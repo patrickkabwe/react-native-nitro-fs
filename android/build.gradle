@@ -20,18 +20,18 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
-apply from: '../nitrogen/generated/android/NitroFs+autolinking.gradle'
+apply from: '../nitrogen/generated/android/NitroFS+autolinking.gradle'
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
 }
 
 def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["NitroFs_" + name]
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["NitroFS_" + name]
 }
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["NitroFs_" + name]).toInteger()
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["NitroFS_" + name]).toInteger()
 }
 
 android {
@@ -141,7 +141,7 @@ dependencies {
 if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
-    libraryName = "NitroFs"
+    libraryName = "NitroFS"
     codegenJavaPackageName = "com.nitrofs"
   }
 }

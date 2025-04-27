@@ -1,5 +1,6 @@
 import { NitroModules } from 'react-native-nitro-modules'
-import type { NitroFs as NitroFsSpec } from './specs/nitro-fs.nitro'
+import type { NitroFS as NitroFSSpec } from './specs/nitro-fs.nitro'
+export * from './type'
 
-export const NitroFs =
-  NitroModules.createHybridObject<NitroFsSpec>('NitroFs')
+export const NitroFS =
+    NitroModules.createHybridObject<NitroFSSpec>('NitroFS')
