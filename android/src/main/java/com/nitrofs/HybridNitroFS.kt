@@ -10,6 +10,7 @@ import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
 import com.margelo.nitro.nitrofs.NitroUploadOptions
 import java.io.File
+import java.nio.charset.Charset
 
 class HybridNitroFS: HybridNitroFSSpec() {
     val context = NitroModules.applicationContext ?: error("React Native context not found")
@@ -34,23 +35,29 @@ class HybridNitroFS: HybridNitroFSSpec() {
         data: String,
         encoding: NitroFileEncoding
     ): Promise<Unit> {
-        // TODO: handle encoding
-        val file = File(path)
-        file.writeText(data)
-        return Promise.resolved(Unit)
+        return Promise.async {
+            try {
+                val file = File(path)
+                file.writeText(data, charset = getFileEncoding(encoding))
+            } catch (e: Exception) {
+                Log.e("NitroFS", "Error writing file: ${e.message}")
+                throw Error(e)
+            }
+        }
     }
 
     override fun readFile(
         path: String,
         encoding: NitroFileEncoding
     ): Promise<String> {
-        // TODO: handle encoding
-        try {
-            val file = File(path)
-            return Promise.resolved(file.readText(charset = Charsets.UTF_8))
-        } catch (e: Exception) {
-            Log.e("NitroFS", "Error reading file: ${e.message}")
-            return Promise.rejected(e)
+        return Promise.async {
+            try {
+                val file = File(path)
+                file.readText(charset = getFileEncoding(encoding))
+            } catch (e: Exception) {
+                Log.e("NitroFS", "Error reading file: ${e.message}")
+                throw Error(e)
+            }
         }
     }
 
@@ -58,16 +65,16 @@ class HybridNitroFS: HybridNitroFSSpec() {
         srcPath: String,
         destPath: String
     ): Promise<Unit> {
-        try {
-            val file = File(srcPath)
-            val dest = File(destPath)
-            file.copyTo(dest)
-            return Promise.resolved(Unit)
-        } catch (e: Exception) {
-            Log.e("NitroFS", "Error copying file: ${e.message}")
-            return Promise.rejected(e)
+        return Promise.async {
+            try {
+                val file = File(srcPath)
+                val dest = File(destPath)
+                file.copyTo(dest)
+            } catch (e: Exception) {
+                Log.e("NitroFS", "Error copying file: ${e.message}")
+                throw Error(e)
+            }
         }
-
     }
 
     override fun copy(
@@ -83,8 +90,14 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun mkdir(path: String): Promise<Boolean> {
-        val file = File(path)
-        return Promise.resolved(file.mkdirs())
+        return Promise.async {
+            try {
+                val file = File(path)
+                file.mkdirs()
+            } catch (e: Exception) {
+                throw Error(e)
+            }
+        }
     }
 
     override fun stat(path: String): Promise<NitroFileStat> {
@@ -116,5 +129,12 @@ class HybridNitroFS: HybridNitroFSSpec() {
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<NitroFile> {
         TODO("Not yet implemented")
+    }
+
+    fun getFileEncoding(encoding: NitroFileEncoding): Charset {
+        return when(encoding){
+            NitroFileEncoding.UTF8 -> Charsets.UTF_8
+            NitroFileEncoding.ASCII -> Charsets.US_ASCII
+        }
     }
 }
