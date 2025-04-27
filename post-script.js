@@ -13,7 +13,7 @@ const androidWorkaround = async () => {
  const androidOnLoadFile = path.join(
    process.cwd(),
    'nitrogen/generated/android',
-   'NitroFsOnLoad.cpp'
+   'NitroFSOnLoad.cpp'
  )
  
  
