@@ -1,13 +1,150 @@
-import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { NitroFs } from 'react-native-nitro-fs';
+import React, {useEffect, useState} from 'react';
+import {Button, Platform, StyleSheet, Text, View} from 'react-native';
+import {NitroFS, type NitroFileStat} from 'react-native-nitro-fs';
 
 function App(): React.JSX.Element {
+  const [exists, setExists] = useState(false);
+  const [stat, setStat] = useState<NitroFileStat | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+
+  useEffect(() => {
+    console.log('NitroFS.DOCUMENT_DIR', NitroFS.DOCUMENT_DIR);
+    
+    NitroFS.exists(NitroFS.DOCUMENT_DIR).then(exists => {
+      console.log('exists '+Platform.OS, exists);
+        
+      setExists(exists);
+    });
+
+    NitroFS.stat(NitroFS.DOCUMENT_DIR + '/test1.txt').then(stat => {
+      setStat(stat);
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
-        <Text style={styles.text}>
-        {NitroFs.sum(1, 2)}
-        </Text>
+      <Text style={styles.text}>{exists ? 'Exists' : 'Does not exist'}</Text>
+      <Button
+        title="Read File"
+        onPress={() => {
+          NitroFS.readFile(NitroFS.DOCUMENT_DIR + '/test1.txt', 'utf8')
+            .then(data => {
+              console.log(data);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      />
+      <Button
+        title="Create File"
+        onPress={() => {
+          NitroFS.writeFile(
+            NitroFS.DOCUMENT_DIR + '/test1.txt',
+            'Hello, world! some more text',
+            'utf8',
+          )
+            .then(() => {
+              console.log('File created');
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      />
+
+      <Button
+        title="Copy File"
+        onPress={() => {
+          NitroFS.copy(
+            NitroFS.DOCUMENT_DIR + '/test1.txt',
+            NitroFS.DOCUMENT_DIR + '/testDir/test2.txt',
+          )
+            .then(() => {
+              console.log('File copied');
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      />
+
+      <Button
+        title="Delete File  "
+        onPress={() => {
+          NitroFS.unlink(NitroFS.DOCUMENT_DIR + '/test1.txt').then(() => {
+            console.log('File unlinked');
+          });
+        }}
+      />
+
+      <Button
+        title="Create Directory"
+        onPress={() => {
+          NitroFS.mkdir(NitroFS.DOCUMENT_DIR + '/testDir').then(() => {
+            console.log('Directory created');
+          });
+        }}
+      />
+
+      <Button
+        title="Upload File"
+        onPress={() => {
+          NitroFS.uploadFile(
+            {
+              name: 'test.txt',
+              mimeType: 'text/plain',
+              path: NitroFS.DOCUMENT_DIR + '/test.txt',
+            },
+            {url: 'http://localhost:5100/upload', method: 'POST'},
+            (uploadedBytes, totalBytes) => {
+              const progress = (uploadedBytes / totalBytes) * 100;
+              setUploadProgress(Math.round(progress));
+            },
+          )
+            .then(() => {
+              console.log('File uploaded');
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      />
+
+      <Button
+        title="Download File"
+        disabled={downloadProgress !== 100 && downloadProgress !== 0}
+        onPress={() => {
+          NitroFS.downloadFile(
+            'http://localhost:5100/download',
+            'dummyfile.zip',
+            NitroFS.DOWNLOAD_DIR + '/dummyfile.zip',
+            (downloadedBytes, totalBytes) => {
+              const progress = (downloadedBytes / totalBytes) * 100;
+              setDownloadProgress(Math.round(progress));
+              console.log(progress);
+            },
+          )
+            .then((file) => {
+              console.log('File downloaded', file);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      />
+      <View>
+        <Text>File Stat</Text>
+        <Text>size: {stat?.size} bytes</Text>
+        <Text>mtime: {stat?.mtime} seconds</Text>
+        <Text>ctime: {stat?.ctime} seconds</Text>
+        <Text>isFile: {stat?.isFile ? 'true' : 'false'}</Text>
+        <Text>isDirectory: {stat?.isDirectory ? 'true' : 'false'}</Text>
+      </View>
+
+      <Text>Upload Progress: {uploadProgress}%</Text>
+      <Text>Download Progress: {downloadProgress}%</Text>
     </View>
   );
 }
@@ -19,8 +156,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-        fontSize: 40, 
-        color: 'green'
-    }});
+    fontSize: 40,
+    color: 'green',
+  },
+});
 
 export default App;

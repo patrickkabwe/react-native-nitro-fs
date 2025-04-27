@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator='iPhone 16'",
     "lint": "eslint .",
-    "start": "react-native start --reset-cache",
+    "start": "react-native start --reset-cache --client-logs",
     "test": "jest",
     "pod": "bundle install && bundle exec pod install --project-directory=ios"
   },

@@ -4,18 +4,18 @@
     "nitrofs"
   ],
   "ios": {
-    "iosModuleName": "NitroFs"
+    "iosModuleName": "NitroFS"
   },
   "android": {
     "androidNamespace": [
       "nitrofs"
     ],
-    "androidCxxLibName": "NitroFs"
+    "androidCxxLibName": "NitroFS"
   },
   "autolinking": {
-    "NitroFs": {
-      "swift": "HybridNitroFs",
-      "kotlin": "HybridNitroFs"
+    "NitroFS": {
+      "swift": "HybridNitroFS",
+      "kotlin": "HybridNitroFS"
     }
   },
   "ignorePaths": [
