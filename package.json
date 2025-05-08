@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-fs",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "Nitro module package",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -116,6 +116,7 @@
     ]
   },
   "release-it": {
+    "pkgFiles": null,
     "npm": {
       "publish": true
     },
