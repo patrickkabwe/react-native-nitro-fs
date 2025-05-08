@@ -45,6 +45,7 @@
   "bugs": "https://github.com/patrickkabwe/react-native-nitro-fs/issues",
   "homepage": "https://github.com/patrickkabwe/react-native-nitro-fs#readme",
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/",
     "provenance": true
   },
