@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-fs",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Nitro module package",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -46,8 +46,7 @@
   "homepage": "https://github.com/patrickkabwe/react-native-nitro-fs#readme",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/",
-    "provenance": true
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
