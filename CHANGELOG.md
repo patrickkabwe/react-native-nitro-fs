@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.2.5](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.2.2...v0.2.4) (2025-05-08)
+## [0.2.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.2.2...v0.2.4) (2025-05-08)
+
 ## [0.2.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.2.2...v0.2.4) (2025-05-08)
 
 ## [0.2.2](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.1.1...v0.2.2) (2025-05-08)
