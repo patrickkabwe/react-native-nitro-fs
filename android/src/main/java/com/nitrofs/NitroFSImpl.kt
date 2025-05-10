@@ -92,10 +92,9 @@ class NitroFSImpl(val context: ReactApplicationContext) {
                    uploadOptions: NitroUploadOptions,
                    onProgress: ((Double, Double) -> Unit)?) {
         val nitroFile = File(nitroFile.path)
-        val dummyFile = generateLargeFile(context, "dummy_100mb.txt", sizeInMB = 100)
 
         Log.d("NitroFS", "Uploading file: ${nitroFile.absolutePath}")
-        nitroFileUploader.handleUpload(dummyFile,uploadOptions, onProgress)
+        nitroFileUploader.handleUpload(nitroFile,uploadOptions, onProgress)
     }
 
     fun getFileEncoding(encoding: NitroFileEncoding): Charset {
@@ -105,9 +104,10 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         }
     }
 
+    // used to generate a large file for testing purposes
     fun generateLargeFile(context: Context, fileName: String = "large_dummy_file.txt", sizeInMB: Int = 100): File {
         val file = File(context.cacheDir, fileName)
-        val buffer = ByteArray(1024 * 1024) // 1MB buffer filled with zeroes
+        val buffer = ByteArray(1024 * 1024)
 
         FileOutputStream(file).use { output ->
             repeat(sizeInMB) {
