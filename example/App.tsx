@@ -2,6 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {Button, Platform, StyleSheet, Text, View} from 'react-native';
 import {NitroFS, type NitroFileStat} from 'react-native-nitro-fs';
 
+const uploadURL = Platform.select({
+  ios: 'http://localhost:5100/upload',
+  android: 'http://10.0.2.2:5100/upload',
+  default: 'http://localhost:5100/upload',
+});
+
+const fileToUpload = Platform.select({
+  ios: NitroFS.DOCUMENT_DIR + '/test1.txt',
+  android: NitroFS.DOCUMENT_DIR + '/text.txt',
+  default: NitroFS.DOCUMENT_DIR + '/test1.txt',
+});
+
 function App(): React.JSX.Element {
   const [exists, setExists] = useState(false);
   const [stat, setStat] = useState<NitroFileStat | null>(null);
@@ -10,10 +22,10 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     console.log('NitroFS.DOCUMENT_DIR', NitroFS.DOCUMENT_DIR);
-    
+
     NitroFS.exists(NitroFS.DOCUMENT_DIR).then(exists => {
-      console.log('exists '+Platform.OS, exists);
-        
+      console.log('exists ' + Platform.OS, exists);
+
       setExists(exists);
     });
 
@@ -28,7 +40,7 @@ function App(): React.JSX.Element {
       <Button
         title="Read File"
         onPress={() => {
-          NitroFS.readFile(NitroFS.DOCUMENT_DIR + '/test1.txt', 'utf8')
+          NitroFS.readFile(fileToUpload, 'utf8')
             .then(data => {
               console.log(data);
             })
@@ -41,7 +53,7 @@ function App(): React.JSX.Element {
         title="Create File"
         onPress={() => {
           NitroFS.writeFile(
-            NitroFS.DOCUMENT_DIR + '/test1.txt',
+            fileToUpload,
             'Hello, world! some more text',
             'utf8',
           )
@@ -57,9 +69,11 @@ function App(): React.JSX.Element {
       <Button
         title="Copy File"
         onPress={() => {
+            console.log(NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`,);
+            
           NitroFS.copy(
-            NitroFS.DOCUMENT_DIR + '/test1.txt',
-            NitroFS.DOCUMENT_DIR + '/testDir/test2.txt',
+            fileToUpload,
+            NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`,
           )
             .then(() => {
               console.log('File copied');
@@ -73,7 +87,7 @@ function App(): React.JSX.Element {
       <Button
         title="Delete File  "
         onPress={() => {
-          NitroFS.unlink(NitroFS.DOCUMENT_DIR + '/test1.txt').then(() => {
+          NitroFS.unlink(fileToUpload).then(() => {
             console.log('File unlinked');
           });
         }}
@@ -95,11 +109,11 @@ function App(): React.JSX.Element {
             {
               name: 'test.txt',
               mimeType: 'text/plain',
-              path: NitroFS.DOCUMENT_DIR + '/test.txt',
+              path: fileToUpload,
             },
-            {url: 'http://localhost:5100/upload', method: 'POST'},
+            {url: uploadURL, method: 'POST'},
             (uploadedBytes, totalBytes) => {
-              const progress = (uploadedBytes / totalBytes) * 100;
+              const progress = (uploadedBytes / totalBytes) * 100;              
               setUploadProgress(Math.round(progress));
             },
           )
@@ -117,7 +131,7 @@ function App(): React.JSX.Element {
         disabled={downloadProgress !== 100 && downloadProgress !== 0}
         onPress={() => {
           NitroFS.downloadFile(
-            'http://localhost:5100/download',
+            uploadURL,
             'dummyfile.zip',
             NitroFS.DOWNLOAD_DIR + '/dummyfile.zip',
             (downloadedBytes, totalBytes) => {
@@ -126,7 +140,7 @@ function App(): React.JSX.Element {
               console.log(progress);
             },
           )
-            .then((file) => {
+            .then(file => {
               console.log('File downloaded', file);
             })
             .catch(err => {
