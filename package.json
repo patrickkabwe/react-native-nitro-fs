@@ -10,7 +10,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "clean": "git clean -dfX",
-    "release": "release-it",
+    "release": "semantic-release",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js"
   },
@@ -54,7 +54,7 @@
     "@release-it/conventional-changelog": "^10.0.0",
     "@types/jest": "^29.5.12",
     "@types/react": "^19.0.10",
-    "nitro-codegen": "0.25.1",
+    "nitro-codegen": "0.25.2",
     "react": "19.0.0",
     "react-native": "0.78.0",
     "react-native-builder-bob": "^0.37.0",
@@ -131,37 +131,6 @@
     "hooks": {
       "before:init": "bun typecheck",
       "after:bump": "bun run build"
-    },
-    "plugins": {
-      "@release-it/bumper": {},
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "✨ Features"
-            },
-            {
-              "type": "perf",
-              "section": "💨 Performance Improvements"
-            },
-            {
-              "type": "fix",
-              "section": "🐛 Bug Fixes"
-            },
-            {
-              "type": "chore(deps)",
-              "section": "🛠️ Dependency Upgrades"
-            },
-            {
-              "type": "docs",
-              "section": "📚 Documentation"
-            }
-          ]
-        },
-        "infile": "CHANGELOG.md"
-      }
     }
   }
 }

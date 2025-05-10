@@ -136,6 +136,10 @@ dependencies {
 
   // Add a dependency on NitroModules
   implementation project(":react-native-nitro-modules")
+
+  // Add a dependency on NitroFS
+  implementation("io.ktor:ktor-client-core:2.3.2")
+  implementation("io.ktor:ktor-client-okhttp:2.3.2")
 }
 
 if (isNewArchitectureEnabled()) {
