@@ -10,7 +10,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "clean": "git clean -dfX",
-    "release": "semantic-release --dry-run",
+    "prerelease": "semantic-release --dry-run",
+    "release": "semantic-release",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js"
   },
