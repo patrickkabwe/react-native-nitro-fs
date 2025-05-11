@@ -50,8 +50,7 @@
   },
   "devDependencies": {
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
-    "@release-it/bumper": "^7.0.1",
-    "@release-it/conventional-changelog": "^10.0.0",
+    "@semantic-release/changelog": "^6.0.3",
     "@types/jest": "^29.5.12",
     "@types/react": "^19.0.10",
     "nitro-codegen": "0.25.2",
@@ -114,23 +113,5 @@
         }
       ]
     ]
-  },
-  "release-it": {
-    "pkgFiles": null,
-    "npm": {
-      "publish": true
-    },
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}",
-      "requireCleanWorkingDir": false
-    },
-    "github": {
-      "release": true
-    },
-    "hooks": {
-      "before:init": "bun typecheck",
-      "after:bump": "bun run build"
-    }
   }
 }
