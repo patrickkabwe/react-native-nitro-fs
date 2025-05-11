@@ -40,12 +40,7 @@ module.exports = {
       },
     ],
     '@semantic-release/changelog',
-    ['@semantic-release/npm', { npmPublish: false }],
-    [
-      '@semantic-release/github',
-      {
-        draftRelease: false,
-      },
-    ],
+    '@semantic-release/npm',
+    '@semantic-release/github',
   ],
 }
