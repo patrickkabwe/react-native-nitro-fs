@@ -2,8 +2,10 @@ package com.nitrofs
 
 import android.os.Handler
 import android.os.Looper
+import io.ktor.client.HttpClient
 import com.margelo.nitro.nitrofs.NitroUploadMethod
 import com.margelo.nitro.nitrofs.NitroUploadOptions
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.onUpload
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -41,13 +43,15 @@ class NitroFileUploader {
                 ) {
                     file.inputStream().asInput()
                 }
-            }
-        ){
-            method = getMethod(uploadOptions.method)
-            onUpload { bytesSent, totalBytes ->
-                onProgress?.let {
-                    Handler(Looper.getMainLooper()).post {
-                        it.invoke(bytesSent.toDouble(), totalBytes.toDouble())
+            ){
+                method = getMethod(uploadOptions.method)
+                onUpload { totalBytesSent, totalBytes ->
+                    if (totalBytesSent > 0 && totalBytes != null) {
+                        onProgress?.let {
+                            Handler(Looper.getMainLooper()).post {
+                                it.invoke(totalBytesSent.toDouble(), totalBytes.toDouble())
+                            }
+                        }
                     }
                 }
             }
