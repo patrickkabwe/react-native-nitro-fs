@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 final class NitroFSFileUploader: NSObject, URLSessionTaskDelegate, URLSessionDataDelegate {
     weak var fileManager: FileManager?
