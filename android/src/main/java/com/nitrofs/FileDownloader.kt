@@ -28,7 +28,7 @@ class FileDownloader {
             it.prepareGet("$serverUrl/$fileName") {
                 method = HttpMethod.Get
                 onDownload { totalBytesSent, contentLength ->
-                    if (totalBytesSent > 0 && contentLength !== null){
+                    if (totalBytesSent > 0 && contentLength != null){
                         onProgress?.let {
                             Handler(Looper.getMainLooper()).post {
                                 onProgress.invoke(totalBytesSent.toDouble(), contentLength.toDouble())
