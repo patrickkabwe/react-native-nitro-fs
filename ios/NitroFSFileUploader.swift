@@ -43,36 +43,4 @@ final class NitroFSFileUploader: NSObject, URLSessionTaskDelegate, URLSessionDat
             self.onProgress?( Double(totalBytesSent), Double(totalBytesExpectedToSend))
         }
     }
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        print("Server response:", String(data: data, encoding: .utf8) ?? "<invalid UTF-8>")
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard let continuation = continuation else {
-            print("⚠️ Continuation is nil! Possible bug.")
-            return
-        }
-        
-        self.continuation = nil  // prevent duplicate resume
-        
-        if let error = error {
-            continuation.resume(throwing: error)
-        } else {
-            continuation.resume(returning: ())
-        }
-    }
-    
-    func getMethod(method: NitroUploadMethod) -> HTTPMethod {
-        switch method {
-        case .post:
-            return .post
-        case .put:
-            return .put
-        case .patch:
-            return .patch
-        default:
-            fatalError("Unsupported upload method: \(method)")
-        }
-    }
 }
