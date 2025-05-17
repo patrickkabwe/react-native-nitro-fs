@@ -27,6 +27,8 @@ Pod::Spec.new do |s|
     "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
   }
 
+  s.dependency 'Alamofire'
+  
   load 'nitrogen/generated/ios/NitroFS+autolinking.rb'
   add_nitrogen_files(s)
 

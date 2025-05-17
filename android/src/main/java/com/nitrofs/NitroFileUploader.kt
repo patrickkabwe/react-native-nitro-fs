@@ -4,6 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import com.margelo.nitro.nitrofs.NitroUploadMethod
 import com.margelo.nitro.nitrofs.NitroUploadOptions
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.onUpload
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -11,43 +13,40 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.http.content.OutgoingContent
-import io.ktor.util.InternalAPI
-import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.streams.asInput
 import java.io.File
 
 class NitroFileUploader {
-    val client = NitroHttpClient.client
-
-    @OptIn(InternalAPI::class)
     suspend fun handleUpload(
         file: File,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ) {
         val totalBytes = file.length()
+        val client = HttpClient(OkHttp)
 
-        client.submitFormWithBinaryData(
-            url = uploadOptions.url,
-            formData = formData {
-                appendInput(
-                    key = "file", // TODO: use dynamic field name
-                    headers = Headers.build {
-                        append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
-                        append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
-                    },
-                    size = totalBytes,
-                ) {
-                    file.inputStream().asInput()
+        client.use { it
+            it.submitFormWithBinaryData(
+                url = uploadOptions.url,
+                formData = formData {
+                    appendInput(
+                        key = uploadOptions.field ?: "file",
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                            append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
+                        },
+                        size = totalBytes,
+                    ) {
+                        file.inputStream().asInput()
+                    }
                 }
-            }
-        ){
-            method = getMethod(uploadOptions.method)
-            onUpload { bytesSent, totalBytes ->
-                onProgress?.let {
-                    Handler(Looper.getMainLooper()).post {
-                        it.invoke(bytesSent.toDouble(), totalBytes.toDouble())
+            ){
+                method = getMethod(uploadOptions.method)
+                onUpload { bytesSent, totalBytes ->
+                    onProgress?.let {
+                        Handler(Looper.getMainLooper()).post {
+                            it.invoke(bytesSent.toDouble(), totalBytes.toDouble())
+                        }
                     }
                 }
             }

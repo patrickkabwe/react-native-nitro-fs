@@ -24,7 +24,6 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <string>
 #include <optional>
 #include "NitroUploadMethod.hpp"
-#include <unordered_map>
 
 namespace margelo::nitro::nitrofs {
 
@@ -35,11 +34,11 @@ namespace margelo::nitro::nitrofs {
   public:
     std::string url     SWIFT_PRIVATE;
     std::optional<NitroUploadMethod> method     SWIFT_PRIVATE;
-    std::optional<std::unordered_map<std::string, std::string>> body     SWIFT_PRIVATE;
+    std::optional<std::string> field     SWIFT_PRIVATE;
 
   public:
     NitroUploadOptions() = default;
-    explicit NitroUploadOptions(std::string url, std::optional<NitroUploadMethod> method, std::optional<std::unordered_map<std::string, std::string>> body): url(url), method(method), body(body) {}
+    explicit NitroUploadOptions(std::string url, std::optional<NitroUploadMethod> method, std::optional<std::string> field): url(url), method(method), field(field) {}
   };
 
 } // namespace margelo::nitro::nitrofs
@@ -56,14 +55,14 @@ namespace margelo::nitro {
       return NitroUploadOptions(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "url")),
         JSIConverter<std::optional<NitroUploadMethod>>::fromJSI(runtime, obj.getProperty(runtime, "method")),
-        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, "body"))
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "field"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroUploadOptions& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "url", JSIConverter<std::string>::toJSI(runtime, arg.url));
       obj.setProperty(runtime, "method", JSIConverter<std::optional<NitroUploadMethod>>::toJSI(runtime, arg.method));
-      obj.setProperty(runtime, "body", JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::toJSI(runtime, arg.body));
+      obj.setProperty(runtime, "field", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.field));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -73,7 +72,7 @@ namespace margelo::nitro {
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "url"))) return false;
       if (!JSIConverter<std::optional<NitroUploadMethod>>::canConvert(runtime, obj.getProperty(runtime, "method"))) return false;
-      if (!JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::canConvert(runtime, obj.getProperty(runtime, "body"))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "field"))) return false;
       return true;
     }
   };

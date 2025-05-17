@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.10.2)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -8,7 +9,8 @@ PODS:
   - hermes-engine (0.78.0):
     - hermes-engine/Pre-built (= 0.78.0)
   - hermes-engine/Pre-built (0.78.0)
-  - NitroFS (0.1.0):
+  - NitroFS (0.2.5):
+    - Alamofire
     - DoubleConversion
     - glog
     - hermes-engine
@@ -32,7 +34,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.25.1):
+  - NitroModules (0.25.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1649,6 +1651,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1791,6 +1794,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -1798,8 +1802,8 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: b417d2b2aee3b89b58e63e23a51e02be91dc876d
-  NitroFS: c4bcfd7a58f6ea74e4a0846034d88450d2b97c5f
-  NitroModules: 24a87ff968604843d38f28c8e1b878f6d70ec562
+  NitroFS: 5f232b368898084f0a92c1cc7e385ffbf3e9e34c
+  NitroModules: 5cc92d3b0baf1124ed8136a015924eea03db912e
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: b2eecf2d60216df56bc5e6be5f063826d3c1ee35
   RCTRequired: 78522de7dc73b81f3ed7890d145fa341f5bb32ea
@@ -1863,4 +1867,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: de4dfe7ab7c8dd4ad1b1a9ee1c17b9372d98278a
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

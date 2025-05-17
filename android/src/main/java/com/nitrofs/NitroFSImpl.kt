@@ -1,16 +1,9 @@
 package com.nitrofs
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Environment
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.ReactApplicationContext
-import com.margelo.nitro.NitroModules
-import com.margelo.nitro.core.Promise
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -21,6 +14,7 @@ import java.nio.charset.Charset
 
 class NitroFSImpl(val context: ReactApplicationContext) {
     private val nitroFileUploader: NitroFileUploader = NitroFileUploader()
+    private val fileDownloader: FileDownloader = FileDownloader()
 
     fun exists(path: String): Boolean {
         val dir = File(path)
@@ -88,13 +82,26 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)?.absolutePath ?: ""
     }
 
-    suspend fun uploadFile(nitroFile: NitroFile,
+    suspend fun uploadFile(file: NitroFile,
                    uploadOptions: NitroUploadOptions,
                    onProgress: ((Double, Double) -> Unit)?) {
-        val nitroFile = File(nitroFile.path)
+        val nitroFile = File(file.path)
+        val s = generateLargeFile(context, file.name, 100)
+        nitroFileUploader.handleUpload(s, uploadOptions, onProgress)
+    }
 
-        Log.d("NitroFS", "Uploading file: ${nitroFile.absolutePath}")
-        nitroFileUploader.handleUpload(nitroFile,uploadOptions, onProgress)
+    suspend fun downloadFile(
+        serverUrl: String,
+        fileName: String,
+        destinationPath: String,
+        onProgress: ((Double, Double) -> Unit)?
+    ) {
+        fileDownloader.downloadFile(
+            serverUrl,
+            fileName,
+            destinationPath,
+            onProgress
+        )
     }
 
     fun getFileEncoding(encoding: NitroFileEncoding): Charset {

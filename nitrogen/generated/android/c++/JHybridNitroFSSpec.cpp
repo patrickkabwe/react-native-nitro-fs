@@ -32,7 +32,6 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <optional>
 #include "NitroUploadMethod.hpp"
 #include "JNitroUploadMethod.hpp"
-#include <unordered_map>
 #include <functional>
 #include "JFunc_void_double_double.hpp"
 

@@ -14,7 +14,6 @@
 #include "NitroUploadMethod.hpp"
 #include <optional>
 #include <string>
-#include <unordered_map>
 
 namespace margelo::nitro::nitrofs {
 
@@ -39,19 +38,12 @@ namespace margelo::nitro::nitrofs {
       jni::local_ref<jni::JString> url = this->getFieldValue(fieldUrl);
       static const auto fieldMethod = clazz->getField<JNitroUploadMethod>("method");
       jni::local_ref<JNitroUploadMethod> method = this->getFieldValue(fieldMethod);
-      static const auto fieldBody = clazz->getField<jni::JMap<jni::JString, jni::JString>>("body");
-      jni::local_ref<jni::JMap<jni::JString, jni::JString>> body = this->getFieldValue(fieldBody);
+      static const auto fieldField = clazz->getField<jni::JString>("field");
+      jni::local_ref<jni::JString> field = this->getFieldValue(fieldField);
       return NitroUploadOptions(
         url->toStdString(),
         method != nullptr ? std::make_optional(method->toCpp()) : std::nullopt,
-        body != nullptr ? std::make_optional([&]() {
-          std::unordered_map<std::string, std::string> __map;
-          __map.reserve(body->size());
-          for (const auto& __entry : *body) {
-            __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
-          }
-          return __map;
-        }()) : std::nullopt
+        field != nullptr ? std::make_optional(field->toStdString()) : std::nullopt
       );
     }
 
@@ -64,13 +56,7 @@ namespace margelo::nitro::nitrofs {
       return newInstance(
         jni::make_jstring(value.url),
         value.method.has_value() ? JNitroUploadMethod::fromCpp(value.method.value()) : nullptr,
-        value.body.has_value() ? [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
-          auto __map = jni::JHashMap<jni::JString, jni::JString>::create(value.body.value().size());
-          for (const auto& __entry : value.body.value()) {
-            __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));
-          }
-          return __map;
-        }() : nullptr
+        value.field.has_value() ? jni::make_jstring(value.field.value()) : nullptr
       );
     }
   };
