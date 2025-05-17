@@ -22,7 +22,7 @@ data class NitroUploadOptions
   constructor(
     val url: String,
     val method: NitroUploadMethod?,
-    val body: Map<String, String>?
+    val field: String?
   ) {
   /* main constructor */
 }

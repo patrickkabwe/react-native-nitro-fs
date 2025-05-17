@@ -18,22 +18,16 @@ public extension NitroUploadOptions {
   /**
    * Create a new instance of `NitroUploadOptions`.
    */
-  init(url: String, method: NitroUploadMethod?, body: Dictionary<String, String>?) {
+  init(url: String, method: NitroUploadMethod?, field: String?) {
     self.init(std.string(url), { () -> bridge.std__optional_NitroUploadMethod_ in
       if let __unwrappedValue = method {
         return bridge.create_std__optional_NitroUploadMethod_(__unwrappedValue)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__unordered_map_std__string__std__string__ in
-      if let __unwrappedValue = body {
-        return bridge.create_std__optional_std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
-          var __map = bridge.create_std__unordered_map_std__string__std__string_(__unwrappedValue.count)
-          for (__k, __v) in __unwrappedValue {
-            bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
-          }
-          return __map
-        }())
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = field {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
@@ -68,20 +62,12 @@ public extension NitroUploadOptions {
     }
   }
   
-  var body: Dictionary<String, String>? {
+  var field: String? {
     @inline(__always)
     get {
-      return { () -> Dictionary<String, String>? in
-        if let __unwrapped = self.__body.value {
-          return { () -> Dictionary<String, String> in
-            var __dictionary = Dictionary<String, String>(minimumCapacity: __unwrapped.size())
-            let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(__unwrapped)
-            for __key in __keys {
-              let __value = __unwrapped[__key]!
-              __dictionary[String(__key)] = String(__value)
-            }
-            return __dictionary
-          }()
+      return { () -> String? in
+        if let __unwrapped = self.__field.value {
+          return String(__unwrapped)
         } else {
           return nil
         }
@@ -89,15 +75,9 @@ public extension NitroUploadOptions {
     }
     @inline(__always)
     set {
-      self.__body = { () -> bridge.std__optional_std__unordered_map_std__string__std__string__ in
+      self.__field = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
-            var __map = bridge.create_std__unordered_map_std__string__std__string_(__unwrappedValue.count)
-            for (__k, __v) in __unwrappedValue {
-              bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
-            }
-            return __map
-          }())
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }

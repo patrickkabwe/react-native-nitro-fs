@@ -13,35 +13,32 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.http.content.OutgoingContent
-import io.ktor.util.InternalAPI
-import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.streams.asInput
 import java.io.File
 
 class NitroFileUploader {
-    val client = NitroHttpClient.client
-
-    @OptIn(InternalAPI::class)
     suspend fun handleUpload(
         file: File,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ) {
         val totalBytes = file.length()
+        val client = HttpClient(OkHttp)
 
-        client.submitFormWithBinaryData(
-            url = uploadOptions.url,
-            formData = formData {
-                appendInput(
-                    key = "file", // TODO: use dynamic field name
-                    headers = Headers.build {
-                        append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
-                        append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
-                    },
-                    size = totalBytes,
-                ) {
-                    file.inputStream().asInput()
+        client.use { it
+            it.submitFormWithBinaryData(
+                url = uploadOptions.url,
+                formData = formData {
+                    appendInput(
+                        key = uploadOptions.field ?: "file",
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                            append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
+                        },
+                        size = totalBytes,
+                    ) {
+                        file.inputStream().asInput()
+                    }
                 }
             ){
                 method = getMethod(uploadOptions.method)

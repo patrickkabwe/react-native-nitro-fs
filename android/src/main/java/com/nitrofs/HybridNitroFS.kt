@@ -128,6 +128,18 @@ class HybridNitroFS: HybridNitroFSSpec() {
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<NitroFile> {
-        TODO("Not yet implemented")
+        return Promise.async {
+            try {
+                nitroFsImpl.downloadFile(serverUrl, fileName, destinationPath, onProgress)
+                NitroFile(
+                    name = fileName,
+                    path = destinationPath,
+                    mimeType = "",
+                )
+            } catch (e: Exception) {
+                Log.e("NitroFS", "Error downloading file: ${e.message}")
+                throw Error(e)
+            }
+        }
     }
 }
