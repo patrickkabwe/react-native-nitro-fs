@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Platform, StyleSheet, Text, View} from 'react-native';
-import {NitroFS, type NitroFileStat} from 'react-native-nitro-fs';
+import NitroFS, {type NitroFileStat} from 'react-native-nitro-fs';
 
 const uploadURL = Platform.select({
   ios: 'http://localhost:5100/upload',
@@ -8,8 +8,14 @@ const uploadURL = Platform.select({
   default: 'http://localhost:5100/upload',
 });
 
+const downloadURL = Platform.select({
+  ios: 'http://localhost:5100/download',
+  android: 'http://10.0.2.2:5100/download',
+  default: 'http://localhost:5100/download',
+});
+
 const fileToUpload = Platform.select({
-  ios: NitroFS.DOCUMENT_DIR + '/test1.txt',
+  ios: NitroFS.DOCUMENT_DIR + '/largefile.txt',
   android: NitroFS.DOCUMENT_DIR + '/text.txt',
   default: NitroFS.DOCUMENT_DIR + '/test1.txt',
 });
@@ -22,6 +28,7 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     console.log('NitroFS.DOCUMENT_DIR', NitroFS.DOCUMENT_DIR);
+    console.log('NitroFS.DOWNLOAD_DIR', NitroFS.DOWNLOAD_DIR);
 
     NitroFS.exists(NitroFS.DOCUMENT_DIR).then(exists => {
       console.log('exists ' + Platform.OS, exists);
@@ -69,8 +76,8 @@ function App(): React.JSX.Element {
       <Button
         title="Copy File"
         onPress={() => {
-            console.log(NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`,);
-            
+          console.log(NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`);
+
           NitroFS.copy(
             fileToUpload,
             NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`,
@@ -104,16 +111,17 @@ function App(): React.JSX.Element {
 
       <Button
         title="Upload File"
+        disabled={uploadProgress !== 100 && uploadProgress !== 0}
         onPress={() => {
           NitroFS.uploadFile(
             {
-              name: 'test.txt',
+              name: 'largefile.txt',
               mimeType: 'text/plain',
               path: fileToUpload,
             },
-            {url: uploadURL, method: 'POST'},
+            {url: uploadURL, method: 'POST', field: 'file'},
             (uploadedBytes, totalBytes) => {
-              const progress = (uploadedBytes / totalBytes) * 100;              
+              const progress = (uploadedBytes / totalBytes) * 100;
               setUploadProgress(Math.round(progress));
             },
           )
@@ -131,13 +139,12 @@ function App(): React.JSX.Element {
         disabled={downloadProgress !== 100 && downloadProgress !== 0}
         onPress={() => {
           NitroFS.downloadFile(
-            uploadURL,
-            'dummyfile.zip',
-            NitroFS.DOWNLOAD_DIR + '/dummyfile.zip',
+            downloadURL,
+            'dummyfile.txt',
+            NitroFS.DOWNLOAD_DIR + '/dummyfile.txt',
             (downloadedBytes, totalBytes) => {
               const progress = (downloadedBytes / totalBytes) * 100;
               setDownloadProgress(Math.round(progress));
-              console.log(progress);
             },
           )
             .then(file => {

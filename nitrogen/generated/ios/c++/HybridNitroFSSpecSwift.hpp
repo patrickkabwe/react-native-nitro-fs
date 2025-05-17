@@ -31,7 +31,6 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include "NitroUploadOptions.hpp"
 #include <optional>
 #include "NitroUploadMethod.hpp"
-#include <unordered_map>
 #include <functional>
 
 #include "NitroFS-Swift-Cxx-Umbrella.hpp"

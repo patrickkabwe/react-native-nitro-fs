@@ -12,9 +12,10 @@ export interface NitroUploadOptions {
      */
     method?: NitroUploadMethod
     /**
-     * The body to send with the fetch request
+     * The field name to use for the file upload
+     * @default 'file'
      */
-    body?: Record<string, string>
+    field?: string
 }
 
 export interface NitroDownloadOptions {

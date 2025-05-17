@@ -9,9 +9,13 @@ import Foundation
 
 class NitroFSImpl {
     weak var fileManager: FileManager?
+    private(set) var fileUploader: NitroFSFileUploader?
+    private(set) var fileDownloader: NitroFSFileDownloader?
     
     init(fileManager: FileManager) {
         self.fileManager = fileManager
+        self.fileUploader = NitroFSFileUploader(fileManager: fileManager)
+        self.fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
     }
     
     func exists(path: String) -> Bool {
@@ -87,6 +91,35 @@ class NitroFSImpl {
             mtime: mtime.timeIntervalSince1970,
             isFile: !IsDirectory(path),
             isDirectory: IsDirectory(path)
+        )
+    }
+    
+    func uploadFile(
+        file: NitroFile,
+        uploadOptions: NitroUploadOptions,
+        onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
+    ) async throws {
+        try await fileUploader?.uploadFile(
+            file: file,
+            uploadOptions: uploadOptions,
+            onProgress: onProgress
+        )
+    }
+    
+    func downloadFile(
+        serverUrl: String,
+        fileName: String,
+        destinationPath: String,
+        onProgress: ((Double, Double) -> Void)?
+    ) async throws -> NitroFile {
+        guard let fileDownloader else {
+            throw NitroFSError.nitroFSUnavailable(message: "Failed to stat file. fileDownloader is unavailable")
+        }
+        return try await fileDownloader.downloadFile(
+            serverUrl,
+            fileName,
+            destinationPath,
+            onProgress: onProgress
         )
     }
     

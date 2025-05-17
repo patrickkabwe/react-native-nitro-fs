@@ -70,8 +70,16 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 		contentType = "application/octet-stream"
 	}
 
+	// Get file info
+	fileInfo, err := file.Stat()
+	if err != nil {
+		http.Error(w, "Failed to get file info", http.StatusInternalServerError)
+		return
+	}
+
 	// Set headers
 	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", fileInfo.Size()))
 	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, filename))
 
 	// Send the file
@@ -88,7 +96,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse multipart form to get file
-	err := r.ParseMultipartForm(1 << 30) // 1GB max memory
+	err := r.ParseMultipartForm(2 << 30) // 1GB max memory
 	if err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
 		return
@@ -124,12 +132,18 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	defer dst.Close()
 
 	// Copy the uploaded file
-	written, err := io.Copy(dst, r.Body)
+	written, err := io.Copy(dst, file)
 	if err != nil {
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)
 		return
 	}
+	contentType := mime.TypeByExtension(filepath.Ext(filename))
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
 
 	fmt.Printf("Uploaded file: %s (%d bytes)\n", filename, written)
+	w.Header().Set("Content-Type", contentType)
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Upload successful!"))
 }

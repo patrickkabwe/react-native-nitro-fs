@@ -12,8 +12,6 @@ import NitroModules
 class HybridNitroFS: HybridNitroFSSpec {
     static private(set) var fileManager: FileManager = FileManager.default
     private(set) var nitroFSImpl: NitroFSImpl = NitroFSImpl(fileManager: fileManager)
-    private(set) var fileUploader: NitroFSFileUploader = NitroFSFileUploader(fileManager: fileManager)
-    private(set) var fileDownloader: NitroFSFileDownloader = NitroFSFileDownloader(fileManager: fileManager)
     
     var DOCUMENT_DIR: String { get { return NitroFSDirs.NitroFSDocDir } }
     var CACHE_DIR: String { get { return NitroFSDirs.NitroFSCacheDir } }
@@ -113,8 +111,11 @@ class HybridNitroFS: HybridNitroFSSpec {
     ) throws -> Promise<Void>{
         return .async { [unowned self] in
             do {
-                let result =  try await self.fileUploader.uploadFile(file: file, uploadOptions: uploadOptions, onProgress: onProgress)
-                os_log("\(result)")
+                try await self.nitroFSImpl.uploadFile(
+                    file: file,
+                    uploadOptions: uploadOptions,
+                    onProgress: onProgress
+                )
             } catch {
                 os_log("failed to upload file: \(error.localizedDescription)")
                 throw error
@@ -125,10 +126,10 @@ class HybridNitroFS: HybridNitroFSSpec {
     func downloadFile(serverUrl: String, fileName: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
         return .async { [unowned self] in
             do {
-                return try await self.fileDownloader.downloadFile(
-                    serverUrl,
-                    fileName,
-                    destinationPath,
+                return try await self.nitroFSImpl.downloadFile(
+                    serverUrl: serverUrl,
+                    fileName: fileName,
+                    destinationPath: destinationPath,
                     onProgress: onProgress
                 )
             } catch {

@@ -34,7 +34,6 @@ namespace NitroFS { class HybridNitroFSSpec_cxx; }
 #include <memory>
 #include <optional>
 #include <string>
-#include <unordered_map>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -209,35 +208,13 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return std::optional<NitroUploadMethod>(value);
   }
   
-  // pragma MARK: std::unordered_map<std::string, std::string>
+  // pragma MARK: std::optional<std::string>
   /**
-   * Specialized version of `std::unordered_map<std::string, std::string>`.
+   * Specialized version of `std::optional<std::string>`.
    */
-  using std__unordered_map_std__string__std__string_ = std::unordered_map<std::string, std::string>;
-  inline std::unordered_map<std::string, std::string> create_std__unordered_map_std__string__std__string_(size_t size) {
-    std::unordered_map<std::string, std::string> map;
-    map.reserve(size);
-    return map;
-  }
-  inline std::vector<std::string> get_std__unordered_map_std__string__std__string__keys(const std__unordered_map_std__string__std__string_& map) {
-    std::vector<std::string> keys;
-    keys.reserve(map.size());
-    for (const auto& entry : map) {
-      keys.push_back(entry.first);
-    }
-    return keys;
-  }
-  inline void emplace_std__unordered_map_std__string__std__string_(std__unordered_map_std__string__std__string_& map, const std::string& key, const std::string& value) {
-    map.emplace(key, value);
-  }
-  
-  // pragma MARK: std::optional<std::unordered_map<std::string, std::string>>
-  /**
-   * Specialized version of `std::optional<std::unordered_map<std::string, std::string>>`.
-   */
-  using std__optional_std__unordered_map_std__string__std__string__ = std::optional<std::unordered_map<std::string, std::string>>;
-  inline std::optional<std::unordered_map<std::string, std::string>> create_std__optional_std__unordered_map_std__string__std__string__(const std::unordered_map<std::string, std::string>& value) {
-    return std::optional<std::unordered_map<std::string, std::string>>(value);
+  using std__optional_std__string_ = std::optional<std::string>;
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
+    return std::optional<std::string>(value);
   }
   
   // pragma MARK: std::function<void(double /* uploadedBytes */, double /* totalBytes */)>
