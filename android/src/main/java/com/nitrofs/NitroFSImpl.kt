@@ -84,10 +84,10 @@ class NitroFSImpl(val context: ReactApplicationContext) {
 
     suspend fun uploadFile(file: NitroFile,
                    uploadOptions: NitroUploadOptions,
-                   onProgress: ((Double, Double) -> Unit)?) {
+                   onProgress: ((Double, Double) -> Unit)?
+    ) {
         val nitroFile = File(file.path)
-        val s = generateLargeFile(context, file.name, 100)
-        nitroFileUploader.handleUpload(s, uploadOptions, onProgress)
+        nitroFileUploader.handleUpload(nitroFile, uploadOptions, onProgress)
     }
 
     suspend fun downloadFile(
