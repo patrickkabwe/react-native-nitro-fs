@@ -8,10 +8,13 @@ import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
 import com.margelo.nitro.nitrofs.NitroUploadOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class HybridNitroFS: HybridNitroFSSpec() {
     val context = NitroModules.applicationContext ?: error("React Native context not found")
     val nitroFsImpl = NitroFSImpl(context)
+    val ioScope = CoroutineScope(Dispatchers.IO)
 
     override val BUNDLE_DIR: String
         get() = ""
@@ -34,7 +37,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         data: String,
         encoding: NitroFileEncoding
     ): Promise<Unit> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.writeFile(path, data, encoding)
             } catch (e: Exception) {
@@ -48,7 +51,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         path: String,
         encoding: NitroFileEncoding
     ): Promise<String> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.readFile(path, encoding)
             } catch (e: Exception) {
@@ -62,7 +65,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         srcPath: String,
         destPath: String
     ): Promise<Unit> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.copyFile(srcPath, destPath)
             } catch (e: Exception) {
@@ -80,7 +83,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun unlink(path: String): Promise<Boolean> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.unlink(path)
             } catch (e: Exception) {
@@ -91,7 +94,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun mkdir(path: String): Promise<Boolean> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.mkdir(path)
             } catch (e: Exception) {
@@ -102,7 +105,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun stat(path: String): Promise<NitroFileStat> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             nitroFsImpl.stat(path)
         }
     }
@@ -112,7 +115,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<Unit> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.uploadFile(file, uploadOptions, onProgress)
             } catch (e: Exception) {
@@ -128,7 +131,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<NitroFile> {
-        return Promise.async {
+        return Promise.async(ioScope) {
             try {
                 nitroFsImpl.downloadFile(serverUrl, fileName, destinationPath, onProgress)
                 NitroFile(

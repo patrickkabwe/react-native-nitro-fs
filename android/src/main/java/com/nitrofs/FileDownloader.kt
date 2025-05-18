@@ -1,7 +1,5 @@
 package com.nitrofs
 
-import android.os.Handler
-import android.os.Looper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -11,6 +9,8 @@ import io.ktor.http.HttpMethod
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.copyAndClose
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class FileDownloader {
@@ -30,7 +30,7 @@ class FileDownloader {
                 onDownload { totalBytesSent, contentLength ->
                     if (totalBytesSent > 0 && contentLength != null){
                         onProgress?.let {
-                            Handler(Looper.getMainLooper()).post {
+                            withContext(Dispatchers.Main) {
                                 onProgress.invoke(totalBytesSent.toDouble(), contentLength.toDouble())
                             }
                         }

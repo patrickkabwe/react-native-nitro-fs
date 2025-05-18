@@ -1,7 +1,5 @@
 package com.nitrofs
 
-import android.os.Handler
-import android.os.Looper
 import io.ktor.client.HttpClient
 import com.margelo.nitro.nitrofs.NitroUploadMethod
 import com.margelo.nitro.nitrofs.NitroUploadOptions
@@ -14,6 +12,8 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.utils.io.streams.asInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class NitroFileUploader {
@@ -45,7 +45,7 @@ class NitroFileUploader {
                 onUpload { totalBytesSent, totalBytes ->
                     if (totalBytesSent > 0 && totalBytes != null) {
                         onProgress?.let {
-                            Handler(Looper.getMainLooper()).post {
+                            withContext(Dispatchers.Main) {
                                 it.invoke(totalBytesSent.toDouble(), totalBytes.toDouble())
                             }
                         }
