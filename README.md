@@ -19,9 +19,6 @@ A high-performance file system module for React Native that handles file operati
 - React Native v0.78.0 or higher
 - Node 18.0.0 or higher
 
-> [!IMPORTANT]  
-> To Support `Nitro Views` you need to install React Native version v0.78.0 or higher.
-
 ## Installation
 
 ```bash
