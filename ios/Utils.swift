@@ -27,6 +27,18 @@ enum NitroFSError: Error {
     case encodingError(message: String)
 }
 
+extension NitroFSError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .unavailable(let message),
+             .fileError(let message),
+             .networkError(let message),
+             .encodingError(let message):
+            return message
+        }
+    }
+}
+
 
 func generateLargeFile(at path: String, sizeInMB: Int) throws {
     let fileURL = URL(fileURLWithPath: path)
