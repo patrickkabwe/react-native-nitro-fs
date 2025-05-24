@@ -125,6 +125,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
             continuation.resume(throwing: error)
         }
         self.continuation = nil
+        session.finishTasksAndInvalidate()
     }
     
     func urlSession(
@@ -148,6 +149,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         if let error {
             continuation?.resume(throwing: error)
             continuation = nil
+            session.finishTasksAndInvalidate()
         }
     }
 }

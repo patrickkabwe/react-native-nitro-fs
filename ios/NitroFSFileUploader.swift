@@ -46,7 +46,10 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
             let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 
             let task = session.uploadTask(with: request, fromFile: multipartFile) { data, response, error in
-                try? FileManager.default.removeItem(at: multipartFile)
+                defer {
+                    try? FileManager.default.removeItem(at: multipartFile)
+                    session.finishTasksAndInvalidate()
+                }
 
                 if let error = error {
                     continuation.resume(throwing: error)
