@@ -30,7 +30,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 try self.nitroFSImpl.writeFile(path: filepath, data: data, encoding: encoding)
             } catch {
                 os_log("Failed to write file content: \(error.localizedDescription)")
-                throw  NitroFSError.fileError(message: "Failed to wriote file content to disk")
+                throw  NitroFSError.fileError(message: "Failed to write file content to disk")
             }
         }
     }
