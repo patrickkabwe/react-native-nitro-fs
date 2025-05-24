@@ -74,7 +74,7 @@ namespace margelo::nitro::nitrofs {
       virtual std::shared_ptr<Promise<bool>> mkdir(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<NitroFileStat>> stat(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
-      virtual std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& fileName, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
+      virtual std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
 
     protected:
       // Hybrid Setup

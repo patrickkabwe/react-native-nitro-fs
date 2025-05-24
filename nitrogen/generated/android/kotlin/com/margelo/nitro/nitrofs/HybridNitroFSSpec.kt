@@ -95,12 +95,12 @@ abstract class HybridNitroFSSpec: HybridObject() {
     return __result
   }
   
-  abstract fun downloadFile(serverUrl: String, fileName: String, destinationPath: String, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroFile>
+  abstract fun downloadFile(serverUrl: String, destinationPath: String, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroFile>
   
   @DoNotStrip
   @Keep
-  private fun downloadFile_cxx(serverUrl: String, fileName: String, destinationPath: String, onProgress: Func_void_double_double?): Promise<NitroFile> {
-    val __result = downloadFile(serverUrl, fileName, destinationPath, onProgress?.let { it })
+  private fun downloadFile_cxx(serverUrl: String, destinationPath: String, onProgress: Func_void_double_double?): Promise<NitroFile> {
+    val __result = downloadFile(serverUrl, destinationPath, onProgress?.let { it })
     return __result
   }
 

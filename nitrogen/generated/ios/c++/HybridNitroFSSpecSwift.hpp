@@ -159,8 +159,8 @@ namespace margelo::nitro::nitrofs {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& fileName, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
-      auto __result = _swiftPart.downloadFile(serverUrl, fileName, destinationPath, onProgress);
+    inline std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
+      auto __result = _swiftPart.downloadFile(serverUrl, destinationPath, onProgress);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

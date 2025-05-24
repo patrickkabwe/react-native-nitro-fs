@@ -309,9 +309,9 @@ public class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func downloadFile(serverUrl: std.string, fileName: std.string, destinationPath: std.string, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
+  public final func downloadFile(serverUrl: std.string, destinationPath: std.string, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
     do {
-      let __result = try self.__implementation.downloadFile(serverUrl: String(serverUrl), fileName: String(fileName), destinationPath: String(destinationPath), onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
+      let __result = try self.__implementation.downloadFile(serverUrl: String(serverUrl), destinationPath: String(destinationPath), onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if let __unwrapped = onProgress.value {
           return { () -> (Double, Double) -> Void in
             let __wrappedFunction = bridge.wrap_Func_void_double_double(__unwrapped)
