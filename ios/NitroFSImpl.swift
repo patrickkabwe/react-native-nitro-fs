@@ -112,7 +112,7 @@ class NitroFSImpl {
         onProgress: ((Double, Double) -> Void)?
     ) async throws -> NitroFile {
         guard let fileDownloader else {
-            throw NitroFSError.unavailable(message: "Failed to stat file. fileDownloader is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to download file. fileDownloader is unavailable")
         }
         return try await fileDownloader.downloadFile(
             serverUrl,
