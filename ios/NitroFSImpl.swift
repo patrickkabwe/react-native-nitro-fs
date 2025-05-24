@@ -27,7 +27,7 @@ class NitroFSImpl {
     
     func writeFile(path: String, data: String, encoding: NitroFileEncoding) throws {
         guard fileManager != nil else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to write file. FileManager is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to write file. FileManager is unavailable")
         }
         try data.write(toFile: path, atomically: true, encoding: getEncoding(nitroEncoding: encoding))
     }
@@ -44,7 +44,7 @@ class NitroFSImpl {
                 if let string = String(data: chunk, encoding: getEncoding(nitroEncoding: encoding)) {
                     result += string
                 } else {
-                    throw NitroFSError.nitroFSInvalidEncoding(message: "Failed to decode chunk")
+                    throw NitroFSError.encodingError(message: "Failed to decode chunk")
                 }
             } else {
                 break
@@ -56,28 +56,28 @@ class NitroFSImpl {
     
     func copy(source: String, destination: String) throws {
         guard let fileManager else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to copy file. FileManager is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to copy file. FileManager is unavailable")
         }
         try fileManager.copyItem(atPath: source, toPath: destination)
     }
     
     func unlink(path: String) throws {
         guard let fileManager else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to unlink file. FileManager is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to unlink file. FileManager is unavailable")
         }
         try fileManager.removeItem(atPath: path)
     }
     
     func mkdir(path: String, mode: FileManager.ItemReplacementOptions = []) throws {
         guard let fileManager else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to mkdir file. FileManager is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to mkdir file. FileManager is unavailable")
         }
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
     }
     
     func stat(path: String) throws -> NitroFileStat {
         guard let fileManager else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to stat file. FileManager is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to stat file. FileManager is unavailable")
         }
         
         let attributes = try fileManager.attributesOfItem(atPath: path)
@@ -108,16 +108,14 @@ class NitroFSImpl {
     
     func downloadFile(
         serverUrl: String,
-        fileName: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Void)?
     ) async throws -> NitroFile {
         guard let fileDownloader else {
-            throw NitroFSError.nitroFSUnavailable(message: "Failed to stat file. fileDownloader is unavailable")
+            throw NitroFSError.unavailable(message: "Failed to download file. fileDownloader is unavailable")
         }
         return try await fileDownloader.downloadFile(
             serverUrl,
-            fileName,
             destinationPath,
             onProgress: onProgress
         )

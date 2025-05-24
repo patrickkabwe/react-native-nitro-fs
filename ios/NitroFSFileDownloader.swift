@@ -8,8 +8,6 @@
 import Foundation
 
 final class NitroFSFileDownloader: NSObject {
-    // MARK: - Properties
-    
     private weak var fileManager: FileManager?
     private var downloadTask: URLSessionDownloadTask?
     private var onProgress: ((Double, Double) -> Void)?
@@ -20,23 +18,20 @@ final class NitroFSFileDownloader: NSObject {
         self.fileManager = fileManager
         super.init()
     }
-    
-    // MARK: - Public Methods
-    
+        
     func downloadFile(
         _ serverUrl: String,
-        _ fileName: String,
         _ destinationPath: String,
         onProgress: ((Double, Double) -> Void)? = nil
     ) async throws -> NitroFile {
         guard fileManager != nil else {
-            throw NitroFSError.nitroFSUnavailable(message: "FileManager is not available")
+            throw NitroFSError.unavailable(message: "FileManager is not available")
         }
         
         self.onProgress = onProgress
         self.destinationPath = destinationPath
         
-        let request = try makeRequest(serverUrl: serverUrl, fileName: fileName)
+        let request = try makeRequest(serverUrl: serverUrl)
         
         let session: URLSession = {
             let config = URLSessionConfiguration.default
@@ -58,9 +53,9 @@ final class NitroFSFileDownloader: NSObject {
     
     // MARK: - Private Methods
     
-    private func makeRequest(serverUrl: String, fileName: String) throws -> URLRequest {
-        guard let encodedFilename = fileName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let url = URL(string: "\(serverUrl)/\(encodedFilename)") else {
+    private func makeRequest(serverUrl: String) throws -> URLRequest {
+        guard let encoded = serverUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encoded) else {
             throw URLError(.badURL)
         }
         
@@ -76,19 +71,19 @@ final class NitroFSFileDownloader: NSObject {
         downloadTask: URLSessionDownloadTask
     ) throws -> NitroFile {
         guard let fileManager else {
-            throw NitroFSError.nitroFSUnavailable(message: "FileManager is not available")
+            throw NitroFSError.unavailable(message: "FileManager is not available")
         }
         
         guard let response = response as? HTTPURLResponse else {
-            throw NitroFSError.nitroFSDownloadFailed(message: "Invalid response type")
+            throw NitroFSError.networkError(message: "Invalid response type")
         }
         
         guard (200...299).contains(response.statusCode) else {
-            throw NitroFSError.nitroFSDownloadFailed(message: "HTTP Error: \(response.statusCode)")
+            throw NitroFSError.networkError(message: "HTTP Error: \(response.statusCode)")
         }
         
         guard let destinationPath = self.destinationPath else {
-            throw NitroFSError.nitroFSDownloadFailed(message: "Destination path not set")
+            throw NitroFSError.networkError(message: "Destination path not set")
         }
         
         let destinationURL = URL(fileURLWithPath: destinationPath)
@@ -130,6 +125,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
             continuation.resume(throwing: error)
         }
         self.continuation = nil
+        session.finishTasksAndInvalidate()
     }
     
     func urlSession(
@@ -153,6 +149,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         if let error {
             continuation?.resume(throwing: error)
             continuation = nil
+            session.finishTasksAndInvalidate()
         }
     }
 }

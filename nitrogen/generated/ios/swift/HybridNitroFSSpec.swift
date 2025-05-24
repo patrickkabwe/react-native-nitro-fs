@@ -26,7 +26,7 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func mkdir(path: String) throws -> Promise<Bool>
   func stat(path: String) throws -> Promise<NitroFileStat>
   func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<Void>
-  func downloadFile(serverUrl: String, fileName: String, destinationPath: String, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>
+  func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>
 }
 
 /// See ``HybridNitroFSSpec``

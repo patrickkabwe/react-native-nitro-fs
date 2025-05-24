@@ -127,18 +127,12 @@ class HybridNitroFS: HybridNitroFSSpec() {
 
     override fun downloadFile(
         serverUrl: String,
-        fileName: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<NitroFile> {
         return Promise.async(ioScope) {
             try {
-                nitroFsImpl.downloadFile(serverUrl, fileName, destinationPath, onProgress)
-                NitroFile(
-                    name = fileName,
-                    path = destinationPath,
-                    mimeType = "",
-                )
+                nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
             } catch (e: Exception) {
                 Log.e("NitroFS", "Error downloading file: ${e.message}")
                 throw Error(e)

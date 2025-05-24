@@ -9,9 +9,9 @@ const uploadURL = Platform.select({
 });
 
 const downloadURL = Platform.select({
-  ios: 'http://localhost:5100/download',
-  android: 'http://10.0.2.2:5100/download',
-  default: 'http://localhost:5100/download',
+  ios: 'http://localhost:5100/download/dummyfile.txt',
+  android: 'http://10.0.2.2:5100/download/dummyfile.txt',
+  default: 'http://localhost:5100/download/dummyfile.txt',
 });
 
 const fileToUpload = Platform.select({
@@ -119,7 +119,7 @@ function App(): React.JSX.Element {
               mimeType: 'text/plain',
               path: fileToUpload,
             },
-            {url: uploadURL, method: 'POST', field: 'file'},
+            { url: uploadURL, method: 'POST', field: 'file'},
             (uploadedBytes, totalBytes) => {
               const progress = (uploadedBytes / totalBytes) * 100;
               setUploadProgress(Math.round(progress));
@@ -140,7 +140,6 @@ function App(): React.JSX.Element {
         onPress={() => {
           NitroFS.downloadFile(
             downloadURL,
-            'dummyfile.txt',
             NitroFS.DOWNLOAD_DIR + '/dummyfile.txt',
             (downloadedBytes, totalBytes) => {
               const progress = (downloadedBytes / totalBytes) * 100;

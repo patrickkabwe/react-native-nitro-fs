@@ -215,9 +215,9 @@ namespace margelo::nitro::nitrofs {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const std::string& serverUrl, const std::string& fileName, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* serverUrl */, jni::alias_ref<jni::JString> /* fileName */, jni::alias_ref<jni::JString> /* destinationPath */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
-    auto __result = method(_javaPart, jni::make_jstring(serverUrl), jni::make_jstring(fileName), jni::make_jstring(destinationPath), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
+  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* serverUrl */, jni::alias_ref<jni::JString> /* destinationPath */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
+    auto __result = method(_javaPart, jni::make_jstring(serverUrl), jni::make_jstring(destinationPath), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<NitroFile>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {

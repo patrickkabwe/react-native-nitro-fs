@@ -92,16 +92,19 @@ class NitroFSImpl(val context: ReactApplicationContext) {
 
     suspend fun downloadFile(
         serverUrl: String,
-        fileName: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
-    ) {
-        fileDownloader.downloadFile(
+    ): NitroFile {
+        val file = fileDownloader.downloadFile(
             serverUrl,
-            fileName,
             destinationPath,
             onProgress
         )
+        if (file != null) {
+            return file
+        } else {
+            throw RuntimeException("Failed to download file from: $serverUrl")
+        }
     }
 
     fun getFileEncoding(encoding: NitroFileEncoding): Charset {

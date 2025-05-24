@@ -114,13 +114,12 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      * Download a file from the internet to the file system
      * ```typescript
      * const serverUrl = 'https://example.com/download'
-     * const fileName = 'file.txt'
      * const destinationPath = NitroFS.DOWNLOAD_DIR + '/file.txt'   
-     * const file = await NitroFS.downloadFile(serverUrl, fileName, destinationPath, (downloadedBytes, totalBytes) => {
+     * const file = await NitroFS.downloadFile(serverUrl, destinationPath, (downloadedBytes, totalBytes) => {
      *  console.log(`Downloading ${downloadedBytes / totalBytes * 100}%`)
      * })
      * console.log(file) // { name: 'file.txt', mimeType: 'text/plain', path: 'file.txt' }
      * ```
      */
-    downloadFile(serverUrl: string, fileName: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
+    downloadFile(serverUrl: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
 }
