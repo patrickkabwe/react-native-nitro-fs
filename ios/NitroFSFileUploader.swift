@@ -32,7 +32,7 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
         let fileURL = URL(fileURLWithPath: file.path)
 
         // Create multipart file body on disk
-        let multipartFile = try await createMultipartBodyFile(
+        let multipartFile = try createMultipartBodyFile(
             fileURL: fileURL,
             fieldName: fieldName,
             boundary: boundary
@@ -42,7 +42,7 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
             let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 
             let task = session.uploadTask(with: request, fromFile: multipartFile) { data, response, error in
@@ -74,7 +74,7 @@ extension NitroFSFileUploader {
         fileURL: URL,
         fieldName: String,
         boundary: String
-    ) async throws -> URL {
+    ) throws -> URL {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 
         guard let output = OutputStream(url: tempURL, append: false) else {
@@ -94,7 +94,7 @@ extension NitroFSFileUploader {
         try output.write(header)
 
         // Stream file content efficiently
-        try await streamFileContent(from: fileURL, to: output)
+        try streamFileContent(from: fileURL, to: output)
 
         // Write multipart footer
         let footer = "\r\n--\(boundary)--\r\n"
@@ -103,7 +103,7 @@ extension NitroFSFileUploader {
         return tempURL
     }
     
-    private func streamFileContent(from fileURL: URL, to output: OutputStream) async throws {
+    private func streamFileContent(from fileURL: URL, to output: OutputStream) throws {
         guard let input = InputStream(url: fileURL) else {
             throw NitroFSError.fileError(message: "Could not read file from disk")
         }
@@ -132,7 +132,7 @@ extension NitroFSFileUploader {
 
 // MARK: - URLSessionTaskDelegate
 extension NitroFSFileUploader: URLSessionTaskDelegate {
-    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64,
+    func urlSession(_ _: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64,
                     totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         DispatchQueue.main.async {
             self.onProgress?(Double(totalBytesSent), Double(totalBytesExpectedToSend))

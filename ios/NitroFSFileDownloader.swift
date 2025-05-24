@@ -54,7 +54,8 @@ final class NitroFSFileDownloader: NSObject {
     // MARK: - Private Methods
     
     private func makeRequest(serverUrl: String) throws -> URLRequest {
-        guard let url = URL(string: serverUrl) else {
+        guard let encoded = serverUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encoded) else {
             throw URLError(.badURL)
         }
         
