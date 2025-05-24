@@ -30,7 +30,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 try self.nitroFSImpl.writeFile(path: filepath, data: data, encoding: encoding)
             } catch {
                 os_log("Failed to write file content: \(error.localizedDescription)")
-                throw  NitroFSError.nitroFSWriteFailed(message: "Failed to wriote file content to disk")
+                throw  NitroFSError.fileError(message: "Failed to wriote file content to disk")
             }
         }
     }
@@ -41,7 +41,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 return try self.nitroFSImpl.readFile(path: path, encoding: encoding)
             } catch {
                 os_log("Failed to read file content: \(error.localizedDescription)")
-                throw  NitroFSError.nitroFSWriteFailed(message: "Failed to write file content to disk")
+                throw  NitroFSError.fileError(message: "Failed to write file content to disk")
             }
         }
     }
@@ -52,7 +52,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 try self.nitroFSImpl.copy(source: srcPath, destination: destPath)
             } catch {
                 os_log("Failed to copy file content: \(error.localizedDescription)")
-                throw  NitroFSError.nitroFSWriteFailed(message: "Failed to copy file file content to disk")
+                throw  NitroFSError.fileError(message: "Failed to copy file file content to disk")
             }
         }
     }
@@ -63,7 +63,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 try self.nitroFSImpl.copy(source: srcPath, destination: destPath)
             } catch {
                 os_log("Failed to copy file or directory: \(error.localizedDescription)")
-                throw  NitroFSError.nitroFSWriteFailed(message: "Failed to copy file or directory content to disk")
+                throw  NitroFSError.fileError(message: "Failed to copy file or directory content to disk")
             }
         }
     }
@@ -99,7 +99,7 @@ class HybridNitroFS: HybridNitroFSSpec {
             } catch {
                 os_log("Failed to get stat: \(error.localizedDescription)")
 
-                throw NitroFSError.nitroFSInvalidEncoding(message: "Failed to get stat: \(error.localizedDescription)")
+                throw NitroFSError.encodingError(message: "Failed to get stat: \(error.localizedDescription)")
             }
         }
     }
@@ -123,12 +123,11 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func downloadFile(serverUrl: String, fileName: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
+    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
         return .async { [unowned self] in
             do {
                 return try await self.nitroFSImpl.downloadFile(
                     serverUrl: serverUrl,
-                    fileName: fileName,
                     destinationPath: destinationPath,
                     onProgress: onProgress
                 )
