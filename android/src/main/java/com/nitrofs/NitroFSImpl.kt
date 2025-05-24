@@ -103,7 +103,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         if (file != null) {
             return file
         } else {
-            throw Error("Error downloading file")
+            throw RuntimeException("Failed to download file from: $serverUrl")
         }
     }
 
