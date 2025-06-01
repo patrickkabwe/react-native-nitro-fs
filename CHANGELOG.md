@@ -1,3 +1,9 @@
+## [0.5.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.0...v0.5.1) (2025-06-01)
+
+### 🛠️ Other changes
+
+* update release management tools in package.json ([a215167](https://github.com/patrickkabwe/react-native-nitro-fs/commit/a215167fcfc18778603b2f6bb92a4cb74d05f9db))
+
 ## [0.5.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.4.2...v0.5.0) (2025-05-24)
 
 ### ✨ Features
