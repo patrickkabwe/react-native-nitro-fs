@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.78.0):
     - hermes-engine/Pre-built (= 0.78.0)
   - hermes-engine/Pre-built (0.78.0)
-  - NitroFS (0.4.2):
+  - NitroFS (0.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -32,7 +32,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.25.2):
+  - NitroModules (0.26.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1584,7 +1584,7 @@ DEPENDENCIES:
   - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - NitroFS (from `../..`)
-  - NitroModules (from `../../node_modules/react-native-nitro-modules`)
+  - NitroModules (from `../node_modules/react-native-nitro-modules`)
   - RCT-Folly (from `../../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1670,7 +1670,7 @@ EXTERNAL SOURCES:
   NitroFS:
     :path: "../.."
   NitroModules:
-    :path: "../../node_modules/react-native-nitro-modules"
+    :path: "../node_modules/react-native-nitro-modules"
   RCT-Folly:
     :podspec: "../../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1798,8 +1798,8 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: b417d2b2aee3b89b58e63e23a51e02be91dc876d
-  NitroFS: 1bb934dabe27fe3c8d7838cb638cc4bb9a40548c
-  NitroModules: 5cc92d3b0baf1124ed8136a015924eea03db912e
+  NitroFS: b4193559e4d3c34ae8c7c0aa75e184a8890a6f00
+  NitroModules: f8d95f8fe2949fbd0b95737f44e8e59ef6b224c2
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: b2eecf2d60216df56bc5e6be5f063826d3c1ee35
   RCTRequired: 78522de7dc73b81f3ed7890d145fa341f5bb32ea
