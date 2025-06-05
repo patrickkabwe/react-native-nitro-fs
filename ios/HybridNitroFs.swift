@@ -41,7 +41,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 return try self.nitroFSImpl.readFile(path: path, encoding: encoding)
             } catch {
                 os_log("Failed to read file content: \(error.localizedDescription)")
-                throw  NitroFSError.fileError(message: "Failed to write file content to disk")
+                throw  NitroFSError.fileError(message: "Failed to read file content from disk")
             }
         }
     }

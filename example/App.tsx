@@ -76,11 +76,9 @@ function App(): React.JSX.Element {
       <Button
         title="Copy File"
         onPress={() => {
-          console.log(NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`);
-
           NitroFS.copy(
             fileToUpload,
-            NitroFS.DOCUMENT_DIR + `/testDir/test${Date.now()}.txt`,
+            NitroFS.DOCUMENT_DIR + `/testDir/${fileToUpload}`,
           )
             .then(() => {
               console.log('File copied');
