@@ -1,3 +1,17 @@
+## [0.5.2](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.1...v0.5.2) (2025-06-05)
+
+### 🐛 Bug Fixes
+
+* update error message in HybridNitroFS to reflect correct file read operation ([b0cb2e9](https://github.com/patrickkabwe/react-native-nitro-fs/commit/b0cb2e9ab9cb50cbccb55b887085c4668cd0a78e))
+
+### 📚 Documentation
+
+* update installation command in README.md to use the latest react-native-nitro-modules version ([cf74404](https://github.com/patrickkabwe/react-native-nitro-fs/commit/cf744047a4a86b843765fb3158a3fca3cbd0f051))
+
+### 🛠️ Other changes
+
+* update dependencies and improve code generation commands ([ba80df6](https://github.com/patrickkabwe/react-native-nitro-fs/commit/ba80df6c19aa8aef75918e4115213b28d7fb7d39))
+
 ## [0.5.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.0...v0.5.1) (2025-06-01)
 
 ### 🛠️ Other changes
