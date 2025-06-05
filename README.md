@@ -22,7 +22,7 @@ A high-performance file system module for React Native that handles file operati
 ## Installation
 
 ```bash
-bun add react-native-nitro-fs react-native-nitro-modules
+bun add react-native-nitro-fs react-native-nitro-modules@0.25.2
 ```
 
 ## Quick Start
