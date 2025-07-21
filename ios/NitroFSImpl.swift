@@ -9,13 +9,9 @@ import Foundation
 
 class NitroFSImpl {
     weak var fileManager: FileManager?
-    private(set) var fileUploader: NitroFSFileUploader?
-    private(set) var fileDownloader: NitroFSFileDownloader?
     
     init(fileManager: FileManager) {
         self.fileManager = fileManager
-        self.fileUploader = NitroFSFileUploader(fileManager: fileManager)
-        self.fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
     }
     
     func exists(path: String) -> Bool {
@@ -99,7 +95,11 @@ class NitroFSImpl {
         uploadOptions: NitroUploadOptions,
         onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
     ) async throws {
-        try await fileUploader?.uploadFile(
+        guard let fileManager else {
+            throw NitroFSError.unavailable(message: "Failed to upload file. FileManager is unavailable")
+        }
+        let fileUploader = NitroFSFileUploader(fileManager: fileManager)
+        try await fileUploader.uploadFile(
             file: file,
             uploadOptions: uploadOptions,
             onProgress: onProgress
@@ -111,9 +111,10 @@ class NitroFSImpl {
         destinationPath: String,
         onProgress: ((Double, Double) -> Void)?
     ) async throws -> NitroFile {
-        guard let fileDownloader else {
-            throw NitroFSError.unavailable(message: "Failed to download file. fileDownloader is unavailable")
+        guard let fileManager else {
+            throw NitroFSError.unavailable(message: "Failed to download file. FileManager is unavailable")
         }
+        let fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
         return try await fileDownloader.downloadFile(
             serverUrl,
             destinationPath,
