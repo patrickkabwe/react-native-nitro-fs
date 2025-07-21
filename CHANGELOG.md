@@ -1,3 +1,11 @@
+## [0.5.3](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.2...v0.5.3) (2025-07-21)
+
+### 🛠️ Other changes
+
+* bump up nitro 0.26.4 ([a262969](https://github.com/patrickkabwe/react-native-nitro-fs/commit/a26296958f779aa0e43cebe58ede791dda51ca3c))
+* **deps:** bump com.android.tools.build:gradle in /android ([14be4d7](https://github.com/patrickkabwe/react-native-nitro-fs/commit/14be4d7bf9842e04b63d64487b44b60f4d605b99))
+* **deps:** bump ktor_version from 3.1.3 to 3.2.2 in /android ([81df62b](https://github.com/patrickkabwe/react-native-nitro-fs/commit/81df62ba59f8b34317f1726c2b9f88559f105b8b))
+
 ## [0.5.2](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.1...v0.5.2) (2025-06-05)
 
 ### 🐛 Bug Fixes
