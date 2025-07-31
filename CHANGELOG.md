@@ -1,3 +1,9 @@
+## [0.5.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.3...v0.5.4) (2025-07-31)
+
+### 🛠️ Other changes
+
+* **deps:** bump ktor_version from 3.2.2 to 3.2.3 in /android ([1797c38](https://github.com/patrickkabwe/react-native-nitro-fs/commit/1797c384d1b6d4e45dbd66fa4b9e4c0ad03a1f9a))
+
 ## [0.5.3](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.2...v0.5.3) (2025-07-21)
 
 ### 🛠️ Other changes
