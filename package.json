@@ -1,6 +1,6 @@
 {
     "name": "react-native-nitro-fs",
-    "version": "0.5.2",
+    "version": "0.5.4",
     "description": "A high-performance file system module for React Native that handles file operations and transfers with native speed.",
     "main": "./lib/commonjs/index.js",
     "module": "./lib/module/index.js",
