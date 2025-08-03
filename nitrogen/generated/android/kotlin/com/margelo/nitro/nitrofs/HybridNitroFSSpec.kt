@@ -86,6 +86,26 @@ abstract class HybridNitroFSSpec: HybridObject() {
   @Keep
   abstract fun stat(path: String): Promise<NitroFileStat>
   
+  @DoNotStrip
+  @Keep
+  abstract fun readdir(path: String): Promise<Array<String>>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun rename(oldPath: String, newPath: String): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun dirname(path: String): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun basename(path: String, ext: String?): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun extname(path: String): String
+  
   abstract fun uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((uploadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<Unit>
   
   @DoNotStrip

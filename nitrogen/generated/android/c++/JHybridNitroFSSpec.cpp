@@ -23,13 +23,14 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <NitroModules/JPromise.hpp>
 #include "NitroFileStat.hpp"
 #include "JNitroFileStat.hpp"
+#include <vector>
 #include "NitroFile.hpp"
 #include "JNitroFile.hpp"
 #include "NitroFileEncoding.hpp"
 #include "JNitroFileEncoding.hpp"
+#include <optional>
 #include "NitroUploadOptions.hpp"
 #include "JNitroUploadOptions.hpp"
-#include <optional>
 #include "NitroUploadMethod.hpp"
 #include "JNitroUploadMethod.hpp"
 #include <functional>
@@ -50,6 +51,11 @@ namespace margelo::nitro::nitrofs {
   size_t JHybridNitroFSSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
+  }
+
+  void JHybridNitroFSSpec::dispose() noexcept {
+    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    method(_javaPart);
   }
 
   // Properties
@@ -199,6 +205,61 @@ namespace margelo::nitro::nitrofs {
       });
       return __promise;
     }();
+  }
+  std::shared_ptr<Promise<std::vector<std::string>>> JHybridNitroFSSpec::readdir(const std::string& path) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* path */)>("readdir");
+    auto __result = method(_javaPart, jni::make_jstring(path));
+    return [&]() {
+      auto __promise = Promise<std::vector<std::string>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JArrayClass<jni::JString>>(__boxedResult);
+        __promise->resolve([&]() {
+          size_t __size = __result->size();
+          std::vector<std::string> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = __result->getElement(__i);
+            __vector.push_back(__element->toStdString());
+          }
+          return __vector;
+        }());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridNitroFSSpec::rename(const std::string& oldPath, const std::string& newPath) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* oldPath */, jni::alias_ref<jni::JString> /* newPath */)>("rename");
+    auto __result = method(_javaPart, jni::make_jstring(oldPath), jni::make_jstring(newPath));
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::string JHybridNitroFSSpec::dirname(const std::string& path) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* path */)>("dirname");
+    auto __result = method(_javaPart, jni::make_jstring(path));
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::basename(const std::string& path, const std::optional<std::string>& ext) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<jni::JString> /* ext */)>("basename");
+    auto __result = method(_javaPart, jni::make_jstring(path), ext.has_value() ? jni::make_jstring(ext.value()) : nullptr);
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::extname(const std::string& path) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* path */)>("extname");
+    auto __result = method(_javaPart, jni::make_jstring(path));
+    return __result->toStdString();
   }
   std::shared_ptr<Promise<void>> JHybridNitroFSSpec::uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroFile> /* file */, jni::alias_ref<JNitroUploadOptions> /* uploadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("uploadFile_cxx");

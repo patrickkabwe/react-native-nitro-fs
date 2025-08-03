@@ -35,6 +35,7 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 // C++ helpers for Swift
 #include "NitroFS-Swift-Cxx-Bridge.hpp"

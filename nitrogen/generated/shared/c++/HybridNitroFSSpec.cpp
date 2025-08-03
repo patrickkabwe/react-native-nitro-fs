@@ -26,6 +26,11 @@ namespace margelo::nitro::nitrofs {
       prototype.registerHybridMethod("unlink", &HybridNitroFSSpec::unlink);
       prototype.registerHybridMethod("mkdir", &HybridNitroFSSpec::mkdir);
       prototype.registerHybridMethod("stat", &HybridNitroFSSpec::stat);
+      prototype.registerHybridMethod("readdir", &HybridNitroFSSpec::readdir);
+      prototype.registerHybridMethod("rename", &HybridNitroFSSpec::rename);
+      prototype.registerHybridMethod("dirname", &HybridNitroFSSpec::dirname);
+      prototype.registerHybridMethod("basename", &HybridNitroFSSpec::basename);
+      prototype.registerHybridMethod("extname", &HybridNitroFSSpec::extname);
       prototype.registerHybridMethod("uploadFile", &HybridNitroFSSpec::uploadFile);
       prototype.registerHybridMethod("downloadFile", &HybridNitroFSSpec::downloadFile);
     });

@@ -22,8 +22,8 @@
 namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 
 #include <string>
-#include <optional>
 #include "NitroUploadMethod.hpp"
+#include <optional>
 
 namespace margelo::nitro::nitrofs {
 

@@ -27,9 +27,10 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <NitroModules/Promise.hpp>
 #include "NitroFileEncoding.hpp"
 #include "NitroFileStat.hpp"
+#include <vector>
+#include <optional>
 #include "NitroFile.hpp"
 #include "NitroUploadOptions.hpp"
-#include <optional>
 #include "NitroUploadMethod.hpp"
 #include <functional>
 
@@ -61,9 +62,11 @@ namespace margelo::nitro::nitrofs {
     }
 
   public:
-    // Get memory pressure
     inline size_t getExternalMemorySize() noexcept override {
       return _swiftPart.getMemorySize();
+    }
+    void dispose() noexcept override {
+      _swiftPart.dispose();
     }
 
   public:
@@ -145,6 +148,46 @@ namespace margelo::nitro::nitrofs {
     }
     inline std::shared_ptr<Promise<NitroFileStat>> stat(const std::string& path) override {
       auto __result = _swiftPart.stat(path);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::vector<std::string>>> readdir(const std::string& path) override {
+      auto __result = _swiftPart.readdir(path);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) override {
+      auto __result = _swiftPart.rename(oldPath, newPath);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::string dirname(const std::string& path) override {
+      auto __result = _swiftPart.dirname(path);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::string basename(const std::string& path, const std::optional<std::string>& ext) override {
+      auto __result = _swiftPart.basename(path, ext);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::string extname(const std::string& path) override {
+      auto __result = _swiftPart.extname(path);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
