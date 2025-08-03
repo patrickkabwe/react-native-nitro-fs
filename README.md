@@ -22,7 +22,7 @@ A high-performance file system module for React Native that handles file operati
 ## Installation
 
 ```bash
-bun add react-native-nitro-fs react-native-nitro-modules
+bun add react-native-nitro-fs react-native-nitro-modules@0.27.2
 ```
 
 ## Quick Start
@@ -160,7 +160,6 @@ const destinationPath = NitroFS.DOWNLOAD_DIR + '/file.txt'
 
 const file = await NitroFS.downloadFile(
   serverUrl,
-  fileName,
   destinationPath,
   (downloadedBytes, totalBytes) => {
     console.log(`Downloading ${(downloadedBytes / totalBytes) * 100}%`)
