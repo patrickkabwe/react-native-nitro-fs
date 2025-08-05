@@ -39,6 +39,7 @@ namespace margelo::nitro::nitrofs {
 
   public:
     size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
 
   public:
     inline const jni::global_ref<JHybridNitroFSSpec::javaobject>& getJavaPart() const noexcept {
@@ -62,6 +63,11 @@ namespace margelo::nitro::nitrofs {
     std::shared_ptr<Promise<bool>> unlink(const std::string& path) override;
     std::shared_ptr<Promise<bool>> mkdir(const std::string& path) override;
     std::shared_ptr<Promise<NitroFileStat>> stat(const std::string& path) override;
+    std::shared_ptr<Promise<std::vector<std::string>>> readdir(const std::string& path) override;
+    std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) override;
+    std::string dirname(const std::string& path) override;
+    std::string basename(const std::string& path, const std::optional<std::string>& ext) override;
+    std::string extname(const std::string& path) override;
     std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override;
     std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;
 

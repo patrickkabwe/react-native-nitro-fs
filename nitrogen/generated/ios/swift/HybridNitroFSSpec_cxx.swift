@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class HybridNitroFSSpec_cxx {
+open class HybridNitroFSSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::nitrofs::bridge::swift`)
    * from `NitroFS-Swift-Cxx-Bridge.hpp`.
@@ -94,6 +94,15 @@ public class HybridNitroFSSpec_cxx {
   @inline(__always)
   public var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
+  }
+
+  /**
+   * Call dispose() on the Swift class.
+   * This _may_ be called manually from JS.
+   */
+  @inline(__always)
+  public func dispose() {
+    self.__implementation.dispose()
   }
 
   // Properties
@@ -275,6 +284,92 @@ public class HybridNitroFSSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__shared_ptr_Promise_NitroFileStat___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func readdir(path: std.string) -> bridge.Result_std__shared_ptr_Promise_std__vector_std__string____ {
+    do {
+      let __result = try self.__implementation.readdir(path: String(path))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_std__string___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_std__string___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_std__string___(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_std__string_ in
+              var __vector = bridge.create_std__vector_std__string_(__result.count)
+              for __item in __result {
+                __vector.push_back(std.string(__item))
+              }
+              return __vector
+            }()) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_std__string____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_std__string____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func rename(oldPath: std.string, newPath: std.string) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.rename(oldPath: String(oldPath), newPath: String(newPath))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func dirname(path: std.string) -> bridge.Result_std__string_ {
+    do {
+      let __result = try self.__implementation.dirname(path: String(path))
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func basename(path: std.string, ext: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
+    do {
+      let __result = try self.__implementation.basename(path: String(path), ext: { () -> String? in
+        if let __unwrapped = ext.value {
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }())
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func extname(path: std.string) -> bridge.Result_std__string_ {
+    do {
+      let __result = try self.__implementation.extname(path: String(path))
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
   

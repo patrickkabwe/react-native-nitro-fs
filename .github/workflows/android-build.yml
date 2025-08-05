@@ -26,6 +26,10 @@ on:
       - '**/react-native.config.js'
       - '**/nitro.json'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_new:
     name: Build Android Example App (new architecture)

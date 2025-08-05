@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 class NitroFSImpl {
     weak var fileManager: FileManager?
@@ -33,6 +34,7 @@ class NitroFSImpl {
         defer { try? fileHandle.close() }
         
         var result = ""
+        // TODO: make this chunk configurable?
         let chunkSize = 1024
         
         while true {
@@ -54,6 +56,7 @@ class NitroFSImpl {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to copy file. FileManager is unavailable")
         }
+        
         try fileManager.copyItem(atPath: source, toPath: destination)
     }
     
@@ -61,7 +64,8 @@ class NitroFSImpl {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to unlink file. FileManager is unavailable")
         }
-        try fileManager.removeItem(atPath: path)
+        let newPath = try getPath(path: path)
+        try fileManager.removeItem(atPath: newPath)
     }
     
     func mkdir(path: String, mode: FileManager.ItemReplacementOptions = []) throws {
@@ -75,8 +79,8 @@ class NitroFSImpl {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to stat file. FileManager is unavailable")
         }
-        
-        let attributes = try fileManager.attributesOfItem(atPath: path)
+        let newPath = try getPath(path: path)
+        let attributes = try fileManager.attributesOfItem(atPath: newPath)
         let size = attributes[FileAttributeKey.size] as! Int
         let mtime = attributes[FileAttributeKey.modificationDate] as! Date
         let ctime = attributes[FileAttributeKey.creationDate] as! Date
@@ -88,6 +92,37 @@ class NitroFSImpl {
             isFile: !IsDirectory(path),
             isDirectory: IsDirectory(path)
         )
+    }
+    
+    func readdir(atPath path: String) throws -> [String] {
+        guard let fileManager else {
+            throw NitroFSError.unavailable(message: "Failed to stat file. FileManager is unavailable")
+        }
+        let pathURL = URL(fileURLWithPath: path)
+        let contents = try fileManager.contentsOfDirectory(
+            at: pathURL,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: .skipsHiddenFiles
+        )
+        return contents.map { $0.lastPathComponent }
+    }
+    
+    func rename(oldPath: String, newPath: String) throws {
+        let oldFile = URL(fileURLWithPath: oldPath)
+        let newFile = URL(fileURLWithPath: newPath)
+        try fileManager?.moveItem(at: oldFile, to: newFile)
+    }
+    
+    func dirname(path: String) throws -> String {
+        return URL(fileURLWithPath: path).deletingLastPathComponent().absoluteString
+    }
+    
+    func extname(path: String) throws -> String {
+        return URL(fileURLWithPath: path).pathExtension
+    }
+    
+    func basename(path: String, ext: String?) throws -> String {
+        return URL(fileURLWithPath: path).lastPathComponent
     }
     
     func uploadFile(

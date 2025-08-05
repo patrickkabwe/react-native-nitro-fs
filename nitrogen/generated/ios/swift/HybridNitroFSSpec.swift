@@ -25,13 +25,19 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func unlink(path: String) throws -> Promise<Bool>
   func mkdir(path: String) throws -> Promise<Bool>
   func stat(path: String) throws -> Promise<NitroFileStat>
+  func readdir(path: String) throws -> Promise<[String]>
+  func rename(oldPath: String, newPath: String) throws -> Promise<Void>
+  func dirname(path: String) throws -> String
+  func basename(path: String, ext: String?) throws -> String
+  func extname(path: String) throws -> String
   func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<Void>
   func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>
 }
 
 /// See ``HybridNitroFSSpec``
-public class HybridNitroFSSpec_base {
+open class HybridNitroFSSpec_base {
   private weak var cxxWrapper: HybridNitroFSSpec_cxx? = nil
+  public init() { }
   public func getCxxWrapper() -> HybridNitroFSSpec_cxx {
   #if DEBUG
     guard self is HybridNitroFSSpec else {

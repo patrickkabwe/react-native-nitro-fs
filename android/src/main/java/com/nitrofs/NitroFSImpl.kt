@@ -32,7 +32,30 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         encoding: NitroFileEncoding
     ) {
         val file = File(path)
-        file.writeText(data, charset = getFileEncoding(encoding))
+        
+        try {
+            val parentDir = file.parentFile
+            if (parentDir != null && !parentDir.exists()) {
+                if (!parentDir.mkdirs()) {
+                    throw RuntimeException("Failed to create parent directories for: $path")
+                }
+            }
+            
+            val dataSize = data.toByteArray(getFileEncoding(encoding)).size
+            val availableSpace = file.parentFile?.freeSpace ?: 0L
+            
+            if (dataSize > availableSpace) {
+                throw RuntimeException("Insufficient disk space. Required: ${dataSize / (1024 * 1024)}MB, Available: ${availableSpace / (1024 * 1024)}MB")
+            }
+            
+            file.writeText(data, charset = getFileEncoding(encoding))
+        } catch (e: SecurityException) {
+            throw RuntimeException("Permission denied writing to: $path")
+        } catch (e: OutOfMemoryError) {
+            throw RuntimeException("Failed to write file: Out of memory. Data may be too large.")
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to write file: ${e.message}")
+        }
     }
 
     fun readFile(
@@ -40,7 +63,49 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         encoding: NitroFileEncoding
     ): String {
         val file = File(path)
-        return file.readText(charset = getFileEncoding(encoding))
+        
+        if (!file.exists()) {
+            throw RuntimeException("File does not exist: $path")
+        }
+        
+        if (!file.isFile) {
+            throw RuntimeException("Path is not a file: $path")
+        }
+        
+        val fileSize = file.length()
+        val maxSize = 100 * 1024 * 1024 // 100MB limit
+        
+        if (fileSize > maxSize) {
+            throw RuntimeException("File too large (${fileSize / (1024 * 1024)}MB). Maximum size is 100MB.")
+        }
+        
+        return try {
+            if (fileSize < 1024 * 1024) {
+                file.readText(charset = getFileEncoding(encoding))
+            } else {
+                readFileChunked(file, getFileEncoding(encoding))
+            }
+        } catch (e: OutOfMemoryError) {
+            throw RuntimeException("Failed to read file: Out of memory. File may be too large.")
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to read file: ${e.message}")
+        }
+    }
+    
+    private fun readFileChunked(file: File, charset: Charset): String {
+        val buffer = StringBuilder()
+        val chunkSize = 64 * 1024
+        
+        file.inputStream().buffered().reader(charset).use { reader ->
+            val charBuffer = CharArray(chunkSize)
+            var bytesRead: Int
+            
+            while (reader.read(charBuffer).also { bytesRead = it } != -1) {
+                buffer.append(charBuffer, 0, bytesRead)
+            }
+        }
+        
+        return buffer.toString()
     }
 
     fun copyFile(
@@ -70,6 +135,42 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return stat
     }
 
+    fun readdir(path: String): Array<String> {
+        val file = File(path)
+        if (!file.isDirectory) {
+            throw Error("$path is not a directory")
+        }
+        return file.list() ?: emptyArray()
+    }
+
+    fun rename(
+        oldPath: String,
+        newPath: String
+    ) {
+        val oldFile = File(oldPath)
+        if (!oldFile.exists()) {
+            throw Error("$oldPath does not exist or is not a file")
+        }
+        val newFile = File(newPath)
+        oldFile.renameTo(newFile)
+    }
+
+    fun dirname(path: String): String {
+        val file = File(path)
+        return file.parent ?: ""
+    }
+
+    fun basename(path: String, ext: String?): String {
+        val file = File(path)
+        return file.nameWithoutExtension
+
+    }
+
+    fun extname(path: String): String {
+        val file = File(path)
+        return file.extension
+    }
+
     fun getDocumentDir(): String {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)?.absolutePath ?: ""
     }
@@ -79,7 +180,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     }
 
     fun getDownloadDir(): String {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)?.absolutePath ?: ""
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath ?: ""
     }
 
     suspend fun uploadFile(file: NitroFile,

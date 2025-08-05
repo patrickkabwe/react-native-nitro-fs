@@ -9,7 +9,7 @@ import os
 import Foundation
 import NitroModules
 
-class HybridNitroFS: HybridNitroFSSpec {
+class HybridNitroFS: HybridNitroFSSpec {    
     static private(set) var fileManager: FileManager = FileManager.default
     private(set) var nitroFSImpl: NitroFSImpl = NitroFSImpl(fileManager: fileManager)
     
@@ -63,7 +63,7 @@ class HybridNitroFS: HybridNitroFSSpec {
                 try self.nitroFSImpl.copy(source: srcPath, destination: destPath)
             } catch {
                 os_log("Failed to copy file or directory: \(error.localizedDescription)")
-                throw  NitroFSError.fileError(message: "Failed to copy file or directory content to disk")
+                throw RuntimeError.error(withMessage: "Failed to copy file or directory content to disk")
             }
         }
     }
@@ -98,12 +98,60 @@ class HybridNitroFS: HybridNitroFSSpec {
                 return try self.nitroFSImpl.stat(path: path)
             } catch {
                 os_log("Failed to get stat: \(error.localizedDescription)")
-
-                throw NitroFSError.encodingError(message: "Failed to get stat: \(error.localizedDescription)")
+                throw RuntimeError.error(withMessage: "Failed to get stat: \(error.localizedDescription)")
             }
         }
     }
     
+    func readdir(path: String) throws -> NitroModules.Promise<[String]> {
+        return .async {
+            do {
+                return try self.nitroFSImpl.readdir(atPath: path)
+            } catch {
+                os_log("An Error occurred in readdir(...): \(error.localizedDescription)")
+                throw RuntimeError.error(withMessage: "An Error occurred in readdir(...): \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func rename(oldPath: String, newPath: String) throws -> NitroModules.Promise<Void> {
+        return .async {
+            do {
+                return try self.nitroFSImpl.rename(oldPath: oldPath, newPath: newPath)
+            } catch {
+                os_log("An Error occurred in rename(...): \(error.localizedDescription)")
+                throw RuntimeError.error(withMessage: "An Error occurred in rename(...): \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func dirname(path: String) throws -> String {
+        do {
+            return try nitroFSImpl.dirname(path: path)
+        } catch {
+            os_log("An Error occurred in dirname(...): \(error.localizedDescription)")
+            throw RuntimeError.error(withMessage: "An Error occurred in dirname(...): \(error.localizedDescription)")
+        }
+    }
+    
+    func extname(path: String) throws -> String {
+        do {
+            return try nitroFSImpl.extname(path: path)
+        } catch {
+            os_log("An Error occurred in extname(...): \(error.localizedDescription)")
+            throw RuntimeError.error(withMessage: "An Error occurred in extname(...): \(error.localizedDescription)")
+        }
+    }
+    
+    func basename(path: String, ext: String?) throws -> String {
+        do {
+            return try nitroFSImpl.basename(path: path, ext: ext)
+        } catch {
+            os_log("An Error occurred in basename(...): \(error.localizedDescription)")
+            throw RuntimeError.error(withMessage: "An Error occurred in basename(...): \(error.localizedDescription)")
+        }
+    }
+
     func uploadFile(
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
@@ -138,3 +186,4 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
 }
+

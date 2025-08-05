@@ -110,6 +110,58 @@ class HybridNitroFS: HybridNitroFSSpec() {
         }
     }
 
+    override fun readdir(path: String): Promise<Array<String>> {
+        return Promise.async(ioScope) {
+            try {
+                nitroFsImpl.readdir(path)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error while calling readdir(...): ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
+
+    override fun rename(
+        oldPath: String,
+        newPath: String
+    ): Promise<Unit> {
+        return Promise.async(ioScope) {
+            try {
+                nitroFsImpl.rename(oldPath, newPath)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error while calling rename(...): ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
+
+    override fun dirname(path: String): String {
+        try {
+            return nitroFsImpl.dirname(path)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error while calling dirname(...): ${e.message}")
+            throw Error(e)
+        }
+    }
+
+    override fun basename(path: String, ext: String?): String {
+        try {
+            return nitroFsImpl.basename(path, ext)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error while calling basename(...): ${e.message}")
+            throw Error(e)
+        }
+    }
+
+    override fun extname(path: String): String {
+        try {
+            return nitroFsImpl.extname(path)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error while calling extname(...): ${e.message}")
+            throw Error(e)
+        }
+    }
+
     override fun uploadFile(
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
@@ -119,7 +171,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.uploadFile(file, uploadOptions, onProgress)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error uploading file: ${e.message}")
+                Log.e(TAG, "Error uploading file: ${e.message}")
                 throw Error(e)
             }
         }
@@ -134,9 +186,13 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error downloading file: ${e.message}")
+                Log.e(TAG, "Error downloading file: ${e.message}")
                 throw Error(e)
             }
         }
+    }
+
+    companion object {
+        const val TAG = "NitroFS"
     }
 }
