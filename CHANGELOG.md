@@ -1,3 +1,19 @@
+## [0.6.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.4...v0.6.0) (2025-08-06)
+
+### ✨ Features
+
+* adds new apis(`readdir`,`rename`,`dirname``basename` and `extname`) ([c634935](https://github.com/patrickkabwe/react-native-nitro-fs/commit/c6349356b2d95a471deb80b8af36602149f1272a))
+
+### 📚 Documentation
+
+* update README.md with enhanced features, installation instructions, and API reference for NitroFS ([84e5c2e](https://github.com/patrickkabwe/react-native-nitro-fs/commit/84e5c2eef4948fc9c5e23f308703ae1d83410d92))
+
+### 🛠️ Other changes
+
+* add concurrency settings to Android and iOS build workflows ([8364156](https://github.com/patrickkabwe/react-native-nitro-fs/commit/8364156276123d25da98bc6b73d9d93af0a05f5e))
+* bump react native to 0.80.2 ([98c5a24](https://github.com/patrickkabwe/react-native-nitro-fs/commit/98c5a249293876c0093683adcd2e9143d44f5645))
+* update NitroFS to version 0.5.4 and update checksum ([cfff291](https://github.com/patrickkabwe/react-native-nitro-fs/commit/cfff29154e86d29d3e3274ffc0afa7a9a534c2c6))
+
 ## [0.5.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.3...v0.5.4) (2025-07-31)
 
 ### 🛠️ Other changes
