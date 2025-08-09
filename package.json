@@ -64,7 +64,7 @@
         "react-native-builder-bob": "^0.37.0",
         "react-native-nitro-modules": "^0.27.2",
         "semantic-release": "^24.2.7",
-        "typescript": "5.0.4"
+        "typescript": "5.9.2"
     },
     "peerDependencies": {
         "react": "*",
