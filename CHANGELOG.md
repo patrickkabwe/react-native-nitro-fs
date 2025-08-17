@@ -1,3 +1,14 @@
+## [0.6.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.6.0...v0.6.1) (2025-08-17)
+
+### 🛠️ Other changes
+
+* add Xcode setup to iOS build workflows ([da22f99](https://github.com/patrickkabwe/react-native-nitro-fs/commit/da22f99376aedca958995175589405e0c81e6500))
+* **deps:** bump bigdecimal from 3.1.9 to 3.2.2 in /example ([e3c1109](https://github.com/patrickkabwe/react-native-nitro-fs/commit/e3c11095ded0fd6b4ff257fe2a79987289e94103))
+* **deps:** bump com.android.tools.build:gradle in /android ([6522427](https://github.com/patrickkabwe/react-native-nitro-fs/commit/65224274614e782f666d2800e398d7fe5ffc2e50))
+* **deps:** bump xcodeproj from 1.25.1 to 1.27.0 in /example ([ebbc096](https://github.com/patrickkabwe/react-native-nitro-fs/commit/ebbc096890b1c7ebf9e723295585a0b6b38975c4))
+* update bun.lock and release workflow cache key ([d7fcf88](https://github.com/patrickkabwe/react-native-nitro-fs/commit/d7fcf88db105015d1a21e4fee0155c7093d9c12d))
+* update dependencies and configurations ([4933e7d](https://github.com/patrickkabwe/react-native-nitro-fs/commit/4933e7d7e337396cd36784d2d3befb7ca6f90abb))
+
 ## [0.6.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.5.4...v0.6.0) (2025-08-06)
 
 ### ✨ Features
