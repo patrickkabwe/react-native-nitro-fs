@@ -15,11 +15,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class NitroFileEncoding {
-  UTF8,
-  ASCII;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class NitroFileEncoding(@DoNotStrip @Keep val value: Int) {
+  UTF8(0),
+  ASCII(1);
 }

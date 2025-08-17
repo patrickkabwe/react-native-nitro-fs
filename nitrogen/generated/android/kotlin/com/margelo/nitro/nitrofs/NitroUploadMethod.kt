@@ -15,12 +15,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class NitroUploadMethod {
-  POST,
-  PUT,
-  PATCH;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class NitroUploadMethod(@DoNotStrip @Keep val value: Int) {
+  POST(0),
+  PUT(1),
+  PATCH(2);
 }

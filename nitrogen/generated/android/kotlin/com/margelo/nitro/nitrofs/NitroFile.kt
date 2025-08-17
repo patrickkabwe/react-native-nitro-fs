@@ -21,8 +21,14 @@ data class NitroFile
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val name: String,
+    @DoNotStrip
+    @Keep
     val mimeType: String,
+    @DoNotStrip
+    @Keep
     val path: String
   ) {
   /* main constructor */

@@ -33,7 +33,7 @@ open class HybridNitroFSSpec_cxx {
   /**
    * Holds a weak pointer to the C++ class that wraps the Swift class.
    */
-  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_
+  private var __cxxPart: bridge.std__weak_ptr_HybridNitroFSSpec_
 
   /**
    * Create a new `HybridNitroFSSpec_cxx` that wraps the given `HybridNitroFSSpec`.
@@ -72,15 +72,15 @@ open class HybridNitroFSSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>`.
+   * The C++ part is a `std::shared_ptr<HybridNitroFSSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridNitroFSSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(newCxxPart)
+      let newCxxPart = bridge.create_std__shared_ptr_HybridNitroFSSpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_HybridNitroFSSpec_(newCxxPart)
       return newCxxPart
     }
   }

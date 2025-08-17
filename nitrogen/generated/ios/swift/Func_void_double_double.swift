@@ -9,21 +9,21 @@ import NitroModules
 
 
 /**
- * Wraps a Swift `(_ downloadedBytes: Double, _ totalBytes: Double) -> Void` as a class.
+ * Wraps a Swift `(_ uploadedBytes: Double, _ totalBytes: Double) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_double_double {
   public typealias bridge = margelo.nitro.nitrofs.bridge.swift
 
-  private let closure: (_ downloadedBytes: Double, _ totalBytes: Double) -> Void
+  private let closure: (_ uploadedBytes: Double, _ totalBytes: Double) -> Void
 
-  public init(_ closure: @escaping (_ downloadedBytes: Double, _ totalBytes: Double) -> Void) {
+  public init(_ closure: @escaping (_ uploadedBytes: Double, _ totalBytes: Double) -> Void) {
     self.closure = closure
   }
 
   @inline(__always)
-  public func call(downloadedBytes: Double, totalBytes: Double) -> Void {
-    self.closure(downloadedBytes, totalBytes)
+  public func call(uploadedBytes: Double, totalBytes: Double) -> Void {
+    self.closure(uploadedBytes, totalBytes)
   }
 
   /**

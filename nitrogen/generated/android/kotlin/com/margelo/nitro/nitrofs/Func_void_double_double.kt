@@ -15,7 +15,7 @@ import dalvik.annotation.optimization.FastNative
 
 
 /**
- * Represents the JavaScript callback `(downloadedBytes: number, totalBytes: number) => void`.
+ * Represents the JavaScript callback `(uploadedBytes: number, totalBytes: number) => void`.
  * This can be either implemented in C++ (in which case it might be a callback coming from JS),
  * or in Kotlin/Java (in which case it is a native callback).
  */
@@ -29,11 +29,11 @@ fun interface Func_void_double_double: (Double, Double) -> Unit {
    */
   @DoNotStrip
   @Keep
-  override fun invoke(downloadedBytes: Double, totalBytes: Double): Unit
+  override fun invoke(uploadedBytes: Double, totalBytes: Double): Unit
 }
 
 /**
- * Represents the JavaScript callback `(downloadedBytes: number, totalBytes: number) => void`.
+ * Represents the JavaScript callback `(uploadedBytes: number, totalBytes: number) => void`.
  * This is implemented in C++, via a `std::function<...>`.
  * The callback might be coming from JS.
  */
@@ -57,15 +57,15 @@ class Func_void_double_double_cxx: Func_void_double_double {
 
   @DoNotStrip
   @Keep
-  override fun invoke(downloadedBytes: Double, totalBytes: Double): Unit
-    = invoke_cxx(downloadedBytes,totalBytes)
+  override fun invoke(uploadedBytes: Double, totalBytes: Double): Unit
+    = invoke_cxx(uploadedBytes,totalBytes)
 
   @FastNative
-  private external fun invoke_cxx(downloadedBytes: Double, totalBytes: Double): Unit
+  private external fun invoke_cxx(uploadedBytes: Double, totalBytes: Double): Unit
 }
 
 /**
- * Represents the JavaScript callback `(downloadedBytes: number, totalBytes: number) => void`.
+ * Represents the JavaScript callback `(uploadedBytes: number, totalBytes: number) => void`.
  * This is implemented in Java/Kotlin, via a `(Double, Double) -> Unit`.
  * The callback is always coming from native.
  */
@@ -75,7 +75,7 @@ class Func_void_double_double_cxx: Func_void_double_double {
 class Func_void_double_double_java(private val function: (Double, Double) -> Unit): Func_void_double_double {
   @DoNotStrip
   @Keep
-  override fun invoke(downloadedBytes: Double, totalBytes: Double): Unit {
-    return this.function(downloadedBytes, totalBytes)
+  override fun invoke(uploadedBytes: Double, totalBytes: Double): Unit {
+    return this.function(uploadedBytes, totalBytes)
   }
 }

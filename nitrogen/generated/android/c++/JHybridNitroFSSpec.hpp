@@ -29,6 +29,7 @@ namespace margelo::nitro::nitrofs {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridNitroFSSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridNitroFSSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:

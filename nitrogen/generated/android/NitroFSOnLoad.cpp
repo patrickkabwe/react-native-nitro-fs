@@ -17,7 +17,6 @@
 
 #include "JHybridNitroFSSpec.hpp"
 #include "JFunc_void_double_double.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::nitrofs {
@@ -39,7 +38,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridNitroFSSpec::javaobject> object("com/nitrofs/HybridNitroFS");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridNitroFSSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
   });

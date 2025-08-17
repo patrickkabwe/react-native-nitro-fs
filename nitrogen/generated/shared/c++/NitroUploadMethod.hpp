@@ -38,26 +38,24 @@ namespace margelo::nitro::nitrofs {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::nitrofs;
-
   // C++ NitroUploadMethod <> JS NitroUploadMethod (union)
   template <>
-  struct JSIConverter<NitroUploadMethod> final {
-    static inline NitroUploadMethod fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::nitrofs::NitroUploadMethod> final {
+    static inline margelo::nitro::nitrofs::NitroUploadMethod fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("POST"): return NitroUploadMethod::POST;
-        case hashString("PUT"): return NitroUploadMethod::PUT;
-        case hashString("PATCH"): return NitroUploadMethod::PATCH;
+        case hashString("POST"): return margelo::nitro::nitrofs::NitroUploadMethod::POST;
+        case hashString("PUT"): return margelo::nitro::nitrofs::NitroUploadMethod::PUT;
+        case hashString("PATCH"): return margelo::nitro::nitrofs::NitroUploadMethod::PATCH;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum NitroUploadMethod - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, NitroUploadMethod arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::nitrofs::NitroUploadMethod arg) {
       switch (arg) {
-        case NitroUploadMethod::POST: return JSIConverter<std::string>::toJSI(runtime, "POST");
-        case NitroUploadMethod::PUT: return JSIConverter<std::string>::toJSI(runtime, "PUT");
-        case NitroUploadMethod::PATCH: return JSIConverter<std::string>::toJSI(runtime, "PATCH");
+        case margelo::nitro::nitrofs::NitroUploadMethod::POST: return JSIConverter<std::string>::toJSI(runtime, "POST");
+        case margelo::nitro::nitrofs::NitroUploadMethod::PUT: return JSIConverter<std::string>::toJSI(runtime, "PUT");
+        case margelo::nitro::nitrofs::NitroUploadMethod::PATCH: return JSIConverter<std::string>::toJSI(runtime, "PATCH");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert NitroUploadMethod to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");
