@@ -21,8 +21,14 @@ data class NitroUploadOptions
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val url: String,
+    @DoNotStrip
+    @Keep
     val method: NitroUploadMethod?,
+    @DoNotStrip
+    @Keep
     val field: String?
   ) {
   /* main constructor */

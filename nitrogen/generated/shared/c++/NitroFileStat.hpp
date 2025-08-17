@@ -44,14 +44,12 @@ namespace margelo::nitro::nitrofs {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::nitrofs;
-
   // C++ NitroFileStat <> JS NitroFileStat (object)
   template <>
-  struct JSIConverter<NitroFileStat> final {
-    static inline NitroFileStat fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::nitrofs::NitroFileStat> final {
+    static inline margelo::nitro::nitrofs::NitroFileStat fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return NitroFileStat(
+      return margelo::nitro::nitrofs::NitroFileStat(
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "size")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "ctime")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "mtime")),
@@ -59,7 +57,7 @@ namespace margelo::nitro {
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, "isDirectory"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroFileStat& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrofs::NitroFileStat& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "size", JSIConverter<double>::toJSI(runtime, arg.size));
       obj.setProperty(runtime, "ctime", JSIConverter<double>::toJSI(runtime, arg.ctime));

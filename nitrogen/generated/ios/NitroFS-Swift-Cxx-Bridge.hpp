@@ -337,17 +337,17 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>(value);
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>
+  // pragma MARK: std::shared_ptr<HybridNitroFSSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>`.
+   * Specialized version of `std::shared_ptr<HybridNitroFSSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ = std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>;
-  std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec> create_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ cppType);
+  using std__shared_ptr_HybridNitroFSSpec_ = std::shared_ptr<HybridNitroFSSpec>;
+  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>
-  using std__weak_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ = std::weak_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>;
-  inline std__weak_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ weakify_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(const std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<HybridNitroFSSpec>
+  using std__weak_ptr_HybridNitroFSSpec_ = std::weak_ptr<HybridNitroFSSpec>;
+  inline std__weak_ptr_HybridNitroFSSpec_ weakify_std__shared_ptr_HybridNitroFSSpec_(const std::shared_ptr<HybridNitroFSSpec>& strong) { return strong; }
   
   // pragma MARK: Result<std::shared_ptr<Promise<bool>>>
   using Result_std__shared_ptr_Promise_bool___ = Result<std::shared_ptr<Promise<bool>>>;

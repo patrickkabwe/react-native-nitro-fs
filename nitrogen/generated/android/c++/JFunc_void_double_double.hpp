@@ -17,7 +17,7 @@ namespace margelo::nitro::nitrofs {
   using namespace facebook;
 
   /**
-   * Represents the Java/Kotlin callback `(downloadedBytes: Double, totalBytes: Double) -> Unit`.
+   * Represents the Java/Kotlin callback `(uploadedBytes: Double, totalBytes: Double) -> Unit`.
    * This can be passed around between C++ and Java/Kotlin.
    */
   struct JFunc_void_double_double: public jni::JavaClass<JFunc_void_double_double> {
@@ -28,9 +28,9 @@ namespace margelo::nitro::nitrofs {
     /**
      * Invokes the function this `JFunc_void_double_double` instance holds through JNI.
      */
-    void invoke(double downloadedBytes, double totalBytes) const {
-      static const auto method = javaClassStatic()->getMethod<void(double /* downloadedBytes */, double /* totalBytes */)>("invoke");
-      method(self(), downloadedBytes, totalBytes);
+    void invoke(double uploadedBytes, double totalBytes) const {
+      static const auto method = javaClassStatic()->getMethod<void(double /* uploadedBytes */, double /* totalBytes */)>("invoke");
+      method(self(), uploadedBytes, totalBytes);
     }
   };
 
@@ -39,7 +39,7 @@ namespace margelo::nitro::nitrofs {
    */
   struct JFunc_void_double_double_cxx final: public jni::HybridClass<JFunc_void_double_double_cxx, JFunc_void_double_double> {
   public:
-    static jni::local_ref<JFunc_void_double_double::javaobject> fromCpp(const std::function<void(double /* downloadedBytes */, double /* totalBytes */)>& func) {
+    static jni::local_ref<JFunc_void_double_double::javaobject> fromCpp(const std::function<void(double /* uploadedBytes */, double /* totalBytes */)>& func) {
       return JFunc_void_double_double_cxx::newObjectCxxArgs(func);
     }
 
@@ -47,13 +47,13 @@ namespace margelo::nitro::nitrofs {
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_void_double_double_cxx` instance holds.
      */
-    void invoke_cxx(double downloadedBytes, double totalBytes) {
-      _func(downloadedBytes, totalBytes);
+    void invoke_cxx(double uploadedBytes, double totalBytes) {
+      _func(uploadedBytes, totalBytes);
     }
 
   public:
     [[nodiscard]]
-    inline const std::function<void(double /* downloadedBytes */, double /* totalBytes */)>& getFunction() const {
+    inline const std::function<void(double /* uploadedBytes */, double /* totalBytes */)>& getFunction() const {
       return _func;
     }
 
@@ -64,11 +64,11 @@ namespace margelo::nitro::nitrofs {
     }
 
   private:
-    explicit JFunc_void_double_double_cxx(const std::function<void(double /* downloadedBytes */, double /* totalBytes */)>& func): _func(func) { }
+    explicit JFunc_void_double_double_cxx(const std::function<void(double /* uploadedBytes */, double /* totalBytes */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(double /* downloadedBytes */, double /* totalBytes */)> _func;
+    std::function<void(double /* uploadedBytes */, double /* totalBytes */)> _func;
   };
 
 } // namespace margelo::nitro::nitrofs

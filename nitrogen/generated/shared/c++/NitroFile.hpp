@@ -42,20 +42,18 @@ namespace margelo::nitro::nitrofs {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::nitrofs;
-
   // C++ NitroFile <> JS NitroFile (object)
   template <>
-  struct JSIConverter<NitroFile> final {
-    static inline NitroFile fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::nitrofs::NitroFile> final {
+    static inline margelo::nitro::nitrofs::NitroFile fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return NitroFile(
+      return margelo::nitro::nitrofs::NitroFile(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "name")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "mimeType")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "path"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroFile& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrofs::NitroFile& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "name", JSIConverter<std::string>::toJSI(runtime, arg.name));
       obj.setProperty(runtime, "mimeType", JSIConverter<std::string>::toJSI(runtime, arg.mimeType));

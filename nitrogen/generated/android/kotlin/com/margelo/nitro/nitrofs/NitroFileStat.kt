@@ -21,10 +21,20 @@ data class NitroFileStat
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val size: Double,
+    @DoNotStrip
+    @Keep
     val ctime: Double,
+    @DoNotStrip
+    @Keep
     val mtime: Double,
+    @DoNotStrip
+    @Keep
     val isFile: Boolean,
+    @DoNotStrip
+    @Keep
     val isDirectory: Boolean
   ) {
   /* main constructor */

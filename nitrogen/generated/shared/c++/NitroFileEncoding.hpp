@@ -37,24 +37,22 @@ namespace margelo::nitro::nitrofs {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::nitrofs;
-
   // C++ NitroFileEncoding <> JS NitroFileEncoding (union)
   template <>
-  struct JSIConverter<NitroFileEncoding> final {
-    static inline NitroFileEncoding fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::nitrofs::NitroFileEncoding> final {
+    static inline margelo::nitro::nitrofs::NitroFileEncoding fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("utf8"): return NitroFileEncoding::UTF8;
-        case hashString("ascii"): return NitroFileEncoding::ASCII;
+        case hashString("utf8"): return margelo::nitro::nitrofs::NitroFileEncoding::UTF8;
+        case hashString("ascii"): return margelo::nitro::nitrofs::NitroFileEncoding::ASCII;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum NitroFileEncoding - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, NitroFileEncoding arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::nitrofs::NitroFileEncoding arg) {
       switch (arg) {
-        case NitroFileEncoding::UTF8: return JSIConverter<std::string>::toJSI(runtime, "utf8");
-        case NitroFileEncoding::ASCII: return JSIConverter<std::string>::toJSI(runtime, "ascii");
+        case margelo::nitro::nitrofs::NitroFileEncoding::UTF8: return JSIConverter<std::string>::toJSI(runtime, "utf8");
+        case margelo::nitro::nitrofs::NitroFileEncoding::ASCII: return JSIConverter<std::string>::toJSI(runtime, "ascii");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert NitroFileEncoding to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

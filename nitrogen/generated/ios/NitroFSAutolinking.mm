@@ -24,7 +24,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "NitroFS",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec> hybridObject = NitroFS::NitroFSAutolinking::createNitroFS();
+      std::shared_ptr<HybridNitroFSSpec> hybridObject = NitroFS::NitroFSAutolinking::createNitroFS();
       return hybridObject;
     }
   );

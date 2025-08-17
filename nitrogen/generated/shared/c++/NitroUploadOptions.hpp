@@ -45,23 +45,21 @@ namespace margelo::nitro::nitrofs {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::nitrofs;
-
   // C++ NitroUploadOptions <> JS NitroUploadOptions (object)
   template <>
-  struct JSIConverter<NitroUploadOptions> final {
-    static inline NitroUploadOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::nitrofs::NitroUploadOptions> final {
+    static inline margelo::nitro::nitrofs::NitroUploadOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return NitroUploadOptions(
+      return margelo::nitro::nitrofs::NitroUploadOptions(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "url")),
-        JSIConverter<std::optional<NitroUploadMethod>>::fromJSI(runtime, obj.getProperty(runtime, "method")),
+        JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::fromJSI(runtime, obj.getProperty(runtime, "method")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "field"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroUploadOptions& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrofs::NitroUploadOptions& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "url", JSIConverter<std::string>::toJSI(runtime, arg.url));
-      obj.setProperty(runtime, "method", JSIConverter<std::optional<NitroUploadMethod>>::toJSI(runtime, arg.method));
+      obj.setProperty(runtime, "method", JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::toJSI(runtime, arg.method));
       obj.setProperty(runtime, "field", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.field));
       return obj;
     }
@@ -71,7 +69,7 @@ namespace margelo::nitro {
       }
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "url"))) return false;
-      if (!JSIConverter<std::optional<NitroUploadMethod>>::canConvert(runtime, obj.getProperty(runtime, "method"))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::canConvert(runtime, obj.getProperty(runtime, "method"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "field"))) return false;
       return true;
     }

@@ -77,12 +77,12 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     };
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec>
-  std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpec> create_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<HybridNitroFSSpec>
+  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroFS::HybridNitroFSSpec_cxx swiftPart = NitroFS::HybridNitroFSSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::nitrofs::HybridNitroFSSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_(std__shared_ptr_margelo__nitro__nitrofs__HybridNitroFSSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType) {
     std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::nitrofs::HybridNitroFSSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
