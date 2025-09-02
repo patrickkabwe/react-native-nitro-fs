@@ -14,7 +14,7 @@
 namespace margelo::nitro::nitrofs::bridge::swift {
 
   // pragma MARK: std::function<void(bool /* result */)>
-  Func_void_bool create_Func_void_bool(void* _Nonnull swiftClosureWrapper) {
+  Func_void_bool create_Func_void_bool(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_bool::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](bool result) mutable -> void {
       swiftClosure.call(result);
@@ -22,7 +22,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) {
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
       swiftClosure.call(error);
@@ -30,7 +30,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void()>
-  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) {
+  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)]() mutable -> void {
       swiftClosure.call();
@@ -38,7 +38,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(const std::string& /* result */)>
-  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper) {
+  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_std__string::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::string& result) mutable -> void {
       swiftClosure.call(result);
@@ -46,7 +46,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(const NitroFileStat& /* result */)>
-  Func_void_NitroFileStat create_Func_void_NitroFileStat(void* _Nonnull swiftClosureWrapper) {
+  Func_void_NitroFileStat create_Func_void_NitroFileStat(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_NitroFileStat::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const NitroFileStat& result) mutable -> void {
       swiftClosure.call(result);
@@ -54,7 +54,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(const std::vector<std::string>& /* result */)>
-  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* _Nonnull swiftClosureWrapper) {
+  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_std__vector_std__string_::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::vector<std::string>& result) mutable -> void {
       swiftClosure.call(result);
@@ -62,7 +62,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(double /* uploadedBytes */, double /* totalBytes */)>
-  Func_void_double_double create_Func_void_double_double(void* _Nonnull swiftClosureWrapper) {
+  Func_void_double_double create_Func_void_double_double(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_double_double::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](double uploadedBytes, double totalBytes) mutable -> void {
       swiftClosure.call(uploadedBytes, totalBytes);
@@ -70,7 +70,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::function<void(const NitroFile& /* result */)>
-  Func_void_NitroFile create_Func_void_NitroFile(void* _Nonnull swiftClosureWrapper) {
+  Func_void_NitroFile create_Func_void_NitroFile(void* _Nonnull swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroFS::Func_void_NitroFile::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const NitroFile& result) mutable -> void {
       swiftClosure.call(result);
@@ -78,11 +78,11 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   }
   
   // pragma MARK: std::shared_ptr<HybridNitroFSSpec>
-  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer) {
+  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer) noexcept {
     NitroFS::HybridNitroFSSpec_cxx swiftPart = NitroFS::HybridNitroFSSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::nitrofs::HybridNitroFSSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType) noexcept {
     std::shared_ptr<margelo::nitro::nitrofs::HybridNitroFSSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::nitrofs::HybridNitroFSSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
