@@ -26,13 +26,13 @@ A high-performance file system module for React Native that provides native-spee
 
 ```bash
 # Using bun (recommended)
-bun add react-native-nitro-fs react-native-nitro-modules@0.27.2
+bun add react-native-nitro-fs react-native-nitro-modules
 
 # Using npm
-npm install react-native-nitro-fs react-native-nitro-modules@0.27.2
+npm install react-native-nitro-fs react-native-nitro-modules
 
 # Using yarn
-yarn add react-native-nitro-fs react-native-nitro-modules@0.27.2
+yarn add react-native-nitro-fs react-native-nitro-modules
 ```
 
 ### iOS Setup
