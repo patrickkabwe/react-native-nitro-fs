@@ -26,17 +26,30 @@ class NitroFSImpl {
         guard fileManager != nil else {
             throw NitroFSError.unavailable(message: "Failed to write file. FileManager is unavailable")
         }
-        try data.write(toFile: path, atomically: true, encoding: getEncoding(nitroEncoding: encoding))
+
+        if encoding == .base64 {
+            guard let decodedData = Data(base64Encoded: data) else {
+                throw NitroFSError.encodingError(message: "Invalid base64 data")
+            }
+            try decodedData.write(to: URL(fileURLWithPath: path))
+        } else {
+            try data.write(toFile: path, atomically: true, encoding: getEncoding(nitroEncoding: encoding))
+        }
     }
     
     func readFile(path: String, encoding: NitroFileEncoding) throws -> String {
+        if encoding == .base64 {
+            let data = try Data(contentsOf: URL(fileURLWithPath: path))
+            return data.base64EncodedString()
+        }
+
         let fileHandle = try FileHandle(forReadingFrom: URL(fileURLWithPath: path))
         defer { try? fileHandle.close() }
-        
+
         var result = ""
         // TODO: make this chunk configurable?
         let chunkSize = 1024
-        
+
         while true {
             if let chunk = try fileHandle.read(upToCount: chunkSize), !chunk.isEmpty {
                 if let string = String(data: chunk, encoding: getEncoding(nitroEncoding: encoding)) {
@@ -48,7 +61,7 @@ class NitroFSImpl {
                 break
             }
         }
-        
+
         return result
     }
     
@@ -163,6 +176,9 @@ class NitroFSImpl {
             return .utf8
         case .ascii:
             return .ascii
+        case .base64:
+            // Base64 is handled separately in readFile/writeFile
+            return .utf8
         default :
             fatalError("Unsupported encoding")
         }

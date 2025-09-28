@@ -31,6 +31,7 @@ namespace margelo::nitro::nitrofs {
   enum class NitroFileEncoding {
     UTF8      SWIFT_NAME(utf8) = 0,
     ASCII      SWIFT_NAME(ascii) = 1,
+    BASE64      SWIFT_NAME(base64) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::nitrofs
@@ -45,6 +46,7 @@ namespace margelo::nitro {
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         case hashString("utf8"): return margelo::nitro::nitrofs::NitroFileEncoding::UTF8;
         case hashString("ascii"): return margelo::nitro::nitrofs::NitroFileEncoding::ASCII;
+        case hashString("base64"): return margelo::nitro::nitrofs::NitroFileEncoding::BASE64;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum NitroFileEncoding - invalid value!");
       }
@@ -53,6 +55,7 @@ namespace margelo::nitro {
       switch (arg) {
         case margelo::nitro::nitrofs::NitroFileEncoding::UTF8: return JSIConverter<std::string>::toJSI(runtime, "utf8");
         case margelo::nitro::nitrofs::NitroFileEncoding::ASCII: return JSIConverter<std::string>::toJSI(runtime, "ascii");
+        case margelo::nitro::nitrofs::NitroFileEncoding::BASE64: return JSIConverter<std::string>::toJSI(runtime, "base64");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert NitroFileEncoding to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");
@@ -66,6 +69,7 @@ namespace margelo::nitro {
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         case hashString("utf8"):
         case hashString("ascii"):
+        case hashString("base64"):
           return true;
         default:
           return false;

@@ -21,6 +21,8 @@ public extension NitroFileEncoding {
         self = .utf8
       case "ascii":
         self = .ascii
+      case "base64":
+        self = .base64
       default:
         return nil
     }
@@ -35,6 +37,8 @@ public extension NitroFileEncoding {
         return "utf8"
       case .ascii:
         return "ascii"
+      case .base64:
+        return "base64"
     }
   }
 }

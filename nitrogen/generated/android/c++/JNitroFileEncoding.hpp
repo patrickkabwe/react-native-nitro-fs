@@ -43,12 +43,15 @@ namespace margelo::nitro::nitrofs {
       static const auto clazz = javaClassStatic();
       static const auto fieldUTF8 = clazz->getStaticField<JNitroFileEncoding>("UTF8");
       static const auto fieldASCII = clazz->getStaticField<JNitroFileEncoding>("ASCII");
+      static const auto fieldBASE64 = clazz->getStaticField<JNitroFileEncoding>("BASE64");
       
       switch (value) {
         case NitroFileEncoding::UTF8:
           return clazz->getStaticFieldValue(fieldUTF8);
         case NitroFileEncoding::ASCII:
           return clazz->getStaticFieldValue(fieldASCII);
+        case NitroFileEncoding::BASE64:
+          return clazz->getStaticFieldValue(fieldBASE64);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::invalid_argument("Invalid enum value (" + stringValue + "!");

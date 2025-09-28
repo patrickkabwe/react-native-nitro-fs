@@ -324,6 +324,39 @@ export const useFileSystem = () => {
         }
     };
 
+    const base64Encoding = async () => {
+        try {
+            setLoading(true);
+            const Path = `${NitroFS.CACHE_DIR}/base64.bin`;
+
+            // Create base64 encoded content (binary data)
+            const base64Content = 'SGVsbG8gV29ybGQhIFRoaXMgaXMgYSBiYXNlNjQgdGVzdC4='; // "Hello World! This is a base64 ."
+
+            // Write base64 content
+            await NitroFS.writeFile(Path, base64Content, 'base64');
+
+            // Read back as base64
+            const readBase64 = await NitroFS.readFile(Path, 'base64');
+
+            // Read as UTF-8 to verify
+            const readText = await NitroFS.readFile(Path, 'utf8');
+
+            Alert.alert('Base64  Success',
+                `Original base64: ${base64Content}\n\n` +
+                `Read as base64: ${readBase64}\n\n` +
+                `Decoded text: ${readText}`
+            );
+
+            // Clean up
+            await NitroFS.unlink(Path);
+        } catch (error) {
+            console.error('Error base64 encoding:', error);
+            Alert.alert('Error', 'Failed to base64 encoding');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         currentPath,
         files,
@@ -347,5 +380,6 @@ export const useFileSystem = () => {
         renameItem,
         getPathInfo,
         navigateToDirectoryType,
+        base64Encoding,
     };
 }; 

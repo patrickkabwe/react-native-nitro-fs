@@ -17,5 +17,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 enum class NitroFileEncoding(@DoNotStrip @Keep val value: Int) {
   UTF8(0),
-  ASCII(1);
+  ASCII(1),
+  BASE64(2);
 }
