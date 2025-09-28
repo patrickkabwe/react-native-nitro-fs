@@ -341,7 +341,7 @@ export const useFileSystem = () => {
             // Read as UTF-8 to verify
             const readText = await NitroFS.readFile(Path, 'utf8');
 
-            Alert.alert('Base64  Success',
+            Alert.alert('Base64 Success',
                 `Original base64: ${base64Content}\n\n` +
                 `Read as base64: ${readBase64}\n\n` +
                 `Decoded text: ${readText}`
@@ -351,7 +351,7 @@ export const useFileSystem = () => {
             await NitroFS.unlink(Path);
         } catch (error) {
             console.error('Error base64 encoding:', error);
-            Alert.alert('Error', 'Failed to base64 encoding');
+            Alert.alert('Error', 'Failed to perform base64 encoding');
         } finally {
             setLoading(false);
         }
