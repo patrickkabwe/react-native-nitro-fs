@@ -1,3 +1,21 @@
+## [0.7.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.6.1...v0.7.0) (2025-10-07)
+
+### ✨ Features
+
+* add base64 encoding support to NitroFS ([50f7be8](https://github.com/patrickkabwe/react-native-nitro-fs/commit/50f7be8f5e10516808f715bf08cdd9ea8fe68b62))
+
+### 🛠️ Other changes
+
+* **deps:** bump actions/checkout from 4 to 5 ([8f37585](https://github.com/patrickkabwe/react-native-nitro-fs/commit/8f37585eb29925677ec0e8cb71ac507379ed6102))
+* **deps:** bump actions/setup-java from 4 to 5 ([6b069cd](https://github.com/patrickkabwe/react-native-nitro-fs/commit/6b069cd53ecb163f3208a2c7e3c6e06fb5cc4ca8))
+* **deps:** bump activesupport from 7.2.2.1 to 7.2.2.2 in /example ([164c39a](https://github.com/patrickkabwe/react-native-nitro-fs/commit/164c39ae5611dcc2f5452dab7d3b10e279fdd024))
+* **deps:** bump benchmark from 0.4.0 to 0.4.1 in /example ([36f6edd](https://github.com/patrickkabwe/react-native-nitro-fs/commit/36f6edd94cfa6bcfd461fe6e506302e0534a0c29))
+* **deps:** bump cocoapods from 1.15.2 to 1.16.2 in /example ([de26e68](https://github.com/patrickkabwe/react-native-nitro-fs/commit/de26e68d4b26341a095a61a4a223ad25f7a3cfbd))
+* **deps:** bump com.android.tools.build:gradle in /android ([2fb7022](https://github.com/patrickkabwe/react-native-nitro-fs/commit/2fb70224f01a1b5e049df012601bfc4e2c38cf27))
+* **deps:** bump com.android.tools.build:gradle in /android ([e6e6bc7](https://github.com/patrickkabwe/react-native-nitro-fs/commit/e6e6bc73feb3e0b47c7b7952212eb194aae0592b))
+* **deps:** bump com.android.tools.build:gradle in /android ([e12c654](https://github.com/patrickkabwe/react-native-nitro-fs/commit/e12c65458b142e46b8eb3708178a129bf226c19f))
+* **deps:** bump concurrent-ruby from 1.3.3 to 1.3.5 in /example ([7da6aa1](https://github.com/patrickkabwe/react-native-nitro-fs/commit/7da6aa1fb20ddbd7f4b8d355c643e1c73a9b41d4))
+
 ## [0.6.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.6.0...v0.6.1) (2025-08-17)
 
 ### 🛠️ Other changes
