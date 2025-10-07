@@ -19,6 +19,7 @@ interface ActionPanelProps {
   onCheckExists: (path: string) => void;
   onCopyItem: (item: FileItem, newName: string) => void;
   onRenameItem: (item: FileItem, newName: string) => void;
+  onBase64Encoding: () => void;
 }
 
 export const ActionPanel: React.FC<ActionPanelProps> = ({
@@ -32,6 +33,7 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
   onCheckExists,
   onCopyItem,
   onRenameItem,
+  onBase64Encoding,
 }) => {
   const [fileName, setFileName] = useState('');
   const [fileContent, setFileContent] = useState('');
@@ -138,6 +140,16 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
           <Text style={styles.buttonText}>Rename Item</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.button, styles.base64Button]}
+          onPress={onBase64Encoding}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>Base64</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -190,6 +202,9 @@ const styles = StyleSheet.create({
   },
   renameButton: {
     backgroundColor: '#fd7e14',
+  },
+  base64Button: {
+    backgroundColor: '#dc3545',
   },
   buttonText: {
     color: '#fff',

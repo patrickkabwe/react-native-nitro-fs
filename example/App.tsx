@@ -32,6 +32,7 @@ const App = () => {
     renameItem,
     getPathInfo,
     navigateToDirectoryType,
+    base64Encoding,
   } = useFileSystem();
 
   return (
@@ -73,6 +74,7 @@ const App = () => {
         onCheckExists={checkExists}
         onCopyItem={copyItem}
         onRenameItem={renameItem}
+        onBase64Encoding={base64Encoding}
       />
 
       <FileEditor

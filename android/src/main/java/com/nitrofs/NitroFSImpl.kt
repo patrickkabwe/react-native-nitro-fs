@@ -8,6 +8,7 @@ import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
 import com.margelo.nitro.nitrofs.NitroUploadOptions
+import android.util.Base64
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.charset.Charset
@@ -32,7 +33,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         encoding: NitroFileEncoding
     ) {
         val file = File(path)
-        
+
         try {
             val parentDir = file.parentFile
             if (parentDir != null && !parentDir.exists()) {
@@ -40,15 +41,27 @@ class NitroFSImpl(val context: ReactApplicationContext) {
                     throw RuntimeException("Failed to create parent directories for: $path")
                 }
             }
-            
-            val dataSize = data.toByteArray(getFileEncoding(encoding)).size
-            val availableSpace = file.parentFile?.freeSpace ?: 0L
-            
-            if (dataSize > availableSpace) {
-                throw RuntimeException("Insufficient disk space. Required: ${dataSize / (1024 * 1024)}MB, Available: ${availableSpace / (1024 * 1024)}MB")
+
+            if (encoding == NitroFileEncoding.BASE64) {
+                val decodedBytes = Base64.decode(data, Base64.DEFAULT)
+                val dataSize = decodedBytes.size
+                val availableSpace = file.parentFile?.freeSpace ?: 0L
+
+                if (dataSize > availableSpace) {
+                    throw RuntimeException("Insufficient disk space. Required: ${dataSize / (1024 * 1024)}MB, Available: ${availableSpace / (1024 * 1024)}MB")
+                }
+
+                file.writeBytes(decodedBytes)
+            } else {
+                val dataSize = data.toByteArray(getFileEncoding(encoding)).size
+                val availableSpace = file.parentFile?.freeSpace ?: 0L
+
+                if (dataSize > availableSpace) {
+                    throw RuntimeException("Insufficient disk space. Required: ${dataSize / (1024 * 1024)}MB, Available: ${availableSpace / (1024 * 1024)}MB")
+                }
+
+                file.writeText(data, charset = getFileEncoding(encoding))
             }
-            
-            file.writeText(data, charset = getFileEncoding(encoding))
         } catch (e: SecurityException) {
             throw RuntimeException("Permission denied writing to: $path")
         } catch (e: OutOfMemoryError) {
@@ -63,24 +76,27 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         encoding: NitroFileEncoding
     ): String {
         val file = File(path)
-        
+
         if (!file.exists()) {
             throw RuntimeException("File does not exist: $path")
         }
-        
+
         if (!file.isFile) {
             throw RuntimeException("Path is not a file: $path")
         }
-        
+
         val fileSize = file.length()
         val maxSize = 100 * 1024 * 1024 // 100MB limit
-        
+
         if (fileSize > maxSize) {
             throw RuntimeException("File too large (${fileSize / (1024 * 1024)}MB). Maximum size is 100MB.")
         }
-        
+
         return try {
-            if (fileSize < 1024 * 1024) {
+            if (encoding == NitroFileEncoding.BASE64) {
+                val bytes = file.readBytes()
+                Base64.encodeToString(bytes, Base64.DEFAULT)
+            } else if (fileSize < 1024 * 1024) {
                 file.readText(charset = getFileEncoding(encoding))
             } else {
                 readFileChunked(file, getFileEncoding(encoding))
@@ -212,6 +228,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return when(encoding){
             NitroFileEncoding.UTF8 -> Charsets.UTF_8
             NitroFileEncoding.ASCII -> Charsets.US_ASCII
+            NitroFileEncoding.BASE64 -> Charsets.UTF_8 // Base64 is handled separately
         }
     }
 

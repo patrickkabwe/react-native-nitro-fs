@@ -1,4 +1,4 @@
-export type NitroFileEncoding = 'utf8' | 'ascii'
+export type NitroFileEncoding = 'utf8' | 'ascii' | 'base64'
 
 export type NitroUploadMethod = 'POST' | 'PUT' | 'PATCH'
 
