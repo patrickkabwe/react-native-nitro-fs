@@ -56,7 +56,11 @@ namespace margelo::nitro::nitrofs {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroFileStat::javaobject> fromCpp(const NitroFileStat& value) {
-      return newInstance(
+      using JSignature = JNitroFileStat(double, double, double, jboolean, jboolean);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         value.size,
         value.ctime,
         value.mtime,

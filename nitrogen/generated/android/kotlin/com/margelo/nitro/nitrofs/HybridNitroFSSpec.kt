@@ -10,7 +10,8 @@ package com.margelo.nitro.nitrofs
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
+import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.HybridObject
 
 /**
  * A Kotlin class representing the NitroFS HybridObject.
@@ -34,6 +35,11 @@ abstract class HybridNitroFSSpec: HybridObject() {
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
     super.updateNative(hybridData)
+  }
+
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject NitroFS]"
   }
 
   // Properties
@@ -127,6 +133,6 @@ abstract class HybridNitroFSSpec: HybridObject() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridNitroFSSpec"
+    protected const val TAG = "HybridNitroFSSpec"
   }
 }

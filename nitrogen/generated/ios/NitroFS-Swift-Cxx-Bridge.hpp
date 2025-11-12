@@ -71,7 +71,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(bool /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_bool create_Func_void_bool(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_bool create_Func_void_bool(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_bool_Wrapper wrap_Func_void_bool(Func_void_bool value) noexcept {
     return Func_void_bool_Wrapper(std::move(value));
   }
@@ -93,7 +93,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
@@ -127,7 +127,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void()>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
     return Func_void_Wrapper(std::move(value));
   }
@@ -161,7 +161,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(const std::string& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
     return Func_void_std__string_Wrapper(std::move(value));
   }
@@ -195,7 +195,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(const NitroFileStat& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_NitroFileStat create_Func_void_NitroFileStat(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_NitroFileStat create_Func_void_NitroFileStat(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_NitroFileStat_Wrapper wrap_Func_void_NitroFileStat(Func_void_NitroFileStat value) noexcept {
     return Func_void_NitroFileStat_Wrapper(std::move(value));
   }
@@ -240,7 +240,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(const std::vector<std::string>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__vector_std__string__Wrapper wrap_Func_void_std__vector_std__string_(Func_void_std__vector_std__string_ value) noexcept {
     return Func_void_std__vector_std__string__Wrapper(std::move(value));
   }
@@ -292,7 +292,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_double_double create_Func_void_double_double(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_double_double create_Func_void_double_double(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_double_double_Wrapper wrap_Func_void_double_double(Func_void_double_double value) noexcept {
     return Func_void_double_double_Wrapper(std::move(value));
   }
@@ -341,7 +341,7 @@ namespace margelo::nitro::nitrofs::bridge::swift {
   private:
     std::unique_ptr<std::function<void(const NitroFile& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_NitroFile create_Func_void_NitroFile(void* _Nonnull swiftClosureWrapper) noexcept;
+  Func_void_NitroFile create_Func_void_NitroFile(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_NitroFile_Wrapper wrap_Func_void_NitroFile(Func_void_NitroFile value) noexcept {
     return Func_void_NitroFile_Wrapper(std::move(value));
   }
@@ -366,8 +366,8 @@ namespace margelo::nitro::nitrofs::bridge::swift {
    * Specialized version of `std::shared_ptr<HybridNitroFSSpec>`.
    */
   using std__shared_ptr_HybridNitroFSSpec_ = std::shared_ptr<HybridNitroFSSpec>;
-  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* _Nonnull swiftUnsafePointer) noexcept;
-  void* _Nonnull get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType) noexcept;
+  std::shared_ptr<HybridNitroFSSpec> create_std__shared_ptr_HybridNitroFSSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridNitroFSSpec_(std__shared_ptr_HybridNitroFSSpec_ cppType);
   
   // pragma MARK: std::weak_ptr<HybridNitroFSSpec>
   using std__weak_ptr_HybridNitroFSSpec_ = std::weak_ptr<HybridNitroFSSpec>;

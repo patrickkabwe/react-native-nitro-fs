@@ -9,7 +9,6 @@ package com.margelo.nitro.nitrofs
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 
 
 /**
@@ -17,19 +16,29 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class NitroUploadOptions
+data class NitroUploadOptions(
   @DoNotStrip
   @Keep
-  constructor(
+  val url: String,
+  @DoNotStrip
+  @Keep
+  val method: NitroUploadMethod?,
+  @DoNotStrip
+  @Keep
+  val field: String?
+) {
+  /* primary constructor */
+
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val url: String,
-    @DoNotStrip
-    @Keep
-    val method: NitroUploadMethod?,
-    @DoNotStrip
-    @Keep
-    val field: String?
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(url: String, method: NitroUploadMethod?, field: String?): NitroUploadOptions {
+      return NitroUploadOptions(url, method, field)
+    }
+  }
 }

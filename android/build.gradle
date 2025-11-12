@@ -47,7 +47,7 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
+        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
         arguments "-DANDROID_STL=c++_shared"
         abiFilters (*reactNativeArchitectures())
 

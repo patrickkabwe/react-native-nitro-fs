@@ -9,7 +9,6 @@ package com.margelo.nitro.nitrofs
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 
 
 /**
@@ -17,19 +16,29 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class NitroFile
+data class NitroFile(
   @DoNotStrip
   @Keep
-  constructor(
+  val name: String,
+  @DoNotStrip
+  @Keep
+  val mimeType: String,
+  @DoNotStrip
+  @Keep
+  val path: String
+) {
+  /* primary constructor */
+
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val name: String,
-    @DoNotStrip
-    @Keep
-    val mimeType: String,
-    @DoNotStrip
-    @Keep
-    val path: String
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(name: String, mimeType: String, path: String): NitroFile {
+      return NitroFile(name, mimeType, path)
+    }
+  }
 }

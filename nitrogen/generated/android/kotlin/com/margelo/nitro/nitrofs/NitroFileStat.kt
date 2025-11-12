@@ -9,7 +9,6 @@ package com.margelo.nitro.nitrofs
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 
 
 /**
@@ -17,25 +16,35 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class NitroFileStat
+data class NitroFileStat(
   @DoNotStrip
   @Keep
-  constructor(
+  val size: Double,
+  @DoNotStrip
+  @Keep
+  val ctime: Double,
+  @DoNotStrip
+  @Keep
+  val mtime: Double,
+  @DoNotStrip
+  @Keep
+  val isFile: Boolean,
+  @DoNotStrip
+  @Keep
+  val isDirectory: Boolean
+) {
+  /* primary constructor */
+
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val size: Double,
-    @DoNotStrip
-    @Keep
-    val ctime: Double,
-    @DoNotStrip
-    @Keep
-    val mtime: Double,
-    @DoNotStrip
-    @Keep
-    val isFile: Boolean,
-    @DoNotStrip
-    @Keep
-    val isDirectory: Boolean
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(size: Double, ctime: Double, mtime: Double, isFile: Boolean, isDirectory: Boolean): NitroFileStat {
+      return NitroFileStat(size, ctime, mtime, isFile, isDirectory)
+    }
+  }
 }

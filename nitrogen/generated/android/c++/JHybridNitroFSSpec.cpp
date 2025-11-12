@@ -58,6 +58,12 @@ namespace margelo::nitro::nitrofs {
     method(_javaPart);
   }
 
+  std::string JHybridNitroFSSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
+  }
+
   // Properties
   std::string JHybridNitroFSSpec::getBUNDLE_DIR() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getBUNDLE_DIR");

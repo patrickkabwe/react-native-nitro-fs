@@ -53,7 +53,11 @@ namespace margelo::nitro::nitrofs {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroUploadOptions::javaobject> fromCpp(const NitroUploadOptions& value) {
-      return newInstance(
+      using JSignature = JNitroUploadOptions(jni::alias_ref<jni::JString>, jni::alias_ref<JNitroUploadMethod>, jni::alias_ref<jni::JString>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         jni::make_jstring(value.url),
         value.method.has_value() ? JNitroUploadMethod::fromCpp(value.method.value()) : nullptr,
         value.field.has_value() ? jni::make_jstring(value.field.value()) : nullptr

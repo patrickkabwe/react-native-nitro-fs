@@ -41,6 +41,7 @@ namespace margelo::nitro::nitrofs {
   public:
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     inline const jni::global_ref<JHybridNitroFSSpec::javaobject>& getJavaPart() const noexcept {

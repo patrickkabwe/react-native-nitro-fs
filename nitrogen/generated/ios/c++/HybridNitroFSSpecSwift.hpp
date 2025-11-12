@@ -68,6 +68,9 @@ namespace margelo::nitro::nitrofs {
     void dispose() noexcept override {
       _swiftPart.dispose();
     }
+    std::string toString() override {
+      return _swiftPart.toString();
+    }
 
   public:
     // Properties
@@ -195,7 +198,7 @@ namespace margelo::nitro::nitrofs {
       return __value;
     }
     inline std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override {
-      auto __result = _swiftPart.uploadFile(file, uploadOptions, onProgress);
+      auto __result = _swiftPart.uploadFile(std::forward<decltype(file)>(file), std::forward<decltype(uploadOptions)>(uploadOptions), onProgress);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

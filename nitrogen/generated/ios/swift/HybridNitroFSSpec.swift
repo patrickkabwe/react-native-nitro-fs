@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroModules
 
 /// See ``HybridNitroFSSpec``
 public protocol HybridNitroFSSpec_protocol: HybridObject {
@@ -32,6 +33,13 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func extname(path: String) throws -> String
   func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<Void>
   func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>
+}
+
+public extension HybridNitroFSSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject NitroFS]"
+  }
 }
 
 /// See ``HybridNitroFSSpec``
