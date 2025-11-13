@@ -16,6 +16,10 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   var DOCUMENT_DIR: String { get }
   var CACHE_DIR: String { get }
   var DOWNLOAD_DIR: String { get }
+  var DCIM_DIR: String { get }
+  var PICTURES_DIR: String { get }
+  var MOVIES_DIR: String { get }
+  var MUSIC_DIR: String { get }
 
   // Methods
   func exists(path: String) throws -> Promise<Bool>
@@ -26,7 +30,7 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func unlink(path: String) throws -> Promise<Bool>
   func mkdir(path: String) throws -> Promise<Bool>
   func stat(path: String) throws -> Promise<NitroFileStat>
-  func readdir(path: String) throws -> Promise<[String]>
+  func readdir(path: String) throws -> Promise<[NitroFile]>
   func rename(oldPath: String, newPath: String) throws -> Promise<Void>
   func dirname(path: String) throws -> String
   func basename(path: String, ext: String?) throws -> String

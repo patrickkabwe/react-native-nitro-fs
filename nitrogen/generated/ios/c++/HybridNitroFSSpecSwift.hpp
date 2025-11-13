@@ -27,9 +27,9 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <NitroModules/Promise.hpp>
 #include "NitroFileEncoding.hpp"
 #include "NitroFileStat.hpp"
+#include "NitroFile.hpp"
 #include <vector>
 #include <optional>
-#include "NitroFile.hpp"
 #include "NitroUploadOptions.hpp"
 #include "NitroUploadMethod.hpp"
 #include <functional>
@@ -88,6 +88,22 @@ namespace margelo::nitro::nitrofs {
     }
     inline std::string getDOWNLOAD_DIR() noexcept override {
       auto __result = _swiftPart.getDOWNLOAD_DIR();
+      return __result;
+    }
+    inline std::string getDCIM_DIR() noexcept override {
+      auto __result = _swiftPart.getDCIM_DIR();
+      return __result;
+    }
+    inline std::string getPICTURES_DIR() noexcept override {
+      auto __result = _swiftPart.getPICTURES_DIR();
+      return __result;
+    }
+    inline std::string getMOVIES_DIR() noexcept override {
+      auto __result = _swiftPart.getMOVIES_DIR();
+      return __result;
+    }
+    inline std::string getMUSIC_DIR() noexcept override {
+      auto __result = _swiftPart.getMUSIC_DIR();
       return __result;
     }
 
@@ -157,7 +173,7 @@ namespace margelo::nitro::nitrofs {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::vector<std::string>>> readdir(const std::string& path) override {
+    inline std::shared_ptr<Promise<std::vector<NitroFile>>> readdir(const std::string& path) override {
       auto __result = _swiftPart.readdir(path);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

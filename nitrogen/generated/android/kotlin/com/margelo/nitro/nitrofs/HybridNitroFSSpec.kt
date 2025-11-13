@@ -58,6 +58,22 @@ abstract class HybridNitroFSSpec: HybridObject() {
   @get:DoNotStrip
   @get:Keep
   abstract val DOWNLOAD_DIR: String
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val DCIM_DIR: String
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val PICTURES_DIR: String
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val MOVIES_DIR: String
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val MUSIC_DIR: String
 
   // Methods
   @DoNotStrip
@@ -94,7 +110,7 @@ abstract class HybridNitroFSSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun readdir(path: String): Promise<Array<String>>
+  abstract fun readdir(path: String): Promise<Array<NitroFile>>
   
   @DoNotStrip
   @Keep

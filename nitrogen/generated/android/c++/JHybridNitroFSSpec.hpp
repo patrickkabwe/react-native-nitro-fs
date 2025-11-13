@@ -54,6 +54,10 @@ namespace margelo::nitro::nitrofs {
     std::string getDOCUMENT_DIR() override;
     std::string getCACHE_DIR() override;
     std::string getDOWNLOAD_DIR() override;
+    std::string getDCIM_DIR() override;
+    std::string getPICTURES_DIR() override;
+    std::string getMOVIES_DIR() override;
+    std::string getMUSIC_DIR() override;
 
   public:
     // Methods
@@ -65,7 +69,7 @@ namespace margelo::nitro::nitrofs {
     std::shared_ptr<Promise<bool>> unlink(const std::string& path) override;
     std::shared_ptr<Promise<bool>> mkdir(const std::string& path) override;
     std::shared_ptr<Promise<NitroFileStat>> stat(const std::string& path) override;
-    std::shared_ptr<Promise<std::vector<std::string>>> readdir(const std::string& path) override;
+    std::shared_ptr<Promise<std::vector<NitroFile>>> readdir(const std::string& path) override;
     std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) override;
     std::string dirname(const std::string& path) override;
     std::string basename(const std::string& path, const std::optional<std::string>& ext) override;

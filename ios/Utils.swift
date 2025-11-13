@@ -12,7 +12,7 @@ struct NitroFSDirs {
     static var NitroFSBundleDir = Bundle.main.bundlePath
     static var NitroFSDocDir = getDir(for: .documentDirectory)
     static var NitroFSCacheDir = getDir(for: .cachesDirectory)
-    static var NitroFSDownloadsDir = getDir(for: .downloadsDirectory)
+    static var NitroFSDownloadsDir = ""
     
     static private func getDir(for searchPath: FileManager.SearchPathDirectory) -> String {
         let dirURL = fileManager.urls(for: searchPath, in: .userDomainMask).first

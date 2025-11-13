@@ -5,4 +5,4 @@ export interface FileItem {
     size?: number;
 }
 
-export type DirectoryType = 'BUNDLE' | 'DOCUMENT' | 'CACHE' | 'DOWNLOAD'; 
+export type DirectoryType = 'BUNDLE' | 'DOCUMENT' | 'CACHE' | 'DOWNLOAD' | 'DCIM' | 'PICTURES' | 'MOVIES' | 'MUSIC'; 

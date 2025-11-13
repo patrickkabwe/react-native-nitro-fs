@@ -142,6 +142,34 @@ open class HybridNitroFSSpec_cxx {
       return std.string(self.__implementation.DOWNLOAD_DIR)
     }
   }
+  
+  public final var DCIM_DIR: std.string {
+    @inline(__always)
+    get {
+      return std.string(self.__implementation.DCIM_DIR)
+    }
+  }
+  
+  public final var PICTURES_DIR: std.string {
+    @inline(__always)
+    get {
+      return std.string(self.__implementation.PICTURES_DIR)
+    }
+  }
+  
+  public final var MOVIES_DIR: std.string {
+    @inline(__always)
+    get {
+      return std.string(self.__implementation.MOVIES_DIR)
+    }
+  }
+  
+  public final var MUSIC_DIR: std.string {
+    @inline(__always)
+    get {
+      return std.string(self.__implementation.MUSIC_DIR)
+    }
+  }
 
   // Methods
   @inline(__always)
@@ -297,27 +325,27 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func readdir(path: std.string) -> bridge.Result_std__shared_ptr_Promise_std__vector_std__string____ {
+  public final func readdir(path: std.string) -> bridge.Result_std__shared_ptr_Promise_std__vector_NitroFile____ {
     do {
       let __result = try self.__implementation.readdir(path: String(path))
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_NitroFile___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_NitroFile___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_NitroFile___(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_std__string_ in
-              var __vector = bridge.create_std__vector_std__string_(__result.count)
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_NitroFile_ in
+              var __vector = bridge.create_std__vector_NitroFile_(__result.count)
               for __item in __result {
-                __vector.push_back(std.string(__item))
+                __vector.push_back(__item)
               }
               return __vector
             }()) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroFile____(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroFile____(__exceptionPtr)
     }
   }
   

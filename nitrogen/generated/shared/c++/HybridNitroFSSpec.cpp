@@ -18,6 +18,10 @@ namespace margelo::nitro::nitrofs {
       prototype.registerHybridGetter("DOCUMENT_DIR", &HybridNitroFSSpec::getDOCUMENT_DIR);
       prototype.registerHybridGetter("CACHE_DIR", &HybridNitroFSSpec::getCACHE_DIR);
       prototype.registerHybridGetter("DOWNLOAD_DIR", &HybridNitroFSSpec::getDOWNLOAD_DIR);
+      prototype.registerHybridGetter("DCIM_DIR", &HybridNitroFSSpec::getDCIM_DIR);
+      prototype.registerHybridGetter("PICTURES_DIR", &HybridNitroFSSpec::getPICTURES_DIR);
+      prototype.registerHybridGetter("MOVIES_DIR", &HybridNitroFSSpec::getMOVIES_DIR);
+      prototype.registerHybridGetter("MUSIC_DIR", &HybridNitroFSSpec::getMUSIC_DIR);
       prototype.registerHybridMethod("exists", &HybridNitroFSSpec::exists);
       prototype.registerHybridMethod("writeFile", &HybridNitroFSSpec::writeFile);
       prototype.registerHybridMethod("readFile", &HybridNitroFSSpec::readFile);

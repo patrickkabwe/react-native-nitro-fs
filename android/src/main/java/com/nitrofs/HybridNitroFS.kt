@@ -18,13 +18,27 @@ class HybridNitroFS: HybridNitroFSSpec() {
 
     override val BUNDLE_DIR: String
         get() = ""
+
     override val DOCUMENT_DIR: String
         get()  = nitroFsImpl.getDocumentDir()
 
     override val CACHE_DIR: String
         get() = nitroFsImpl.getCacheDir()
+
     override val DOWNLOAD_DIR: String
         get() = nitroFsImpl.getDownloadDir()
+
+    override val PICTURES_DIR: String
+        get() = nitroFsImpl.getPicturesDir()
+
+    override val MOVIES_DIR: String
+        get() = nitroFsImpl.getMoviesDir()
+
+    override val DCIM_DIR: String
+        get() = nitroFsImpl.getDCIMDir()
+
+    override val MUSIC_DIR: String
+        get() = nitroFsImpl.getMusicDir()
 
     override fun exists(path: String): Promise<Boolean> {
         return Promise.async {
@@ -110,7 +124,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         }
     }
 
-    override fun readdir(path: String): Promise<Array<String>> {
+    override fun readdir(path: String): Promise<Array<NitroFile>> {
         return Promise.async(ioScope) {
             try {
                 nitroFsImpl.readdir(path)

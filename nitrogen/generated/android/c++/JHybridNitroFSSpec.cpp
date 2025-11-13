@@ -23,8 +23,8 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <NitroModules/JPromise.hpp>
 #include "NitroFileStat.hpp"
 #include "JNitroFileStat.hpp"
-#include <vector>
 #include "NitroFile.hpp"
+#include <vector>
 #include "JNitroFile.hpp"
 #include "NitroFileEncoding.hpp"
 #include "JNitroFileEncoding.hpp"
@@ -82,6 +82,26 @@ namespace margelo::nitro::nitrofs {
   }
   std::string JHybridNitroFSSpec::getDOWNLOAD_DIR() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getDOWNLOAD_DIR");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::getDCIM_DIR() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getDCIM_DIR");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::getPICTURES_DIR() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getPICTURES_DIR");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::getMOVIES_DIR() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getMOVIES_DIR");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
+  std::string JHybridNitroFSSpec::getMUSIC_DIR() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getMUSIC_DIR");
     auto __result = method(_javaPart);
     return __result->toStdString();
   }
@@ -212,20 +232,20 @@ namespace margelo::nitro::nitrofs {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::vector<std::string>>> JHybridNitroFSSpec::readdir(const std::string& path) {
+  std::shared_ptr<Promise<std::vector<NitroFile>>> JHybridNitroFSSpec::readdir(const std::string& path) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* path */)>("readdir");
     auto __result = method(_javaPart, jni::make_jstring(path));
     return [&]() {
-      auto __promise = Promise<std::vector<std::string>>::create();
+      auto __promise = Promise<std::vector<NitroFile>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<jni::JArrayClass<jni::JString>>(__boxedResult);
+        auto __result = jni::static_ref_cast<jni::JArrayClass<JNitroFile>>(__boxedResult);
         __promise->resolve([&]() {
           size_t __size = __result->size();
-          std::vector<std::string> __vector;
+          std::vector<NitroFile> __vector;
           __vector.reserve(__size);
           for (size_t __i = 0; __i < __size; __i++) {
             auto __element = __result->getElement(__i);
-            __vector.push_back(__element->toStdString());
+            __vector.push_back(__element->toCpp());
           }
           return __vector;
         }());

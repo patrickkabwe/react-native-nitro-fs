@@ -5,21 +5,51 @@ import type { NitroFile, NitroFileEncoding, NitroFileStat, NitroUploadOptions } 
 export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
     /**
      * The directory for storing bundle files
+     * @platform ios
      */
     readonly BUNDLE_DIR: string
+    
     /**
      * The directory for storing documents
+     * @platform ios | android
      */
     readonly DOCUMENT_DIR: string
+
     /**
      * The directory for storing cache
+     * @platform ios | android
      */
     readonly CACHE_DIR: string
+
     /**
      * The directory for storing downloads
+     * @platform android
      */
     readonly DOWNLOAD_DIR: string
 
+    /**
+     * The directory for storing DCIM
+     * @platform android
+     */
+    readonly DCIM_DIR: string
+
+    /**
+     * The directory for storing pictures
+     * @platform android
+     */
+    readonly PICTURES_DIR: string
+
+    /**
+     * The directory for storing movies
+     * @platform android
+     */
+    readonly MOVIES_DIR: string
+
+    /**
+     * The directory for storing music
+     * @platform android
+     */
+    readonly MUSIC_DIR: string
 
     /**
      * Check if a file or directory exists
@@ -56,7 +86,7 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
     /**
      * List contents of a directory
      */
-    readdir(path: string): Promise<string[]>
+    readdir(path: string): Promise<NitroFile[]>
     /**
      * Rename or move a file or directory
      */

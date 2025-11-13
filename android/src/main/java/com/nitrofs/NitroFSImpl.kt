@@ -3,6 +3,7 @@ package com.nitrofs
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import android.webkit.MimeTypeMap
 import com.facebook.react.bridge.ReactApplicationContext
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
@@ -62,9 +63,9 @@ class NitroFSImpl(val context: ReactApplicationContext) {
 
                 file.writeText(data, charset = getFileEncoding(encoding))
             }
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             throw RuntimeException("Permission denied writing to: $path")
-        } catch (e: OutOfMemoryError) {
+        } catch (_: OutOfMemoryError) {
             throw RuntimeException("Failed to write file: Out of memory. Data may be too large.")
         } catch (e: Exception) {
             throw RuntimeException("Failed to write file: ${e.message}")
@@ -101,7 +102,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
             } else {
                 readFileChunked(file, getFileEncoding(encoding))
             }
-        } catch (e: OutOfMemoryError) {
+        } catch (_: OutOfMemoryError) {
             throw RuntimeException("Failed to read file: Out of memory. File may be too large.")
         } catch (e: Exception) {
             throw RuntimeException("Failed to read file: ${e.message}")
@@ -151,12 +152,34 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return stat
     }
 
-    fun readdir(path: String): Array<String> {
+    fun readdir(path: String): Array<NitroFile> {
         val file = File(path)
+        if (!file.exists()) {
+            throw Error("Directory does not exist: $path")
+        }
         if (!file.isDirectory) {
             throw Error("$path is not a directory")
         }
-        return file.list() ?: emptyArray()
+        
+        if (!file.canRead()) {
+            throw Error("Permission denied: Cannot read directory $path")
+        }
+
+        val files = file.listFiles() ?: throw Error("Failed to list files in directory: $path")
+
+        val nitroFiles = files.map { fileItem ->
+            val fileName = fileItem.name
+            val filePath = fileItem.absolutePath
+            val mimeType = getMimeType(fileName)
+            
+            NitroFile(
+                name = fileName,
+                mimeType = mimeType,
+                path = filePath
+            )
+        }
+        
+        return nitroFiles.toTypedArray()
     }
 
     fun rename(
@@ -179,7 +202,6 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     fun basename(path: String, ext: String?): String {
         val file = File(path)
         return file.nameWithoutExtension
-
     }
 
     fun extname(path: String): String {
@@ -197,6 +219,22 @@ class NitroFSImpl(val context: ReactApplicationContext) {
 
     fun getDownloadDir(): String {
         return context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath ?: ""
+    }
+
+    fun getDCIMDir(): String {
+        return context.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath ?: ""
+    }
+
+    fun getMoviesDir(): String {
+        return context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)?.absolutePath ?: ""
+    }
+
+    fun getPicturesDir(): String {
+        return context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath ?: ""
+    }
+
+    fun getMusicDir(): String {
+        return context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath ?: ""
     }
 
     suspend fun uploadFile(file: NitroFile,
@@ -246,4 +284,16 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         Log.d("LargeFile", "Generated file: ${file.absolutePath}, Size: ${file.length()} bytes")
         return file
     }
+ 
+    private fun getMimeType(fileName: String): String {
+        val extension = fileName.substringAfterLast('.', "").lowercase()
+        if (extension.isEmpty()) {
+            return "application/octet-stream"
+        }
+        
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        val mimeType = mimeTypeMap.getMimeTypeFromExtension(extension)
+        return mimeType ?: "application/octet-stream"
+    }
+
 }
