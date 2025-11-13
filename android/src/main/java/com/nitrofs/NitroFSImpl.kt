@@ -188,7 +188,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     }
 
     fun getDocumentDir(): String {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)?.absolutePath ?: ""
+        return context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath ?: ""
     }
 
     fun getCacheDir(): String {
@@ -196,7 +196,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     }
 
     fun getDownloadDir(): String {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)?.absolutePath ?: ""
+        return context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath ?: ""
     }
 
     suspend fun uploadFile(file: NitroFile,

@@ -41,7 +41,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.writeFile(path, data, encoding)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error writing file: ${e.message}")
+                Log.e(TAG, "Error writing file: ${e.message}")
                 throw Error(e)
             }
         }
@@ -55,7 +55,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.readFile(path, encoding)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error reading file: ${e.message}")
+                Log.e(TAG, "Error reading file: ${e.message}")
                 throw Error(e)
             }
         }
@@ -69,7 +69,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.copyFile(srcPath, destPath)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error copying file: ${e.message}")
+                Log.e(TAG, "Error copying file: ${e.message}")
                 throw Error(e)
             }
         }
@@ -87,7 +87,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.unlink(path)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error unlinking file: ${e.message}")
+                Log.e(TAG, "Error unlinking file: ${e.message}")
                 throw Error(e)
             }
         }
@@ -98,7 +98,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
             try {
                 nitroFsImpl.mkdir(path)
             } catch (e: Exception) {
-                Log.e("NitroFS", "Error creating directory: ${e.message}")
+                Log.e(TAG, "Error creating directory: ${e.message}")
                 throw Error(e)
             }
         }
