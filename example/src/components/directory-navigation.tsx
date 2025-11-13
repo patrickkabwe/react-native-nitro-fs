@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NitroFS from 'react-native-nitro-fs';
 import { DirectoryType } from '../types';
 
@@ -13,11 +13,13 @@ export const DirectoryNavigation: React.FC<DirectoryNavigationProps> = ({
   onNavigate,
 }) => {
   const directories = [
-    {
-      type: 'BUNDLE' as DirectoryType,
-      label: 'Bundle',
-      path: NitroFS.BUNDLE_DIR,
-    },
+    ...(Platform.OS === 'ios' ? [
+      {
+        type: 'BUNDLE' as DirectoryType,
+        label: 'Bundle',
+        path: NitroFS.BUNDLE_DIR,
+      },
+    ] : []),
     {
       type: 'DOCUMENT' as DirectoryType,
       label: 'Documents',
@@ -29,29 +31,57 @@ export const DirectoryNavigation: React.FC<DirectoryNavigationProps> = ({
       label: 'Downloads',
       path: NitroFS.DOWNLOAD_DIR,
     },
+    ...(Platform.OS === 'android' ? [
+      {
+        type: 'DCIM' as DirectoryType,
+        label: 'DCIM',
+        path: NitroFS.DCIM_DIR,
+      },
+      {
+        type: 'PICTURES' as DirectoryType,
+        label: 'Pictures',
+        path: NitroFS.PICTURES_DIR,
+      },
+      {
+        type: 'MOVIES' as DirectoryType,
+        label: 'Movies',
+        path: NitroFS.MOVIES_DIR,
+      },
+      {
+        type: 'MUSIC' as DirectoryType,
+        label: 'Music',
+        path: NitroFS.MUSIC_DIR,
+      },
+    ] : []),
   ];
 
   return (
     <View style={styles.directoryNav}>
-      {directories.map(({ type, label, path }) => (
-        <TouchableOpacity
-          key={type}
-          style={[
-            styles.dirButton,
-            currentPath === path && styles.activeDirButton,
-          ]}
-          onPress={() => onNavigate(type)}
+        <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.directoryNavContent}
         >
-          <Text
+        {directories.map(({ type, label, path }) => (
+            <TouchableOpacity
+            key={type}
             style={[
-              styles.dirButtonText,
-              currentPath === path && styles.activeDirButtonText,
+                styles.dirButton,
+                currentPath === path && styles.activeDirButton,
             ]}
-          >
-            {label}
-          </Text>
-        </TouchableOpacity>
-      ))}
+            onPress={() => onNavigate(type)}
+            >
+            <Text
+                style={[
+                styles.dirButtonText,
+                currentPath === path && styles.activeDirButtonText,
+                ]}
+            >
+                {label}
+            </Text>
+            </TouchableOpacity>
+        ))}
+        </ScrollView>
     </View>
   );
 };
@@ -59,12 +89,15 @@ export const DirectoryNavigation: React.FC<DirectoryNavigationProps> = ({
 const styles = StyleSheet.create({
   directoryNav: {
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#e1e5e9',
+  },
+  directoryNavContent: {
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    height: 50,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 8,
   },
   dirButton: {
     backgroundColor: '#f8f9fa',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { ActionPanel } from './src/components/action-panel';
 import { DirectoryNavigation } from './src/components/directory-navigation';
 import { FileEditor } from './src/components/file-editor';
@@ -8,8 +8,9 @@ import { Header } from './src/components/header';
 import { PathDisplay } from './src/components/path-display';
 import { ProgressIndicator } from './src/components/progress-indicator';
 import { useFileSystem } from './src/hooks/use-file-system';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-const App = () => {
+const AppContent = () => {
   const {
     currentPath,
     files,
@@ -84,6 +85,14 @@ const App = () => {
         onReadFile={readFile}
       />
     </SafeAreaView>
+  );
+};
+
+const App = () => {
+  return (
+    <SafeAreaProvider>
+      <AppContent />
+    </SafeAreaProvider>
   );
 };
 

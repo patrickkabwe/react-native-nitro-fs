@@ -53,10 +53,10 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::vector<std::string>& /* result */)>
-  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroFS::Func_void_std__vector_std__string_::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::vector<std::string>& result) mutable -> void {
+  // pragma MARK: std::function<void(const std::vector<NitroFile>& /* result */)>
+  Func_void_std__vector_NitroFile_ create_Func_void_std__vector_NitroFile_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroFS::Func_void_std__vector_NitroFile_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::vector<NitroFile>& result) mutable -> void {
       swiftClosure.call(result);
     };
   }

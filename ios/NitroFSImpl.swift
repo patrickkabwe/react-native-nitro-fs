@@ -107,17 +107,58 @@ class NitroFSImpl {
         )
     }
     
-    func readdir(atPath path: String) throws -> [String] {
+    func readdir(atPath path: String) throws -> [NitroFile] {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to stat file. FileManager is unavailable")
         }
         let pathURL = URL(fileURLWithPath: path)
         let contents = try fileManager.contentsOfDirectory(
             at: pathURL,
-            includingPropertiesForKeys: [.isDirectoryKey],
+            includingPropertiesForKeys: [.isDirectoryKey, .contentTypeKey],
             options: .skipsHiddenFiles
         )
-        return contents.map { $0.lastPathComponent }
+        
+        return try contents.map { url in
+            let fileName = url.lastPathComponent
+            let filePath = url.path
+            let mimeType = try getMimeType(for: url)
+            
+            return NitroFile(
+                name: fileName,
+                mimeType: mimeType,
+                path: filePath
+            )
+        }
+    }
+    
+    private func getMimeType(for url: URL) throws -> String {
+        if let resourceValues = try? url.resourceValues(forKeys: [.contentTypeKey]),
+           let contentType = resourceValues.contentType {
+            return contentType.identifier
+        }
+        
+        let pathExtension = url.pathExtension.lowercased()
+        if pathExtension.isEmpty {
+            return "application/octet-stream"
+        }
+        
+        let mimeTypes: [String: String] = [
+            "jpg": "image/jpeg",
+            "jpeg": "image/jpeg",
+            "png": "image/png",
+            "gif": "image/gif",
+            "pdf": "application/pdf",
+            "txt": "text/plain",
+            "json": "application/json",
+            "mp4": "video/mp4",
+            "mp3": "audio/mpeg",
+            "zip": "application/zip"
+        ]
+        
+        guard let mimeType = mimeTypes[pathExtension] else {
+            throw NitroFSError.encodingError(message: "Failed to get mime type")
+        }
+        return mimeType
     }
     
     func rename(oldPath: String, newPath: String) throws {

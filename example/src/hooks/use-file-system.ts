@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import NitroFS from 'react-native-nitro-fs';
 import { DirectoryType, FileItem } from '../types';
+import { getMimeTypeFromExtension } from '../utils/file-utils';
 
 export const useFileSystem = () => {
     const [currentPath, setCurrentPath] = useState('');
@@ -15,7 +16,7 @@ export const useFileSystem = () => {
         const initializeApp = async () => {
             try {
                 setLoading(true);
-                await listFiles(NitroFS.DOWNLOAD_DIR);
+                await listFiles(NitroFS.DOCUMENT_DIR);
             } catch (error) {
                 console.error('Error initializing app:', error);
                 Alert.alert('Error', 'Failed to initialize the app');
@@ -33,18 +34,17 @@ export const useFileSystem = () => {
             const fileList = await NitroFS.readdir(path);
             const fileItems: FileItem[] = [];
 
-            for (const fileName of fileList) {
-                const filePath = path ? `${path}/${fileName}` : fileName;
+            for (const file of fileList) {
                 try {
-                    const stat = await NitroFS.stat(filePath);
+                    const stat = await NitroFS.stat(file.path);
                     fileItems.push({
-                        name: fileName,
-                        path: filePath,
+                        name: file.name,
+                        path: file.path,
                         isDirectory: stat.isDirectory,
                         size: stat.size,
                     });
                 } catch (error) {
-                    console.error(`Error getting stat for ${filePath}:`, error);
+                    console.error(`Error getting stat for ${file.path}:`, error);
                 }
             }
 
@@ -175,7 +175,7 @@ export const useFileSystem = () => {
 
             const file = {
                 name: selectedFile.name,
-                mimeType: 'text/plain',
+                mimeType: getMimeTypeFromExtension(selectedFile.name),
                 path: selectedFile.path,
             };
 
@@ -313,6 +313,18 @@ export const useFileSystem = () => {
                     break;
                 case 'DOWNLOAD':
                     path = NitroFS.DOWNLOAD_DIR;
+                    break;
+                case 'DCIM':
+                    path = NitroFS.DCIM_DIR;
+                    break;
+                case 'PICTURES':
+                    path = NitroFS.PICTURES_DIR;
+                    break;
+                case 'MOVIES':
+                    path = NitroFS.MOVIES_DIR;
+                    break;
+                case 'MUSIC':
+                    path = NitroFS.MUSIC_DIR;
                     break;
             }
             await listFiles(path);

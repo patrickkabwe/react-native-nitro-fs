@@ -9,14 +9,18 @@ import os
 import Foundation
 import NitroModules
 
-class HybridNitroFS: HybridNitroFSSpec {    
+class HybridNitroFS: HybridNitroFSSpec {
     static private(set) var fileManager: FileManager = FileManager.default
     private(set) var nitroFSImpl: NitroFSImpl = NitroFSImpl(fileManager: fileManager)
     
     var DOCUMENT_DIR: String { get { return NitroFSDirs.NitroFSDocDir } }
     var CACHE_DIR: String { get { return NitroFSDirs.NitroFSCacheDir } }
     var BUNDLE_DIR: String { get { return NitroFSDirs.NitroFSBundleDir } }
-    var DOWNLOAD_DIR: String { get { return NitroFSDirs.NitroFSDownloadsDir } }
+    var DOWNLOAD_DIR: String = "" // Always returns nil on ios
+    var DCIM_DIR: String = ""
+    var PICTURES_DIR: String = ""
+    var MOVIES_DIR: String = ""
+    var MUSIC_DIR: String = ""
 
     func exists(path: String) throws -> Promise<Bool> {
         return .async { [unowned nitroFSImpl] in
@@ -103,7 +107,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func readdir(path: String) throws -> NitroModules.Promise<[String]> {
+    func readdir(path: String) throws -> NitroModules.Promise<[NitroFile]> {
         return .async {
             do {
                 return try self.nitroFSImpl.readdir(atPath: path)

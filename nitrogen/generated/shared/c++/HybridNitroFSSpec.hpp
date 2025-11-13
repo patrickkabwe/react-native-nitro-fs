@@ -26,9 +26,9 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 #include <NitroModules/Promise.hpp>
 #include "NitroFileEncoding.hpp"
 #include "NitroFileStat.hpp"
+#include "NitroFile.hpp"
 #include <vector>
 #include <optional>
-#include "NitroFile.hpp"
 #include "NitroUploadOptions.hpp"
 #include <functional>
 
@@ -63,6 +63,10 @@ namespace margelo::nitro::nitrofs {
       virtual std::string getDOCUMENT_DIR() = 0;
       virtual std::string getCACHE_DIR() = 0;
       virtual std::string getDOWNLOAD_DIR() = 0;
+      virtual std::string getDCIM_DIR() = 0;
+      virtual std::string getPICTURES_DIR() = 0;
+      virtual std::string getMOVIES_DIR() = 0;
+      virtual std::string getMUSIC_DIR() = 0;
 
     public:
       // Methods
@@ -74,7 +78,7 @@ namespace margelo::nitro::nitrofs {
       virtual std::shared_ptr<Promise<bool>> unlink(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<bool>> mkdir(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<NitroFileStat>> stat(const std::string& path) = 0;
-      virtual std::shared_ptr<Promise<std::vector<std::string>>> readdir(const std::string& path) = 0;
+      virtual std::shared_ptr<Promise<std::vector<NitroFile>>> readdir(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) = 0;
       virtual std::string dirname(const std::string& path) = 0;
       virtual std::string basename(const std::string& path, const std::optional<std::string>& ext) = 0;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FileItem as FileItemType } from '../types';
-import { formatFileSize } from '../utils/file-utils';
+import { formatFileSize, getFileIcon } from '../utils/file-utils';
 
 interface FileItemProps {
   item: FileItemType;
@@ -30,14 +30,16 @@ export const FileItem: React.FC<FileItemProps> = ({
         <Text
           style={[styles.fileIcon, item.isDirectory && styles.directoryIcon]}
         >
-          {item.isDirectory ? '📁' : '📄'}
+          {getFileIcon(item.name, item.isDirectory)}
         </Text>
         <View style={styles.fileDetails}>
           <Text style={styles.fileName} numberOfLines={1}>
             {item.name}
           </Text>
-          {!item.isDirectory && item.size !== undefined && (
-            <Text style={styles.fileSize}>{formatFileSize(item.size)}</Text>
+          {!item.isDirectory && (
+            <Text style={styles.fileSize}>
+              {item.size !== undefined ? formatFileSize(item.size) : 'Unknown size'}
+            </Text>
           )}
         </View>
       </View>

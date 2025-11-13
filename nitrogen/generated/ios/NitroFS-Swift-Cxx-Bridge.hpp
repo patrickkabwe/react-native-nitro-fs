@@ -200,49 +200,49 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return Func_void_NitroFileStat_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::vector<std::string>
+  // pragma MARK: std::vector<NitroFile>
   /**
-   * Specialized version of `std::vector<std::string>`.
+   * Specialized version of `std::vector<NitroFile>`.
    */
-  using std__vector_std__string_ = std::vector<std::string>;
-  inline std::vector<std::string> create_std__vector_std__string_(size_t size) noexcept {
-    std::vector<std::string> vector;
+  using std__vector_NitroFile_ = std::vector<NitroFile>;
+  inline std::vector<NitroFile> create_std__vector_NitroFile_(size_t size) noexcept {
+    std::vector<NitroFile> vector;
     vector.reserve(size);
     return vector;
   }
   
-  // pragma MARK: std::shared_ptr<Promise<std::vector<std::string>>>
+  // pragma MARK: std::shared_ptr<Promise<std::vector<NitroFile>>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<std::vector<std::string>>>`.
+   * Specialized version of `std::shared_ptr<Promise<std::vector<NitroFile>>>`.
    */
-  using std__shared_ptr_Promise_std__vector_std__string___ = std::shared_ptr<Promise<std::vector<std::string>>>;
-  inline std::shared_ptr<Promise<std::vector<std::string>>> create_std__shared_ptr_Promise_std__vector_std__string___() noexcept {
-    return Promise<std::vector<std::string>>::create();
+  using std__shared_ptr_Promise_std__vector_NitroFile___ = std::shared_ptr<Promise<std::vector<NitroFile>>>;
+  inline std::shared_ptr<Promise<std::vector<NitroFile>>> create_std__shared_ptr_Promise_std__vector_NitroFile___() noexcept {
+    return Promise<std::vector<NitroFile>>::create();
   }
-  inline PromiseHolder<std::vector<std::string>> wrap_std__shared_ptr_Promise_std__vector_std__string___(std::shared_ptr<Promise<std::vector<std::string>>> promise) noexcept {
-    return PromiseHolder<std::vector<std::string>>(std::move(promise));
+  inline PromiseHolder<std::vector<NitroFile>> wrap_std__shared_ptr_Promise_std__vector_NitroFile___(std::shared_ptr<Promise<std::vector<NitroFile>>> promise) noexcept {
+    return PromiseHolder<std::vector<NitroFile>>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const std::vector<std::string>& /* result */)>
+  // pragma MARK: std::function<void(const std::vector<NitroFile>& /* result */)>
   /**
-   * Specialized version of `std::function<void(const std::vector<std::string>&)>`.
+   * Specialized version of `std::function<void(const std::vector<NitroFile>&)>`.
    */
-  using Func_void_std__vector_std__string_ = std::function<void(const std::vector<std::string>& /* result */)>;
+  using Func_void_std__vector_NitroFile_ = std::function<void(const std::vector<NitroFile>& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const std::vector<std::string>& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const std::vector<NitroFile>& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_std__vector_std__string__Wrapper final {
+  class Func_void_std__vector_NitroFile__Wrapper final {
   public:
-    explicit Func_void_std__vector_std__string__Wrapper(std::function<void(const std::vector<std::string>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<std::string>& /* result */)>>(std::move(func))) {}
-    inline void call(std::vector<std::string> result) const noexcept {
+    explicit Func_void_std__vector_NitroFile__Wrapper(std::function<void(const std::vector<NitroFile>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<NitroFile>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<NitroFile> result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const std::vector<std::string>& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const std::vector<NitroFile>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__vector_std__string__Wrapper wrap_Func_void_std__vector_std__string_(Func_void_std__vector_std__string_ value) noexcept {
-    return Func_void_std__vector_std__string__Wrapper(std::move(value));
+  Func_void_std__vector_NitroFile_ create_Func_void_std__vector_NitroFile_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_NitroFile__Wrapper wrap_Func_void_std__vector_NitroFile_(Func_void_std__vector_NitroFile_ value) noexcept {
+    return Func_void_std__vector_NitroFile__Wrapper(std::move(value));
   }
   
   // pragma MARK: std::optional<std::string>
@@ -409,13 +409,13 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return Result<std::shared_ptr<Promise<NitroFileStat>>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<std::string>>>>
-  using Result_std__shared_ptr_Promise_std__vector_std__string____ = Result<std::shared_ptr<Promise<std::vector<std::string>>>>;
-  inline Result_std__shared_ptr_Promise_std__vector_std__string____ create_Result_std__shared_ptr_Promise_std__vector_std__string____(const std::shared_ptr<Promise<std::vector<std::string>>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<std::string>>>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<NitroFile>>>>
+  using Result_std__shared_ptr_Promise_std__vector_NitroFile____ = Result<std::shared_ptr<Promise<std::vector<NitroFile>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_NitroFile____ create_Result_std__shared_ptr_Promise_std__vector_NitroFile____(const std::shared_ptr<Promise<std::vector<NitroFile>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroFile>>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_std__vector_std__string____ create_Result_std__shared_ptr_Promise_std__vector_std__string____(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<std::string>>>>::withError(error);
+  inline Result_std__shared_ptr_Promise_std__vector_NitroFile____ create_Result_std__shared_ptr_Promise_std__vector_NitroFile____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroFile>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::string>
