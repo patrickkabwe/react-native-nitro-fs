@@ -181,19 +181,14 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<[String: Any]> {
+    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroDownloadResult> {
         return .async { [unowned self] in
             do {
-                let result = try await self.nitroFSImpl.downloadFile(
+                return try await self.nitroFSImpl.downloadFile(
                     serverUrl: serverUrl,
                     destinationPath: destinationPath,
                     onProgress: onProgress
                 )
-                
-                return [
-                    "jobId": result.jobId,
-                    "file": result.file
-                ]
             } catch {
                 os_log("failed to download file: \(error.localizedDescription)")
                 throw error

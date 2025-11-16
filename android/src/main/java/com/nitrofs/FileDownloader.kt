@@ -1,6 +1,7 @@
 package com.nitrofs
 
 import android.util.Log
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -24,11 +25,6 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.io.File
-
-data class NitroDownloadResult(
-    val jobId: String,
-    val file: NitroFile
-)
 
 class FileDownloader {
     private val downloadScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

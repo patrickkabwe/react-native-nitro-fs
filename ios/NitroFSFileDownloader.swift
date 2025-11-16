@@ -6,11 +6,7 @@
 //
 
 import Foundation
-
-struct NitroDownloadResult {
-    let jobId: String
-    let file: NitroFile
-}
+import NitroModules
 
 final class NitroFSFileDownloader: NSObject {
     private weak var fileManager: FileManager?

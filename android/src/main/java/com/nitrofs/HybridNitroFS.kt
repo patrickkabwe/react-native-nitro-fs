@@ -4,6 +4,7 @@ import android.util.Log
 import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.nitrofs.HybridNitroFSSpec
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -206,15 +207,10 @@ class HybridNitroFS: HybridNitroFSSpec() {
         serverUrl: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<Map<String, Any>> {
+    ): Promise<NitroDownloadResult> {
         return Promise.async(ioScope) {
             try {
-                val result = nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
-                
-                return@async mapOf(
-                    "jobId" to result.jobId,
-                    "file" to result.file
-                )
+                nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
             } catch (e: Exception) {
                 Log.e(TAG, "Error downloading file: ${e.message}")
                 throw Error(e)
