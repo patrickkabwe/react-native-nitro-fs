@@ -28,9 +28,9 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 #include "NitroFileStat.hpp"
 #include "NitroFile.hpp"
 #include <vector>
-#include <optional>
 #include "NitroUploadOptions.hpp"
 #include <functional>
+#include <optional>
 
 namespace margelo::nitro::nitrofs {
 
@@ -81,7 +81,7 @@ namespace margelo::nitro::nitrofs {
       virtual std::shared_ptr<Promise<std::vector<NitroFile>>> readdir(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) = 0;
       virtual std::string dirname(const std::string& path) = 0;
-      virtual std::string basename(const std::string& path, const std::optional<std::string>& ext) = 0;
+      virtual std::string basename(const std::string& path) = 0;
       virtual std::string extname(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
       virtual std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;

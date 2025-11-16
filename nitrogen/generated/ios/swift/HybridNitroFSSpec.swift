@@ -33,7 +33,7 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func readdir(path: String) throws -> Promise<[NitroFile]>
   func rename(oldPath: String, newPath: String) throws -> Promise<Void>
   func dirname(path: String) throws -> String
-  func basename(path: String, ext: String?) throws -> String
+  func basename(path: String) throws -> String
   func extname(path: String) throws -> String
   func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<Void>
   func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>

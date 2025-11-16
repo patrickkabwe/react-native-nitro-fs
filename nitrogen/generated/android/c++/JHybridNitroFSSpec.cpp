@@ -28,10 +28,10 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include "JNitroFile.hpp"
 #include "NitroFileEncoding.hpp"
 #include "JNitroFileEncoding.hpp"
-#include <optional>
 #include "NitroUploadOptions.hpp"
 #include "JNitroUploadOptions.hpp"
 #include "NitroUploadMethod.hpp"
+#include <optional>
 #include "JNitroUploadMethod.hpp"
 #include <functional>
 #include "JFunc_void_double_double.hpp"
@@ -277,9 +277,9 @@ namespace margelo::nitro::nitrofs {
     auto __result = method(_javaPart, jni::make_jstring(path));
     return __result->toStdString();
   }
-  std::string JHybridNitroFSSpec::basename(const std::string& path, const std::optional<std::string>& ext) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<jni::JString> /* ext */)>("basename");
-    auto __result = method(_javaPart, jni::make_jstring(path), ext.has_value() ? jni::make_jstring(ext.value()) : nullptr);
+  std::string JHybridNitroFSSpec::basename(const std::string& path) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* path */)>("basename");
+    auto __result = method(_javaPart, jni::make_jstring(path));
     return __result->toStdString();
   }
   std::string JHybridNitroFSSpec::extname(const std::string& path) {
