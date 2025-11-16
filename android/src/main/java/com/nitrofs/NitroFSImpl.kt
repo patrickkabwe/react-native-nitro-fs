@@ -149,8 +149,8 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         srcPath: String,
         destPath: String
     ) {
-        val src = srcPath.toResolvedPath() ?: return
-        val dest = destPath.toResolvedPath() ?: return
+        val src = srcPath.toResolvedPath() ?:  throw Error("Invalid source path: $srcPath")
+        val dest = destPath.toResolvedPath() ?: throw Error("Invalid destination path: $destPath")
 
         try {
             src.openInputStream(context)?.use { input ->
@@ -182,7 +182,6 @@ class NitroFSImpl(val context: ReactApplicationContext) {
                     DocumentsContract.Document.COLUMN_SIZE,
                     DocumentsContract.Document.COLUMN_MIME_TYPE,
                     DocumentsContract.Document.COLUMN_LAST_MODIFIED,
-                    DocumentsContract.Document.MIME_TYPE_DIR
                 )
                 contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
                     if (!cursor.moveToFirst()) {

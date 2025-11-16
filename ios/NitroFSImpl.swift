@@ -191,7 +191,7 @@ class NitroFSImpl {
     
     func dirname(path: String) throws -> String {
         let pathURL = try pathToURL(path)
-        return pathURL.deletingLastPathComponent().absoluteString
+        return pathURL.deletingLastPathComponent().path
     }
     
     func extname(path: String) throws -> String {
