@@ -13,6 +13,7 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
     private var uploadSessions: [String: URLSession] = [:]
     private var progressCallbacks: [String: ((Double, Double) -> Void)] = [:]
     private var taskToJobId: [Int: String] = [:]
+    private var uploadContinuations: [String: CheckedContinuation<Void, Error>] = [:]
     private let taskQueue = DispatchQueue(label: "com.nitrofs.uploader")
 
     init(fileManager: FileManager) {
@@ -48,34 +49,28 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
 
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 
-        let task = session.uploadTask(with: request, fromFile: multipartFile) { _, response, error in
-            defer {
-                try? FileManager.default.removeItem(at: multipartFile)
-                session.finishTasksAndInvalidate()
-                self.taskQueue.async {
-                    self.uploadTasks.removeValue(forKey: jobId)
-                    self.uploadSessions.removeValue(forKey: jobId)
-                    self.progressCallbacks.removeValue(forKey: jobId)
-                    self.taskToJobId.removeValue(forKey: task.taskIdentifier)
-                }
-            }
-
-            // Note: Errors are silently ignored here since the jobId is returned immediately
-            // The user can check progress via onProgress callback or cancel if needed
-        }
+        let task = session.uploadTask(with: request, fromFile: multipartFile)
 
         // Use sync to ensure state is initialized before task.resume() is called
         // This prevents race condition where delegate callbacks fire before state is set up
-        taskQueue.sync {
-            self.uploadTasks[jobId] = task
-            self.uploadSessions[jobId] = session
-            self.taskToJobId[task.taskIdentifier] = jobId
-            if let onProgress = onProgress {
-                self.progressCallbacks[jobId] = onProgress
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            taskQueue.sync {
+                self.uploadTasks[jobId] = task
+                self.uploadSessions[jobId] = session
+                self.taskToJobId[task.taskIdentifier] = jobId
+                self.uploadContinuations[jobId] = continuation
+                if let onProgress = onProgress {
+                    self.progressCallbacks[jobId] = onProgress
+                }
             }
+            task.resume()
         }
         
-        task.resume()
+        // Cleanup multipart file after completion
+        defer {
+            try? FileManager.default.removeItem(at: multipartFile)
+        }
+        
         return jobId
     }
     
@@ -85,6 +80,11 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
             guard let self = self else { return }
             if let task = self.uploadTasks[jobId] {
                 task.cancel()
+                // Resume continuation with cancellation error if it exists
+                if let continuation = self.uploadContinuations[jobId] {
+                    continuation.resume(throwing: NitroFSError.networkError(message: "Upload cancelled"))
+                    self.uploadContinuations.removeValue(forKey: jobId)
+                }
                 self.taskToJobId.removeValue(forKey: task.taskIdentifier)
                 self.uploadTasks.removeValue(forKey: jobId)
                 self.progressCallbacks.removeValue(forKey: jobId)
@@ -176,6 +176,60 @@ extension NitroFSFileUploader: URLSessionTaskDelegate {
                 onProgress(Double(totalBytesSent), Double(totalBytesExpectedToSend))
             }
         }
+    }
+    
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didCompleteWithError error: Error?
+    ) {
+        var jobId: String?
+        var continuation: CheckedContinuation<Void, Error>?
+        
+        taskQueue.sync {
+            jobId = self.taskToJobId[task.taskIdentifier]
+            if let jobId = jobId {
+                continuation = self.uploadContinuations[jobId]
+            }
+        }
+        
+        guard let jobId = jobId else { return }
+        
+        // Remove continuation immediately to prevent double-resume
+        taskQueue.sync {
+            self.uploadContinuations.removeValue(forKey: jobId)
+        }
+        
+        if let error = error {
+            // Handle cancellation separately
+            if (error as NSError).code == NSURLErrorCancelled {
+                continuation?.resume(throwing: NitroFSError.networkError(message: "Upload cancelled"))
+            } else {
+                continuation?.resume(throwing: error)
+            }
+        } else {
+            // Check HTTP response status
+            if let httpResponse = task.response as? HTTPURLResponse {
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    continuation?.resume(throwing: NitroFSError.networkError(
+                        message: "Upload failed with status code: \(httpResponse.statusCode)"
+                    ))
+                    return
+                }
+            }
+            // Success - resume continuation
+            continuation?.resume()
+        }
+        
+        // Cleanup
+        taskQueue.async {
+            self.uploadTasks.removeValue(forKey: jobId)
+            self.uploadSessions.removeValue(forKey: jobId)
+            self.progressCallbacks.removeValue(forKey: jobId)
+            self.taskToJobId.removeValue(forKey: task.taskIdentifier)
+        }
+        
+        session.finishTasksAndInvalidate()
     }
 }
 
