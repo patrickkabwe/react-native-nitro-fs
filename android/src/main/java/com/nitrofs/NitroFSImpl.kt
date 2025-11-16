@@ -270,19 +270,20 @@ class NitroFSImpl(val context: ReactApplicationContext) {
             is ResolvedPath.Content -> {
                 val uri = resolved.uri
                 val fileName = contentResolver.query(
-                    uri, null, null, null, null
+                    uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
                 )?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                         if (nameIndex != -1) {
                             cursor.getString(nameIndex)
                         } else {
-                            ""
+                            null
                         }
                     } else {
-                        ""
+                        null
                     }
-                } ?: ""
+                } ?: throw Error("Unable to get file name from content URI: $path")
+
                 fileName
             }
         }
@@ -296,9 +297,9 @@ class NitroFSImpl(val context: ReactApplicationContext) {
             is ResolvedPath.Content -> {
                 val mimeType: String? = contentResolver.getType(resolved.uri)
                 if (mimeType != null) {
-                    MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: ""
+                    MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: throw  Error("Unable to get extension from mime type: $mimeType")
                 } else {
-                    ""
+                    throw Error("Unable to get mime type from content URI: $path")
                 }
             }
         }
