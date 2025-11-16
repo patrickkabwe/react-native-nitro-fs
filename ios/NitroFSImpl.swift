@@ -204,36 +204,51 @@ class NitroFSImpl {
         return pathURL.lastPathComponent
     }
     
+    private var fileUploader: NitroFSFileUploader?
+    private var fileDownloader: NitroFSFileDownloader?
+    
     func uploadFile(
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
-    ) async throws {
+    ) async throws -> String {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to upload file. FileManager is unavailable")
         }
-        let fileUploader = NitroFSFileUploader(fileManager: fileManager)
-        try await fileUploader.uploadFile(
+        if fileUploader == nil {
+            fileUploader = NitroFSFileUploader(fileManager: fileManager)
+        }
+        return try await fileUploader!.uploadFile(
             file: file,
             uploadOptions: uploadOptions,
             onProgress: onProgress
         )
     }
     
+    func cancelUpload(jobId: String) -> Bool {
+        return fileUploader?.cancelUpload(jobId: jobId) ?? false
+    }
+    
     func downloadFile(
         serverUrl: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Void)?
-    ) async throws -> NitroFile {
+    ) async throws -> NitroDownloadResult {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to download file. FileManager is unavailable")
         }
-        let fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
-        return try await fileDownloader.downloadFile(
+        if fileDownloader == nil {
+            fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
+        }
+        return try await fileDownloader!.downloadFile(
             serverUrl,
             destinationPath,
             onProgress: onProgress
         )
+    }
+    
+    func cancelDownload(jobId: String) -> Bool {
+        return fileDownloader?.cancelDownload(jobId: jobId) ?? false
     }
     
     private func getEncoding(nitroEncoding: NitroFileEncoding) -> String.Encoding {

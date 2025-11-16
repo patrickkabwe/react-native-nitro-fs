@@ -11,6 +11,8 @@
 namespace margelo::nitro::nitrofs { struct NitroFileStat; }
 // Forward declaration of `NitroFile` to properly resolve imports.
 namespace margelo::nitro::nitrofs { struct NitroFile; }
+// Forward declaration of `NitroDownloadResult` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadResult; }
 // Forward declaration of `NitroFileEncoding` to properly resolve imports.
 namespace margelo::nitro::nitrofs { enum class NitroFileEncoding; }
 // Forward declaration of `NitroUploadOptions` to properly resolve imports.
@@ -26,6 +28,8 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include "NitroFile.hpp"
 #include <vector>
 #include "JNitroFile.hpp"
+#include "NitroDownloadResult.hpp"
+#include "JNitroDownloadResult.hpp"
 #include "NitroFileEncoding.hpp"
 #include "JNitroFileEncoding.hpp"
 #include "NitroUploadOptions.hpp"
@@ -287,13 +291,14 @@ namespace margelo::nitro::nitrofs {
     auto __result = method(_javaPart, jni::make_jstring(path));
     return __result->toStdString();
   }
-  std::shared_ptr<Promise<void>> JHybridNitroFSSpec::uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroFSSpec::uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroFile> /* file */, jni::alias_ref<JNitroUploadOptions> /* uploadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("uploadFile_cxx");
     auto __result = method(_javaPart, JNitroFile::fromCpp(file), JNitroUploadOptions::fromCpp(uploadOptions), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
-        __promise->resolve();
+      auto __promise = Promise<std::string>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -302,14 +307,46 @@ namespace margelo::nitro::nitrofs {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
+  std::shared_ptr<Promise<bool>> JHybridNitroFSSpec::cancelUpload(const std::string& jobId) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* jobId */)>("cancelUpload");
+    auto __result = method(_javaPart, jni::make_jstring(jobId));
+    return [&]() {
+      auto __promise = Promise<bool>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JBoolean>(__boxedResult);
+        __promise->resolve(static_cast<bool>(__result->value()));
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<NitroDownloadResult>> JHybridNitroFSSpec::downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* serverUrl */, jni::alias_ref<jni::JString> /* destinationPath */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
     auto __result = method(_javaPart, jni::make_jstring(serverUrl), jni::make_jstring(destinationPath), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<NitroFile>::create();
+      auto __promise = Promise<NitroDownloadResult>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JNitroFile>(__boxedResult);
+        auto __result = jni::static_ref_cast<JNitroDownloadResult>(__boxedResult);
         __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<bool>> JHybridNitroFSSpec::cancelDownload(const std::string& jobId) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* jobId */)>("cancelDownload");
+    auto __result = method(_javaPart, jni::make_jstring(jobId));
+    return [&]() {
+      auto __promise = Promise<bool>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JBoolean>(__boxedResult);
+        __promise->resolve(static_cast<bool>(__result->value()));
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);

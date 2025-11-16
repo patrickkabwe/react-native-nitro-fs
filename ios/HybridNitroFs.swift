@@ -160,10 +160,10 @@ class HybridNitroFS: HybridNitroFSSpec {
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
-    ) throws -> Promise<Void>{
+    ) throws -> Promise<String>{
         return .async { [unowned self] in
             do {
-                try await self.nitroFSImpl.uploadFile(
+                return try await self.nitroFSImpl.uploadFile(
                     file: file,
                     uploadOptions: uploadOptions,
                     onProgress: onProgress
@@ -175,18 +175,35 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
+    func cancelUpload(jobId: String) throws -> Promise<Bool> {
+        return .async { [unowned self] in
+            return self.nitroFSImpl.cancelUpload(jobId: jobId)
+        }
+    }
+    
+    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<[String: Any]> {
         return .async { [unowned self] in
             do {
-                return try await self.nitroFSImpl.downloadFile(
+                let result = try await self.nitroFSImpl.downloadFile(
                     serverUrl: serverUrl,
                     destinationPath: destinationPath,
                     onProgress: onProgress
                 )
+                
+                return [
+                    "jobId": result.jobId,
+                    "file": result.file
+                ]
             } catch {
-                os_log("failed to upload file: \(error.localizedDescription)")
+                os_log("failed to download file: \(error.localizedDescription)")
                 throw error
             }
+        }
+    }
+    
+    func cancelDownload(jobId: String) throws -> NitroModules.Promise<Bool> {
+        return .async { [unowned self] in
+            return self.nitroFSImpl.cancelDownload(jobId: jobId)
         }
     }
 }

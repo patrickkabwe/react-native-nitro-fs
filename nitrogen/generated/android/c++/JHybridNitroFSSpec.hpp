@@ -74,8 +74,10 @@ namespace margelo::nitro::nitrofs {
     std::string dirname(const std::string& path) override;
     std::string basename(const std::string& path) override;
     std::string extname(const std::string& path) override;
-    std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override;
-    std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;
+    std::shared_ptr<Promise<std::string>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override;
+    std::shared_ptr<Promise<bool>> cancelUpload(const std::string& jobId) override;
+    std::shared_ptr<Promise<NitroDownloadResult>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;
+    std::shared_ptr<Promise<bool>> cancelDownload(const std::string& jobId) override;
 
   private:
     friend HybridBase;

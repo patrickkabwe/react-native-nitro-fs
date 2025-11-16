@@ -180,7 +180,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<Unit> {
+    ): Promise<String> {
         return Promise.async(ioScope) {
             try {
                 nitroFsImpl.uploadFile(file, uploadOptions, onProgress)
@@ -190,17 +190,44 @@ class HybridNitroFS: HybridNitroFSSpec() {
             }
         }
     }
+    
+    override fun cancelUpload(jobId: String): Promise<Boolean> {
+        return Promise.async {
+            try {
+                nitroFsImpl.cancelUpload(jobId)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error cancelling upload: ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
 
     override fun downloadFile(
         serverUrl: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<NitroFile> {
+    ): Promise<Map<String, Any>> {
         return Promise.async(ioScope) {
             try {
-                nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
+                val result = nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
+                
+                return@async mapOf(
+                    "jobId" to result.jobId,
+                    "file" to result.file
+                )
             } catch (e: Exception) {
                 Log.e(TAG, "Error downloading file: ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
+    
+    override fun cancelDownload(jobId: String): Promise<Boolean> {
+        return Promise.async {
+            try {
+                nitroFsImpl.cancelDownload(jobId)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error cancelling download: ${e.message}")
                 throw Error(e)
             }
         }
