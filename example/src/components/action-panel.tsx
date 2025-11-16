@@ -168,6 +168,8 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
           </TouchableOpacity>
         </View>
 
+        </>
+      )}
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={[styles.button, styles.copyImagesButton, { opacity: loading ? 0.5 : 1 }]}
@@ -179,8 +181,6 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
             </Text>
           </TouchableOpacity>
         </View>
-        </>
-      )}
     </View>
   );
 };
