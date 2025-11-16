@@ -147,9 +147,9 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func basename(path: String, ext: String?) throws -> String {
+    func basename(path: String) throws -> String {
         do {
-            return try nitroFSImpl.basename(path: path, ext: ext)
+            return try nitroFSImpl.basename(path: path)
         } catch {
             os_log("An Error occurred in basename(...): \(error.localizedDescription)")
             throw RuntimeError.error(withMessage: "An Error occurred in basename(...): \(error.localizedDescription)")

@@ -2,6 +2,8 @@ package com.nitrofs
 
 import android.content.Context
 import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
 import com.facebook.react.bridge.ReactApplicationContext
@@ -18,14 +20,32 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     private val nitroFileUploader: NitroFileUploader = NitroFileUploader()
     private val fileDownloader: FileDownloader = FileDownloader()
 
+    private val contentResolver = context.contentResolver
+
     fun exists(path: String): Boolean {
-        val dir = File(path)
-        return dir.exists()
+        val resolved = path.toResolvedPath() ?: return false
+        return when(resolved) {
+            is ResolvedPath.FilePath -> resolved.file.exists()
+            is ResolvedPath.Content -> {
+                contentResolver.query(
+                    resolved.uri,
+                    arrayOf("_id"),
+                    null,
+                    null,
+                    null
+                )?.use { cursor -> cursor.moveToFirst()  } ?: false
+            }
+        }
     }
 
     fun unlink(path: String): Boolean {
-        val file = File(path)
-        return file.deleteRecursively()
+        val resolved = path.toResolvedPath() ?: return false
+        return when(resolved) {
+            is ResolvedPath.FilePath -> resolved.file.deleteRecursively()
+            is ResolvedPath.Content -> {
+                contentResolver.delete(resolved.uri, null, null) > 0
+            }
+        }
     }
 
     fun writeFile(
@@ -129,27 +149,72 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         srcPath: String,
         destPath: String
     ) {
-        val file = File(srcPath)
-        val dest = File(destPath)
-        file.copyTo(dest)
+        val src = srcPath.toResolvedPath() ?: return
+        val dest = destPath.toResolvedPath() ?: return
+
+        try {
+            src.openInputStream(context)?.use { input ->
+                dest.openOutputStream(context)?.use { output ->
+                    input.copyTo(output, DEFAULT_BUFFER_SIZE)
+                }
+            }
+        } catch (e: Exception) {
+            throw Error("Failed to copy file: ${e.message}")
+        }
     }
 
 
     fun mkdir(path: String): Boolean {
-        val file = File(path)
-        return file.mkdirs()
+        val resolved = path.toResolvedPath() ?: return false
+        return when(resolved) {
+            is ResolvedPath.FilePath -> resolved.file.mkdirs()
+            is ResolvedPath.Content -> throw Error("Cannot create directory from content URI: $path")
+        }
     }
 
     fun stat(path: String): NitroFileStat {
-        val file = File(path)
-        val stat = NitroFileStat(
-            size = file.length().toDouble(),
-            isFile = file.isFile,
-            isDirectory = file.isDirectory,
-            ctime = file.lastModified().toDouble(),
-            mtime = file.lastModified().toDouble()
-        )
-        return stat
+        val resolved = path.toResolvedPath() ?: throw Error("Invalid path: $path")
+        return when(resolved) {
+            is ResolvedPath.FilePath -> resolved.file.toNitroFileStat()
+            is ResolvedPath.Content -> {
+                val uri = resolved.uri
+                val projection = arrayOf(
+                    DocumentsContract.Document.COLUMN_SIZE,
+                    DocumentsContract.Document.COLUMN_MIME_TYPE,
+                    DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+                    DocumentsContract.Document.MIME_TYPE_DIR
+                )
+                contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+                    if (!cursor.moveToFirst()) {
+                        throw Error("Unable to stat content uri (no row): $path")
+                    }
+
+                    fun getString(col: String): String? {
+                        val idx = cursor.getColumnIndex(col)
+                        return if (idx >= 0 && !cursor.isNull(idx)) cursor.getString(idx) else null
+                    }
+
+                    fun getLong(col: String): Long? {
+                        val idx = cursor.getColumnIndex(col)
+                        return if (idx >= 0 && !cursor.isNull(idx)) cursor.getLong(idx) else null
+                    }
+
+                    val size       = getLong(DocumentsContract.Document.COLUMN_SIZE) ?: 0L
+                    val mime       = getString(DocumentsContract.Document.COLUMN_MIME_TYPE) ?: contentResolver.getType(uri)
+                    val isDirectory      = mime == DocumentsContract.Document.MIME_TYPE_DIR
+                    val isFile = !isDirectory
+                    val lastModified = getLong(DocumentsContract.Document.COLUMN_LAST_MODIFIED) ?: 0L
+
+                    NitroFileStat(
+                        size = size.toDouble(),
+                        isFile = isFile,
+                        isDirectory = isDirectory,
+                        ctime = lastModified.toDouble(),
+                        mtime = lastModified.toDouble()
+                    )
+                } ?: throw Error("Unable to stat content uri (query failed): $path")
+            }
+        }
     }
 
     fun readdir(path: String): Array<NitroFile> {
@@ -199,14 +264,45 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return file.parent ?: ""
     }
 
-    fun basename(path: String, ext: String?): String {
-        val file = File(path)
-        return file.nameWithoutExtension
+    fun basename(path: String): String {
+        val resolved = path.toResolvedPath() ?: throw Error("Invalid path: $path")
+        return when(resolved) {
+            is ResolvedPath.FilePath -> resolved.file.name
+            is ResolvedPath.Content -> {
+                val uri = resolved.uri
+                val fileName = contentResolver.query(
+                    uri, null, null, null, null
+                )?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                        if (nameIndex != -1) {
+                            cursor.getString(nameIndex)
+                        } else {
+                            ""
+                        }
+                    } else {
+                        ""
+                    }
+                } ?: ""
+                fileName
+            }
+        }
     }
 
     fun extname(path: String): String {
-        val file = File(path)
-        return file.extension
+        val resolved = path.toResolvedPath() ?: throw Error("Invalid path: $path")
+
+        return when(resolved){
+            is ResolvedPath.FilePath -> resolved.file.extension
+            is ResolvedPath.Content -> {
+                val mimeType: String? = contentResolver.getType(resolved.uri)
+                if (mimeType != null) {
+                    MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: ""
+                } else {
+                    ""
+                }
+            }
+        }
     }
 
     fun getDocumentDir(): String {

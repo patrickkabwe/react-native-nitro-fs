@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -20,6 +21,8 @@ interface ActionPanelProps {
   onCopyItem: (item: FileItem, newName: string) => void;
   onRenameItem: (item: FileItem, newName: string) => void;
   onBase64Encoding: () => void;
+  onCopyImagesFromDCIMToCache: () => void;
+  onPickDocument: () => void;
 }
 
 export const ActionPanel: React.FC<ActionPanelProps> = ({
@@ -34,6 +37,8 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
   onCopyItem,
   onRenameItem,
   onBase64Encoding,
+  onCopyImagesFromDCIMToCache,
+  onPickDocument,   
 }) => {
   const [fileName, setFileName] = useState('');
   const [fileContent, setFileContent] = useState('');
@@ -128,14 +133,14 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
         <TouchableOpacity
           style={[styles.button, styles.copyButton]}
           onPress={handleCopyItem}
-          disabled={!selectedFile || !fileName.trim()}
+          disabled={!selectedFile}
         >
           <Text style={styles.buttonText}>Copy Item</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.renameButton]}
           onPress={handleRenameItem}
-          disabled={!selectedFile || !fileName.trim()}
+          disabled={!selectedFile}
         >
           <Text style={styles.buttonText}>Rename Item</Text>
         </TouchableOpacity>
@@ -150,6 +155,32 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
           <Text style={styles.buttonText}>Base64</Text>
         </TouchableOpacity>
       </View>
+
+      {Platform.OS === 'android' && (
+        <>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[styles.button, styles.copyImagesButton, { opacity: loading ? 0.5 : 1 }]}
+            onPress={onCopyImagesFromDCIMToCache}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>Copy DCIM Images</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[styles.button, styles.copyImagesButton, { opacity: loading ? 0.5 : 1 }]}
+            onPress={onPickDocument}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+                Pick a Document
+            </Text>
+          </TouchableOpacity>
+        </View>
+        </>
+      )}
     </View>
   );
 };
@@ -205,6 +236,9 @@ const styles = StyleSheet.create({
   },
   base64Button: {
     backgroundColor: '#dc3545',
+  },
+  copyImagesButton: {
+    backgroundColor: '#20c997',
   },
   buttonText: {
     color: '#fff',
