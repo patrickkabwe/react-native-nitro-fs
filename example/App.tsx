@@ -34,6 +34,8 @@ const AppContent = () => {
     getPathInfo,
     navigateToDirectoryType,
     base64Encoding,
+    copyImagesFromDCIMToCache,
+    pickDocument,
   } = useFileSystem();
 
   return (
@@ -76,6 +78,8 @@ const AppContent = () => {
         onCopyItem={copyItem}
         onRenameItem={renameItem}
         onBase64Encoding={base64Encoding}
+        onCopyImagesFromDCIMToCache={copyImagesFromDCIMToCache}
+        onPickDocument={pickDocument}
       />
 
       <FileEditor
