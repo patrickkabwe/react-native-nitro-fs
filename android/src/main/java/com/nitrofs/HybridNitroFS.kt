@@ -158,9 +158,9 @@ class HybridNitroFS: HybridNitroFSSpec() {
         }
     }
 
-    override fun basename(path: String, ext: String?): String {
+    override fun basename(path: String): String {
         try {
-            return nitroFsImpl.basename(path, ext)
+            return nitroFsImpl.basename(path)
         } catch (e: Exception) {
             Log.e(TAG, "Error while calling basename(...): ${e.message}")
             throw Error(e)

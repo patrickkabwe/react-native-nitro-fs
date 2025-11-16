@@ -381,16 +381,9 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func basename(path: std.string, ext: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
+  public final func basename(path: std.string) -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.basename(path: String(path), ext: { () -> String? in
-        if bridge.has_value_std__optional_std__string_(ext) {
-          let __unwrapped = bridge.get_std__optional_std__string_(ext)
-          return String(__unwrapped)
-        } else {
-          return nil
-        }
-      }())
+      let __result = try self.__implementation.basename(path: String(path))
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {

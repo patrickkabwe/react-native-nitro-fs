@@ -72,7 +72,7 @@ namespace margelo::nitro::nitrofs {
     std::shared_ptr<Promise<std::vector<NitroFile>>> readdir(const std::string& path) override;
     std::shared_ptr<Promise<void>> rename(const std::string& oldPath, const std::string& newPath) override;
     std::string dirname(const std::string& path) override;
-    std::string basename(const std::string& path, const std::optional<std::string>& ext) override;
+    std::string basename(const std::string& path) override;
     std::string extname(const std::string& path) override;
     std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override;
     std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;

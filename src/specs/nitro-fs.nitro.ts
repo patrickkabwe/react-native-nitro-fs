@@ -98,7 +98,7 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
     /**
      * Get the filename from a path
      */
-    basename(path: string, ext?: string): string
+    basename(path: string): string
     /**
      * Get the file extension from a path
      */

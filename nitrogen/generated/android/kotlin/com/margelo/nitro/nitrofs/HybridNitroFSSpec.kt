@@ -122,7 +122,7 @@ abstract class HybridNitroFSSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun basename(path: String, ext: String?): String
+  abstract fun basename(path: String): String
   
   @DoNotStrip
   @Keep

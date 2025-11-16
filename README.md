@@ -240,16 +240,16 @@ const dir = NitroFS.dirname('/path/to/file.txt')
 // Returns: '/path/to'
 ```
 
-#### `basename(path: string, ext?: string): string`
+#### `basename(path: string): string`
 
-Get the filename from a path, optionally removing extension.
+Get the filename from a path, including the file extension.
 
 ```typescript
 const name = NitroFS.basename('/path/to/file.txt')
 // Returns: 'file.txt'
 
-const nameWithoutExt = NitroFS.basename('/path/to/file.txt', '.txt')
-// Returns: 'file'
+const nameWithExt = NitroFS.basename('/path/to/document.pdf')
+// Returns: 'document.pdf'
 ```
 
 #### `extname(path: string): string`
