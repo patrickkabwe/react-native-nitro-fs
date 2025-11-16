@@ -1,3 +1,38 @@
+## [0.8.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.7.0...v0.8.0) (2025-11-16)
+
+### ✨ Features
+
+* Android 16 KB support ([8431cb0](https://github.com/patrickkabwe/react-native-nitro-fs/commit/8431cb0101446990a53972d1e8eb2b7d89bacfdc))
+* **android:** adds new dirs `DCIM_DIR`,`PICTURES_DIR` and more ([e4bbfe9](https://github.com/patrickkabwe/react-native-nitro-fs/commit/e4bbfe933ef29484f3bec937c7cff978580795b5))
+
+### 🐛 Bug Fixes
+
+* **android:** enhance error handling for file name and extension retrieval ([260725e](https://github.com/patrickkabwe/react-native-nitro-fs/commit/260725ec690f39cb1b2d87f84df90f19e5f8f291))
+* **android:** fix basename syntax and remove ext parameter ([5de2c05](https://github.com/patrickkabwe/react-native-nitro-fs/commit/5de2c051888c053c60af49f5ff0ea0581a03880d))
+* **android:** point document/download dirs to app-scoped storage ([1e40d41](https://github.com/patrickkabwe/react-native-nitro-fs/commit/1e40d411fb57b5b6d0671b2f40e5d8414cbbcbb3))
+* correct JSX structure in ActionPanel component ([ac0bde0](https://github.com/patrickkabwe/react-native-nitro-fs/commit/ac0bde085a4de882df332241b0dbc047b503e8f3))
+* enable copy item button and improve error handling ([7106ec2](https://github.com/patrickkabwe/react-native-nitro-fs/commit/7106ec2eb8563be03d368a2571b3e3f30484655d))
+* improve error handling for path resolution and update dirname method ([55eaa58](https://github.com/patrickkabwe/react-native-nitro-fs/commit/55eaa581fa9ce3a8c94cf0c936ba74d839ceeab3))
+
+### 📚 Documentation
+
+* update README and example app to reflect changes in basename function and add new file system methods ([73a3a3d](https://github.com/patrickkabwe/react-native-nitro-fs/commit/73a3a3d5ca710d37bf8742a97432fdc74a25b668))
+
+### 🛠️ Other changes
+
+* bump up nitro to 0.29.8 ([5e163c3](https://github.com/patrickkabwe/react-native-nitro-fs/commit/5e163c37e05927a1792e114065b574305ce48785))
+* codegen ([490b251](https://github.com/patrickkabwe/react-native-nitro-fs/commit/490b251def58d31f1f359edf5ec4d4484ea20434))
+* **deps:** add react-native-nitro-document-picker dependency ([dac8a7a](https://github.com/patrickkabwe/react-native-nitro-fs/commit/dac8a7a1ff9308152c5496c2604ee65b9c3c287f))
+* **deps:** bump activesupport from 7.2.2.2 to 7.2.3 in /example ([63cb714](https://github.com/patrickkabwe/react-native-nitro-fs/commit/63cb7146240c1e7fa3071f0950478d1745a831ad))
+* **deps:** bump benchmark from 0.4.1 to 0.5.0 in /example ([d6fc4eb](https://github.com/patrickkabwe/react-native-nitro-fs/commit/d6fc4ebc5e982278d8f39cf06dcfa18b9d0b6a78))
+* **deps:** bump bigdecimal from 3.2.2 to 3.3.0 in /example ([56f9cd0](https://github.com/patrickkabwe/react-native-nitro-fs/commit/56f9cd09a9bc0da04b1acb693ff911579b1da70a))
+* **deps:** bump bigdecimal from 3.3.0 to 3.3.1 in /example ([d8883ed](https://github.com/patrickkabwe/react-native-nitro-fs/commit/d8883edddb4f76cdc7d35346a912bd1abde5d800))
+* **deps:** bump com.android.tools.build:gradle in /android ([3437b48](https://github.com/patrickkabwe/react-native-nitro-fs/commit/3437b484c3d08225e5d4e5036a3383b63adea731))
+* **deps:** bump ktor_version from 3.2.3 to 3.3.0 in /android ([948e304](https://github.com/patrickkabwe/react-native-nitro-fs/commit/948e3042dec23f5480af84dc7b879c2882449c3b))
+* **deps:** bump ktor_version from 3.3.0 to 3.3.2 in /android ([6e2ae21](https://github.com/patrickkabwe/react-native-nitro-fs/commit/6e2ae21801f769b12447907add1cddfafcf2f90f))
+* regenerate bindings after basename signature change ([1da99ea](https://github.com/patrickkabwe/react-native-nitro-fs/commit/1da99ea9973f5240cb0250c2b509dc39b3d99572))
+* update react-native-nitro-modules version to 0.31.5 in installation instructions ([b935588](https://github.com/patrickkabwe/react-native-nitro-fs/commit/b93558824ab0f2db36b90a0b82e88252fcd703ce))
+
 ## [0.7.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.6.1...v0.7.0) (2025-10-07)
 
 ### ✨ Features
