@@ -1,0 +1,141 @@
+name: Bug Report
+description: File a bug report to help us improve
+title: '[BUG] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: A clear and concise description of what actually happened.
+      placeholder: What actually happened?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform(s) does this bug affect?
+      options:
+        - iOS
+        - Android
+        - Both
+    validations:
+      required: true
+
+  - type: input
+    id: react-native-version
+    attributes:
+      label: React Native Version
+      description: The version of React Native you're using
+      placeholder: e.g. 0.81.0
+    validations:
+      required: true
+
+  - type: input
+    id: nitro-modules-version
+    attributes:
+      label: React Native Nitro Modules Version
+      description: The version of react-native-nitro-modules you're using
+      placeholder: e.g. 0.31.5
+    validations:
+      required: true
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Package Version
+      description: The version of react-native-nitro-fs you're using
+      placeholder: e.g. 0.8.0
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: OS Version
+      description: The operating system version
+      placeholder: e.g. iOS 17.0, Android 14
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: Device model (if applicable)
+      placeholder: e.g. iPhone 14, Pixel 7
+
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Code Example
+      description: A minimal code example that reproduces the issue
+      render: typescript
+      placeholder: |
+        // Please provide a minimal code example
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages/Logs
+      description: Paste any error messages or logs here
+      render: shell
+      placeholder: |
+        Paste error messages or logs here
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might be helpful...
+
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: Possible Solution
+      description: If you have suggestions on how to fix the bug, please describe them here
+      placeholder: Optional: Describe a possible solution...
+
