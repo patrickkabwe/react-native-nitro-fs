@@ -1,6 +1,6 @@
 name: Bug Report
 description: File a bug report to help us improve
-title: '[BUG] '
+title: '[BUG]: '
 labels: ['bug']
 body:
   - type: markdown
@@ -77,31 +77,6 @@ body:
       placeholder: e.g. 0.31.5
     validations:
       required: true
-
-  - type: input
-    id: package-version
-    attributes:
-      label: Package Version
-      description: The version of react-native-nitro-fs you're using
-      placeholder: e.g. 0.8.0
-    validations:
-      required: true
-
-  - type: input
-    id: os-version
-    attributes:
-      label: OS Version
-      description: The operating system version
-      placeholder: e.g. iOS 17.0, Android 14
-    validations:
-      required: true
-
-  - type: input
-    id: device
-    attributes:
-      label: Device
-      description: Device model (if applicable)
-      placeholder: e.g. iPhone 14, Pixel 7
 
   - type: textarea
     id: code-example
