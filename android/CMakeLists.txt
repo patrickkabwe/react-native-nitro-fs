@@ -21,6 +21,10 @@ include_directories(
 
 find_library(LOG_LIB log)
 
+if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS "27")
+    target_link_options(${PACKAGE_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
+
 # Link all libraries together
 target_link_libraries(
         ${PACKAGE_NAME}
