@@ -1,3 +1,20 @@
+## [0.8.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.0...v0.8.1) (2025-11-20)
+
+### 🐛 Bug Fixes
+
+* resolve YAML syntax error in bug report template placeholder ([72c2b27](https://github.com/patrickkabwe/react-native-nitro-fs/commit/72c2b27f009a7a01d055bb865e4305d3c2a222a8))
+
+### 🔄 Code Refactors
+
+* simplify bug report template to essential fields only ([197feff](https://github.com/patrickkabwe/react-native-nitro-fs/commit/197feff7085ab6097819a286ee94a1e45a77f0e9))
+* simplify feature request template to only include problem statement and optional solution ([56d2299](https://github.com/patrickkabwe/react-native-nitro-fs/commit/56d22998502cbb03969c2b456d82d93acf1462a5))
+
+### 🛠️ Other changes
+
+* add GitHub issue templates for bug reports and feature requests ([32fe404](https://github.com/patrickkabwe/react-native-nitro-fs/commit/32fe40479d50acd950544beac26e045ba481e388))
+* convert issue templates to GitHub issue forms with structured inputs ([08e0844](https://github.com/patrickkabwe/react-native-nitro-fs/commit/08e08443036ad974bae17d93bedc8acba12ed0dc))
+* update bug report template and increment NitroFS version in Podfile.lock ([d8fa291](https://github.com/patrickkabwe/react-native-nitro-fs/commit/d8fa29197509a0818f9674bb574332d7ea4b4506))
+
 ## [0.8.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.7.0...v0.8.0) (2025-11-16)
 
 ### ✨ Features
