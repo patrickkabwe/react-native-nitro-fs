@@ -36,7 +36,9 @@ namespace margelo::nitro::nitrofs {
       prototype.registerHybridMethod("basename", &HybridNitroFSSpec::basename);
       prototype.registerHybridMethod("extname", &HybridNitroFSSpec::extname);
       prototype.registerHybridMethod("uploadFile", &HybridNitroFSSpec::uploadFile);
+      prototype.registerHybridMethod("cancelUpload", &HybridNitroFSSpec::cancelUpload);
       prototype.registerHybridMethod("downloadFile", &HybridNitroFSSpec::downloadFile);
+      prototype.registerHybridMethod("cancelDownload", &HybridNitroFSSpec::cancelDownload);
     });
   }
 

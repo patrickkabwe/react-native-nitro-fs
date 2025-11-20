@@ -46,3 +46,14 @@ export type NitroFileStat = {
     isFile: boolean
     isDirectory: boolean
 }
+
+export type NitroDownloadResult = {
+    /**
+     * The job ID for cancelling the download operation
+     */
+    jobId: string
+    /**
+     * The downloaded file (available once download completes)
+     */
+    file: NitroFile
+}

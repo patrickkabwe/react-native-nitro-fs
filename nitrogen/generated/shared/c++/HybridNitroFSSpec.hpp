@@ -21,6 +21,8 @@ namespace margelo::nitro::nitrofs { struct NitroFileStat; }
 namespace margelo::nitro::nitrofs { struct NitroFile; }
 // Forward declaration of `NitroUploadOptions` to properly resolve imports.
 namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
+// Forward declaration of `NitroDownloadResult` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadResult; }
 
 #include <string>
 #include <NitroModules/Promise.hpp>
@@ -31,6 +33,7 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 #include "NitroUploadOptions.hpp"
 #include <functional>
 #include <optional>
+#include "NitroDownloadResult.hpp"
 
 namespace margelo::nitro::nitrofs {
 
@@ -83,8 +86,10 @@ namespace margelo::nitro::nitrofs {
       virtual std::string dirname(const std::string& path) = 0;
       virtual std::string basename(const std::string& path) = 0;
       virtual std::string extname(const std::string& path) = 0;
-      virtual std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
-      virtual std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
+      virtual std::shared_ptr<Promise<std::string>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
+      virtual std::shared_ptr<Promise<bool>> cancelUpload(const std::string& jobId) = 0;
+      virtual std::shared_ptr<Promise<NitroDownloadResult>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
+      virtual std::shared_ptr<Promise<bool>> cancelDownload(const std::string& jobId) = 0;
 
     protected:
       // Hybrid Setup

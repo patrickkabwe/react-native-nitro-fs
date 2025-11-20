@@ -10,6 +10,8 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridNitroFSSpec` to properly resolve imports.
 namespace margelo::nitro::nitrofs { class HybridNitroFSSpec; }
+// Forward declaration of `NitroDownloadResult` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadResult; }
 // Forward declaration of `NitroFileStat` to properly resolve imports.
 namespace margelo::nitro::nitrofs { struct NitroFileStat; }
 // Forward declaration of `NitroFile` to properly resolve imports.
@@ -23,6 +25,7 @@ namespace NitroFS { class HybridNitroFSSpec_cxx; }
 
 // Include C++ defined types
 #include "HybridNitroFSSpec.hpp"
+#include "NitroDownloadResult.hpp"
 #include "NitroFile.hpp"
 #include "NitroFileStat.hpp"
 #include "NitroUploadMethod.hpp"
@@ -312,38 +315,38 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return *optional;
   }
   
-  // pragma MARK: std::shared_ptr<Promise<NitroFile>>
+  // pragma MARK: std::shared_ptr<Promise<NitroDownloadResult>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<NitroFile>>`.
+   * Specialized version of `std::shared_ptr<Promise<NitroDownloadResult>>`.
    */
-  using std__shared_ptr_Promise_NitroFile__ = std::shared_ptr<Promise<NitroFile>>;
-  inline std::shared_ptr<Promise<NitroFile>> create_std__shared_ptr_Promise_NitroFile__() noexcept {
-    return Promise<NitroFile>::create();
+  using std__shared_ptr_Promise_NitroDownloadResult__ = std::shared_ptr<Promise<NitroDownloadResult>>;
+  inline std::shared_ptr<Promise<NitroDownloadResult>> create_std__shared_ptr_Promise_NitroDownloadResult__() noexcept {
+    return Promise<NitroDownloadResult>::create();
   }
-  inline PromiseHolder<NitroFile> wrap_std__shared_ptr_Promise_NitroFile__(std::shared_ptr<Promise<NitroFile>> promise) noexcept {
-    return PromiseHolder<NitroFile>(std::move(promise));
+  inline PromiseHolder<NitroDownloadResult> wrap_std__shared_ptr_Promise_NitroDownloadResult__(std::shared_ptr<Promise<NitroDownloadResult>> promise) noexcept {
+    return PromiseHolder<NitroDownloadResult>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const NitroFile& /* result */)>
+  // pragma MARK: std::function<void(const NitroDownloadResult& /* result */)>
   /**
-   * Specialized version of `std::function<void(const NitroFile&)>`.
+   * Specialized version of `std::function<void(const NitroDownloadResult&)>`.
    */
-  using Func_void_NitroFile = std::function<void(const NitroFile& /* result */)>;
+  using Func_void_NitroDownloadResult = std::function<void(const NitroDownloadResult& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const NitroFile& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const NitroDownloadResult& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_NitroFile_Wrapper final {
+  class Func_void_NitroDownloadResult_Wrapper final {
   public:
-    explicit Func_void_NitroFile_Wrapper(std::function<void(const NitroFile& /* result */)>&& func): _function(std::make_unique<std::function<void(const NitroFile& /* result */)>>(std::move(func))) {}
-    inline void call(NitroFile result) const noexcept {
+    explicit Func_void_NitroDownloadResult_Wrapper(std::function<void(const NitroDownloadResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const NitroDownloadResult& /* result */)>>(std::move(func))) {}
+    inline void call(NitroDownloadResult result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const NitroFile& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const NitroDownloadResult& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_NitroFile create_Func_void_NitroFile(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_NitroFile_Wrapper wrap_Func_void_NitroFile(Func_void_NitroFile value) noexcept {
-    return Func_void_NitroFile_Wrapper(std::move(value));
+  Func_void_NitroDownloadResult create_Func_void_NitroDownloadResult(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_NitroDownloadResult_Wrapper wrap_Func_void_NitroDownloadResult(Func_void_NitroDownloadResult value) noexcept {
+    return Func_void_NitroDownloadResult_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>
@@ -427,13 +430,13 @@ namespace margelo::nitro::nitrofs::bridge::swift {
     return Result<std::string>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<NitroFile>>>
-  using Result_std__shared_ptr_Promise_NitroFile___ = Result<std::shared_ptr<Promise<NitroFile>>>;
-  inline Result_std__shared_ptr_Promise_NitroFile___ create_Result_std__shared_ptr_Promise_NitroFile___(const std::shared_ptr<Promise<NitroFile>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<NitroFile>>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<Promise<NitroDownloadResult>>>
+  using Result_std__shared_ptr_Promise_NitroDownloadResult___ = Result<std::shared_ptr<Promise<NitroDownloadResult>>>;
+  inline Result_std__shared_ptr_Promise_NitroDownloadResult___ create_Result_std__shared_ptr_Promise_NitroDownloadResult___(const std::shared_ptr<Promise<NitroDownloadResult>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<NitroDownloadResult>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_NitroFile___ create_Result_std__shared_ptr_Promise_NitroFile___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<NitroFile>>>::withError(error);
+  inline Result_std__shared_ptr_Promise_NitroDownloadResult___ create_Result_std__shared_ptr_Promise_NitroDownloadResult___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<NitroDownloadResult>>>::withError(error);
   }
 
 } // namespace margelo::nitro::nitrofs::bridge::swift

@@ -7,6 +7,7 @@ import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
 import com.facebook.react.bridge.ReactApplicationContext
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -336,26 +337,29 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     suspend fun uploadFile(file: NitroFile,
                    uploadOptions: NitroUploadOptions,
                    onProgress: ((Double, Double) -> Unit)?
-    ) {
+    ): String {
         val nitroFile = File(file.path)
-        nitroFileUploader.handleUpload(nitroFile, uploadOptions, onProgress)
+        return nitroFileUploader.handleUpload(nitroFile, uploadOptions, onProgress)
+    }
+    
+    fun cancelUpload(jobId: String): Boolean {
+        return nitroFileUploader.cancelUpload(jobId)
     }
 
     suspend fun downloadFile(
         serverUrl: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
-    ): NitroFile {
-        val file = fileDownloader.downloadFile(
+    ): NitroDownloadResult {
+        return fileDownloader.downloadFile(
             serverUrl,
             destinationPath,
             onProgress
         )
-        if (file != null) {
-            return file
-        } else {
-            throw RuntimeException("Failed to download file from: $serverUrl")
-        }
+    }
+    
+    fun cancelDownload(jobId: String): Boolean {
+        return fileDownloader.cancelDownload(jobId)
     }
 
     fun getFileEncoding(encoding: NitroFileEncoding): Charset {

@@ -6,13 +6,17 @@
 //
 
 import Foundation
+import NitroModules
 
 final class NitroFSFileDownloader: NSObject {
     private weak var fileManager: FileManager?
-    private var downloadTask: URLSessionDownloadTask?
-    private var onProgress: ((Double, Double) -> Void)?
-    private var continuation: CheckedContinuation<NitroFile, Error>?
-    private var destinationPath: String?
+    private var downloadTasks: [String: URLSessionDownloadTask] = [:]
+    private var downloadSessions: [String: URLSession] = [:]
+    private var progressCallbacks: [String: ((Double, Double) -> Void)] = [:]
+    private var destinationPaths: [String: String] = [:]
+    private var taskToJobId: [Int: String] = [:]
+    private var fileContinuations: [String: CheckedContinuation<NitroFile, Error>] = [:]
+    private let taskQueue = DispatchQueue(label: "com.nitrofs.downloader")
     
     init(fileManager: FileManager) {
         self.fileManager = fileManager
@@ -23,13 +27,12 @@ final class NitroFSFileDownloader: NSObject {
         _ serverUrl: String,
         _ destinationPath: String,
         onProgress: ((Double, Double) -> Void)? = nil
-    ) async throws -> NitroFile {
+    ) async throws -> NitroDownloadResult {
         guard fileManager != nil else {
             throw NitroFSError.unavailable(message: "FileManager is not available")
         }
         
-        self.onProgress = onProgress
-        self.destinationPath = destinationPath
+        let jobId = UUID().uuidString
         
         let request = try makeRequest(serverUrl: serverUrl)
         
@@ -38,17 +41,50 @@ final class NitroFSFileDownloader: NSObject {
             config.requestCachePolicy = .reloadIgnoringLocalCacheData
             return URLSession(configuration: config, delegate: self, delegateQueue: .main)
         }()
-            
         
-        return try await withCheckedThrowingContinuation { continuation in
-            self.continuation = continuation
-            downloadTask = session.downloadTask(with: request)
-            downloadTask?.resume()
+        let downloadTask = session.downloadTask(with: request)
+        
+        let file = try await withCheckedThrowingContinuation { continuation in
+            // Use sync to ensure state is initialized before downloadTask.resume() is called
+            // This prevents race condition where delegate callbacks fire before state is set up
+            taskQueue.sync {
+                self.downloadTasks[jobId] = downloadTask
+                self.downloadSessions[jobId] = session
+                self.taskToJobId[downloadTask.taskIdentifier] = jobId
+                self.destinationPaths[jobId] = destinationPath
+                self.fileContinuations[jobId] = continuation
+                if let onProgress = onProgress {
+                    self.progressCallbacks[jobId] = onProgress
+                }
+            }
+            downloadTask.resume()
         }
+        
+        return NitroDownloadResult(jobId: jobId, file: file)
     }
     
-    func cancelDownload() {
-        downloadTask?.cancel()
+    func cancelDownload(jobId: String) -> Bool {
+        var cancelled = false
+        taskQueue.sync { [weak self] in
+            guard let self = self else { return }
+            if let task = self.downloadTasks[jobId] {
+                task.cancel()
+                self.taskToJobId.removeValue(forKey: task.taskIdentifier)
+                self.downloadTasks.removeValue(forKey: jobId)
+                self.progressCallbacks.removeValue(forKey: jobId)
+                self.destinationPaths.removeValue(forKey: jobId)
+                if let continuation = self.fileContinuations[jobId] {
+                    continuation.resume(throwing: NitroFSError.networkError(message: "Download cancelled"))
+                    self.fileContinuations.removeValue(forKey: jobId)
+                }
+                cancelled = true
+            }
+            if let session = self.downloadSessions[jobId] {
+                session.invalidateAndCancel()
+                self.downloadSessions.removeValue(forKey: jobId)
+            }
+        }
+        return cancelled
     }
     
     // MARK: - Private Methods
@@ -69,7 +105,7 @@ final class NitroFSFileDownloader: NSObject {
         location: URL,
         response: URLResponse,
         downloadTask: URLSessionDownloadTask
-    ) throws -> NitroFile {
+    ) throws -> NitroFile? {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "FileManager is not available")
         }
@@ -82,8 +118,17 @@ final class NitroFSFileDownloader: NSObject {
             throw NitroFSError.networkError(message: "HTTP Error: \(response.statusCode)")
         }
         
-        guard let destinationPath = self.destinationPath else {
-            throw NitroFSError.networkError(message: "Destination path not set")
+        var jobId: String?
+        var destinationPath: String?
+        
+        taskQueue.sync {
+            jobId = self.taskToJobId[downloadTask.taskIdentifier]
+            destinationPath = jobId.flatMap { self.destinationPaths[$0] }
+        }
+        
+        guard let destinationPath = destinationPath else {
+            // Download was cancelled or jobId not found
+            return nil
         }
         
         let destinationURL = URL(fileURLWithPath: destinationPath)
@@ -112,7 +157,22 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL
     ) {
-        guard let continuation = self.continuation else { return }
+        var jobId: String?
+        var continuation: CheckedContinuation<NitroFile, Error>?
+        
+        taskQueue.sync {
+            jobId = self.taskToJobId[downloadTask.taskIdentifier]
+            if let jobId = jobId {
+                continuation = self.fileContinuations[jobId]
+            }
+        }
+        
+        guard let jobId = jobId, let continuation = continuation else { return }
+        
+        // Remove continuation immediately to prevent double-resume from didCompleteWithError
+        taskQueue.sync {
+            self.fileContinuations.removeValue(forKey: jobId)
+        }
         
         do {
             let file = try handleDownloadCompletion(
@@ -120,11 +180,23 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
                 response: downloadTask.response ?? URLResponse(),
                 downloadTask: downloadTask
             )
-            continuation.resume(returning: file)
+            if let file = file {
+                continuation.resume(returning: file)
+            } else {
+                continuation.resume(throwing: NitroFSError.networkError(message: "Download was cancelled"))
+            }
         } catch {
             continuation.resume(throwing: error)
         }
-        self.continuation = nil
+        
+        taskQueue.async {
+            self.downloadTasks.removeValue(forKey: jobId)
+            self.downloadSessions.removeValue(forKey: jobId)
+            self.progressCallbacks.removeValue(forKey: jobId)
+            self.destinationPaths.removeValue(forKey: jobId)
+            self.taskToJobId.removeValue(forKey: downloadTask.taskIdentifier)
+        }
+        
         session.finishTasksAndInvalidate()
     }
     
@@ -136,8 +208,16 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         totalBytesExpectedToWrite: Int64
     ) {
         guard totalBytesExpectedToWrite > 0 else { return }
-        DispatchQueue.main.async { [weak self] in
-            self?.onProgress?(Double(totalBytesWritten), Double(totalBytesExpectedToWrite))
+        
+        taskQueue.async { [weak self] in
+            guard let self = self,
+                  let jobId = self.taskToJobId[downloadTask.taskIdentifier],
+                  let onProgress = self.progressCallbacks[jobId] else {
+                return
+            }
+            DispatchQueue.main.async {
+                onProgress(Double(totalBytesWritten), Double(totalBytesExpectedToWrite))
+            }
         }
     }
     
@@ -146,9 +226,32 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?
     ) {
-        if let error {
-            continuation?.resume(throwing: error)
-            continuation = nil
+        var jobId: String?
+        var continuation: CheckedContinuation<NitroFile, Error>?
+        
+        taskQueue.sync {
+            jobId = self.taskToJobId[task.taskIdentifier]
+            if let jobId = jobId {
+                continuation = self.fileContinuations[jobId]
+            }
+        }
+        
+        guard let jobId = jobId else { return }
+        
+        if let error = error, let continuation = continuation {
+            // Remove continuation immediately to prevent double-resume
+            taskQueue.sync {
+                self.fileContinuations.removeValue(forKey: jobId)
+            }
+            
+            continuation.resume(throwing: error)
+            taskQueue.async {
+                self.downloadTasks.removeValue(forKey: jobId)
+                self.downloadSessions.removeValue(forKey: jobId)
+                self.progressCallbacks.removeValue(forKey: jobId)
+                self.destinationPaths.removeValue(forKey: jobId)
+                self.taskToJobId.removeValue(forKey: task.taskIdentifier)
+            }
             session.finishTasksAndInvalidate()
         }
     }

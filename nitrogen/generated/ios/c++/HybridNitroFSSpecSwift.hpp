@@ -22,6 +22,8 @@ namespace margelo::nitro::nitrofs { struct NitroFile; }
 namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 // Forward declaration of `NitroUploadMethod` to properly resolve imports.
 namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
+// Forward declaration of `NitroDownloadResult` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadResult; }
 
 #include <string>
 #include <NitroModules/Promise.hpp>
@@ -33,6 +35,7 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include "NitroUploadMethod.hpp"
 #include <optional>
 #include <functional>
+#include "NitroDownloadResult.hpp"
 
 #include "NitroFS-Swift-Cxx-Umbrella.hpp"
 
@@ -213,7 +216,7 @@ namespace margelo::nitro::nitrofs {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<void>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override {
+    inline std::shared_ptr<Promise<std::string>> uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override {
       auto __result = _swiftPart.uploadFile(std::forward<decltype(file)>(file), std::forward<decltype(uploadOptions)>(uploadOptions), onProgress);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -221,8 +224,24 @@ namespace margelo::nitro::nitrofs {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<NitroFile>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
+    inline std::shared_ptr<Promise<bool>> cancelUpload(const std::string& jobId) override {
+      auto __result = _swiftPart.cancelUpload(jobId);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<NitroDownloadResult>> downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
       auto __result = _swiftPart.downloadFile(serverUrl, destinationPath, onProgress);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<bool>> cancelDownload(const std::string& jobId) override {
+      auto __result = _swiftPart.cancelDownload(jobId);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

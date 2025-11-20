@@ -405,7 +405,7 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: bridge.std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: bridge.std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.uploadFile(file: file, uploadOptions: uploadOptions, onProgress: { () -> ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______(onProgress) {
@@ -420,23 +420,42 @@ open class HybridNitroFSSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_void__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve() })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func downloadFile(serverUrl: std.string, destinationPath: std.string, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
+  public final func cancelUpload(jobId: std.string) -> bridge.Result_std__shared_ptr_Promise_bool___ {
+    do {
+      let __result = try self.__implementation.cancelUpload(jobId: String(jobId))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_bool__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_bool__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_bool__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func downloadFile(serverUrl: std.string, destinationPath: std.string, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroDownloadResult___ {
     do {
       let __result = try self.__implementation.downloadFile(serverUrl: String(serverUrl), destinationPath: String(destinationPath), onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______(onProgress) {
@@ -451,18 +470,37 @@ open class HybridNitroFSSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_NitroFile__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_NitroFile__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_NitroFile__(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_NitroDownloadResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_NitroDownloadResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_NitroDownloadResult__(__promise)
         __result
           .then({ __result in __promiseHolder.resolve(__result) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_NitroFile___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_NitroDownloadResult___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_NitroFile___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_NitroDownloadResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func cancelDownload(jobId: std.string) -> bridge.Result_std__shared_ptr_Promise_bool___ {
+    do {
+      let __result = try self.__implementation.cancelDownload(jobId: String(jobId))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_bool__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_bool__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_bool__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__exceptionPtr)
     }
   }
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.nitrofs.HybridNitroFSSpec
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -180,7 +181,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
         file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<Unit> {
+    ): Promise<String> {
         return Promise.async(ioScope) {
             try {
                 nitroFsImpl.uploadFile(file, uploadOptions, onProgress)
@@ -190,17 +191,39 @@ class HybridNitroFS: HybridNitroFSSpec() {
             }
         }
     }
+    
+    override fun cancelUpload(jobId: String): Promise<Boolean> {
+        return Promise.async {
+            try {
+                nitroFsImpl.cancelUpload(jobId)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error cancelling upload: ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
 
     override fun downloadFile(
         serverUrl: String,
         destinationPath: String,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<NitroFile> {
+    ): Promise<NitroDownloadResult> {
         return Promise.async(ioScope) {
             try {
                 nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
             } catch (e: Exception) {
                 Log.e(TAG, "Error downloading file: ${e.message}")
+                throw Error(e)
+            }
+        }
+    }
+    
+    override fun cancelDownload(jobId: String): Promise<Boolean> {
+        return Promise.async {
+            try {
+                nitroFsImpl.cancelDownload(jobId)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error cancelling download: ${e.message}")
                 throw Error(e)
             }
         }

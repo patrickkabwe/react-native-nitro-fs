@@ -1,6 +1,6 @@
 
 import { type HybridObject } from 'react-native-nitro-modules'
-import type { NitroFile, NitroFileEncoding, NitroFileStat, NitroUploadOptions } from '../type'
+import type { NitroDownloadResult, NitroFile, NitroFileEncoding, NitroFileStat, NitroUploadOptions } from '../type'
 
 export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
     /**
@@ -119,12 +119,22 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      *      'X-Filename': 'test.txt',
      *  },
      * }
-     * await NitroFS.uploadFile(options, (uploadedBytes, totalBytes) => {
+     * const jobId = await NitroFS.uploadFile(options, (uploadedBytes, totalBytes) => {
      *  console.log(`Uploading ${uploadedBytes / totalBytes * 100}%`)
      * })
+     * // To cancel: NitroFS.cancelUpload(jobId)
      * ```
      */
-    uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<void>
+    uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<string>
+    /**
+     * Cancel an upload operation
+     * ```typescript
+     * const jobId = await NitroFS.uploadFile(...)
+     * const cancelled = await NitroFS.cancelUpload(jobId)
+     * // Returns true if the upload was cancelled, false if jobId not found
+     * ```
+     */
+    cancelUpload(jobId: string): Promise<boolean>
     /**
      * Upload multiple files to the file system
      * ```typescript
@@ -142,11 +152,21 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      * ```typescript
      * const serverUrl = 'https://example.com/download'
      * const destinationPath = NitroFS.DOWNLOAD_DIR + '/file.txt'   
-     * const file = await NitroFS.downloadFile(serverUrl, destinationPath, (downloadedBytes, totalBytes) => {
+     * const { jobId, file } = await NitroFS.downloadFile(serverUrl, destinationPath, (downloadedBytes, totalBytes) => {
      *  console.log(`Downloading ${downloadedBytes / totalBytes * 100}%`)
      * })
-     * console.log(file) // { name: 'file.txt', mimeType: 'text/plain', path: 'file.txt' }
+     * // To cancel before completion: NitroFS.cancelDownload(jobId)
+     * // File is available once download completes
      * ```
      */
-    downloadFile(serverUrl: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
+    downloadFile(serverUrl: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroDownloadResult>
+    /**
+     * Cancel a download operation
+     * ```typescript
+     * const { jobId } = await NitroFS.downloadFile(...)
+     * const cancelled = await NitroFS.cancelDownload(jobId)
+     * // Returns true if the download was cancelled, false if jobId not found
+     * ```
+     */
+    cancelDownload(jobId: string): Promise<boolean>
 }
