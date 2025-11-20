@@ -137,5 +137,5 @@ body:
     attributes:
       label: Possible Solution
       description: If you have suggestions on how to fix the bug, please describe them here
-      placeholder: Optional: Describe a possible solution...
+      placeholder: Describe a possible solution (optional)
 
