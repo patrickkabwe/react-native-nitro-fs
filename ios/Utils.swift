@@ -20,6 +20,42 @@ struct NitroFSDirs {
     }
 }
 
+struct NitroFSMimeTypes {
+    static let mimeTypes: [String: String] = [
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "png": "image/png",
+        "gif": "image/gif",
+        "pdf": "application/pdf",
+        "txt": "text/plain",
+        "json": "application/json",
+        "mp4": "video/mp4",
+        "mp3": "audio/mpeg",
+        "zip": "application/zip",
+        "csv": "text/csv",
+        "xls": "application/vnd.ms-excel",
+        "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "ppt": "application/vnd.ms-powerpoint",
+        "pptx": "application/vnd.openxmlformats-officedocument.presentationml.sheet",
+        "doc": "application/vnd.ms-word",
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "odt": "application/vnd.oasis.opendocument.text",
+        "ods": "application/vnd.oasis.opendocument.spreadsheet",
+        "db": "application/vnd.sqlite3",
+        "sqlite": "application/vnd.sqlite3",
+        "sqlite3": "application/vnd.sqlite3",
+        "sql": "application/sql",
+        "xml": "application/xml",
+        "yaml": "text/yaml",
+        "yml": "text/yaml",
+        "md": "text/markdown",
+        "readme": "text/plain",
+        "log": "text/plain",
+        "html": "text/html",
+        "htm": "text/html",
+    ]
+}
+
 enum NitroFSError: Error {
     case unavailable(message: String)
     case fileError(message: String)
