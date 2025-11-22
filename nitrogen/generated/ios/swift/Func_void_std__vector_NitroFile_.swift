@@ -5,8 +5,8 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
+import Foundation
 import NitroModules
-
 
 /**
  * Wraps a Swift `(_ value: [NitroFile]) -> Void` as a class.

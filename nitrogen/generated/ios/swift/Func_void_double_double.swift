@@ -5,8 +5,8 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
+import Foundation
 import NitroModules
-
 
 /**
  * Wraps a Swift `(_ uploadedBytes: Double, _ totalBytes: Double) -> Void` as a class.
