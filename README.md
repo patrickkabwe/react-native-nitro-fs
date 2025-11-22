@@ -2,6 +2,11 @@
 
 ![React Native NitroFS](https://github.com/user-attachments/assets/14fa98eb-fbee-4e00-bc85-eb3a8f0e9832)
 
+[![npm version](https://img.shields.io/npm/v/react-native-nitro-fs?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/react-native-nitro-fs)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-nitro-fs?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/react-native-nitro-fs)
+[![Build](https://img.shields.io/github/actions/workflow/status/patrickkabwe/react-native-nitro-fs/release.yml?style=for-the-badge&logo=github)](https://github.com/patrickkabwe/react-native-nitro-fs/actions)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/7KXUyHjz)
+
 A high-performance file system module for React Native that provides native-speed file operations and network transfers using Swift (iOS) and Kotlin (Android) implementations.
 
 ## 🚀 Features
