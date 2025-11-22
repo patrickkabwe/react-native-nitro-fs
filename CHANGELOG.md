@@ -1,3 +1,15 @@
+## [0.8.2](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.1...v0.8.2) (2025-11-22)
+
+### 🐛 Bug Fixes
+
+* **ios:** move mime types to constants and fix readdir error for unknown extensions ([3b76ec2](https://github.com/patrickkabwe/react-native-nitro-fs/commit/3b76ec2caf5646ef84e92e1a136f573b1a14fdb3))
+
+### 🛠️ Other changes
+
+* **deps:** bump actions/checkout from 5 to 6 ([83e39f5](https://github.com/patrickkabwe/react-native-nitro-fs/commit/83e39f5104bae447f60fca1cbc165db4907bf564))
+* update generated files and dependencies after nitro upgrade ([6d8d49c](https://github.com/patrickkabwe/react-native-nitro-fs/commit/6d8d49cdd50d6efc9b101cf87dd5ff5ee9939329))
+* upgrade nitro to latest version (0.31.9) ([5d4faae](https://github.com/patrickkabwe/react-native-nitro-fs/commit/5d4faaecf3c7f837c5aca28028a5e3420a5b7a67))
+
 ## [0.8.1](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.0...v0.8.1) (2025-11-20)
 
 ### 🐛 Bug Fixes
