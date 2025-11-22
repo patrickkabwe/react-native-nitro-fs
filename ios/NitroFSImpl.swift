@@ -159,23 +159,7 @@ class NitroFSImpl {
             return "application/octet-stream"
         }
         
-        let mimeTypes: [String: String] = [
-            "jpg": "image/jpeg",
-            "jpeg": "image/jpeg",
-            "png": "image/png",
-            "gif": "image/gif",
-            "pdf": "application/pdf",
-            "txt": "text/plain",
-            "json": "application/json",
-            "mp4": "video/mp4",
-            "mp3": "audio/mpeg",
-            "zip": "application/zip"
-        ]
-        
-        guard let mimeType = mimeTypes[pathExtension] else {
-            throw NitroFSError.encodingError(message: "Failed to get mime type")
-        }
-        return mimeType
+        return NitroFSMimeTypes.mimeTypes[pathExtension] ?? "application/octet-stream"
     }
     
     func rename(oldPath: String, newPath: String) throws {
