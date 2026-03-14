@@ -14,8 +14,14 @@
   },
   "autolinking": {
     "NitroFS": {
-      "swift": "HybridNitroFS",
-      "kotlin": "HybridNitroFS"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridNitroFS"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridNitroFS"
+      }
     }
   },
   "ignorePaths": [
