@@ -1,0 +1,45 @@
+name: Update Podfile.lock
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pod-install:
+    name: Run pod install and commit
+    runs-on: macOS-15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: example/ios
+
+      - name: Install dependencies (bun)
+        run: bun install
+
+      - name: Run codegen
+        run: bun run codegen
+
+      - name: Commit updated lock files
+        run: |
+          git add example/ios/Podfile.lock bun.lock nitrogen/generated/
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update Podfile.lock and bun.lock via CI"
+          git push
+
+      - name: Check for other uncommitted changes
+        run: git status --short
