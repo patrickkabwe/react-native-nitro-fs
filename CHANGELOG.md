@@ -1,3 +1,9 @@
+## [0.9.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.5...v0.9.0) (2026-05-17)
+
+### ✨ Features
+
+* bump nitro to v0.35.6 ([8b32a3e](https://github.com/patrickkabwe/react-native-nitro-fs/commit/8b32a3eeb1613012233ce2a2554412731dd248f0))
+
 ## [0.8.5](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.4...v0.8.5) (2026-05-17)
 
 ### 🛠️ Other changes
