@@ -9,6 +9,7 @@ package com.margelo.nitro.nitrofs
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -34,6 +35,26 @@ data class NitroFileStat(
   val isDirectory: Boolean
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is NitroFileStat) return false
+    return Objects.deepEquals(this.size, other.size)
+      && Objects.deepEquals(this.ctime, other.ctime)
+      && Objects.deepEquals(this.mtime, other.mtime)
+      && Objects.deepEquals(this.isFile, other.isFile)
+      && Objects.deepEquals(this.isDirectory, other.isDirectory)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      size,
+      ctime,
+      mtime,
+      isFile,
+      isDirectory
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

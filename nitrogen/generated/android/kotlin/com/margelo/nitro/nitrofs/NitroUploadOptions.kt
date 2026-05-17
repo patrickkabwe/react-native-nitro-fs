@@ -9,6 +9,7 @@ package com.margelo.nitro.nitrofs
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -28,6 +29,22 @@ data class NitroUploadOptions(
   val field: String?
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is NitroUploadOptions) return false
+    return Objects.deepEquals(this.url, other.url)
+      && Objects.deepEquals(this.method, other.method)
+      && Objects.deepEquals(this.field, other.field)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      url,
+      method,
+      field
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

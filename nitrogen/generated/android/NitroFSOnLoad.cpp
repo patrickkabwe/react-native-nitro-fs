@@ -28,7 +28,7 @@ int initialize(JavaVM* vm) {
 }
 
 struct JHybridNitroFSSpecImpl: public jni::JavaClass<JHybridNitroFSSpecImpl, JHybridNitroFSSpec::JavaPart> {
-  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/nitrofs/HybridNitroFS;";
+  static constexpr auto kJavaDescriptor = "Lcom/nitrofs/HybridNitroFS;";
   static std::shared_ptr<JHybridNitroFSSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridNitroFSSpecImpl::javaobject()>();
     jni::local_ref<JHybridNitroFSSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
