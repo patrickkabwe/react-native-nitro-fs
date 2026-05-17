@@ -1,3 +1,21 @@
+## [0.8.3](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.2...v0.8.3) (2026-05-17)
+
+### 📚 Documentation
+
+* add Discord and npm badges to README ([eed9c3b](https://github.com/patrickkabwe/react-native-nitro-fs/commit/eed9c3b58d46503a358f0372cee90494e90c5ad3))
+* update README badges and add Discord link ([aa79cb2](https://github.com/patrickkabwe/react-native-nitro-fs/commit/aa79cb25d2496ad8868b9c4a55b974280200eb93))
+
+### 🛠️ Other changes
+
+* bump Nitro modules and update generated code ([ac5ff9e](https://github.com/patrickkabwe/react-native-nitro-fs/commit/ac5ff9efbb46d6adecf9b94911c178ce0aec4f2f))
+* Bump Nitrogen and update autolinking ([6228429](https://github.com/patrickkabwe/react-native-nitro-fs/commit/62284297199b9fd272ebfcfdb6d2a3c8d9bf5ae1))
+* comment out Pods cache restoration in iOS build workflow ([fb17db5](https://github.com/patrickkabwe/react-native-nitro-fs/commit/fb17db5f9896e4c8adc212ab3a028a635f5ce7d4))
+* refactor iOS build workflow to use matrix strategy and update Ruby version ([9403fb5](https://github.com/patrickkabwe/react-native-nitro-fs/commit/9403fb584eba5722cbb8401fb47d0eb91c1cb29f))
+* update hermes-engine to version 0.81.5 in Podfile.lock ([1811bd1](https://github.com/patrickkabwe/react-native-nitro-fs/commit/1811bd1c76ca4f889cb7f338e07f113e0a140d3c))
+* update iOS build workflow to reference NitroFsExample workspace and scheme ([797aae8](https://github.com/patrickkabwe/react-native-nitro-fs/commit/797aae8d1064321bc3513d31cba08abc5ac5e91a))
+* update react-native-nitro-modules to v0.35.6 ([db96064](https://github.com/patrickkabwe/react-native-nitro-fs/commit/db96064aa9497be17e45fd9177e72762aa8af4e4))
+* upgrade react native to 0.81.5 ([9610472](https://github.com/patrickkabwe/react-native-nitro-fs/commit/96104722dd4e24978a561cc198587d6bb288c865))
+
 ## [0.8.2](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.1...v0.8.2) (2025-11-22)
 
 ### 🐛 Bug Fixes
