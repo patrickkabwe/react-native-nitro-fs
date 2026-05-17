@@ -1,3 +1,9 @@
+## [0.8.5](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.4...v0.8.5) (2026-05-17)
+
+### 🛠️ Other changes
+
+* update release workflow ([9877ec2](https://github.com/patrickkabwe/react-native-nitro-fs/commit/9877ec22fd2e062c063e1d3f06276b707d986d07))
+
 ## [0.8.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.3...v0.8.4) (2026-05-17)
 
 ### 🛠️ Other changes
