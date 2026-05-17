@@ -1,3 +1,9 @@
+## [0.8.4](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.3...v0.8.4) (2026-05-17)
+
+### 🛠️ Other changes
+
+* fix package.json ([fd3176b](https://github.com/patrickkabwe/react-native-nitro-fs/commit/fd3176b639416bff4778fd91d30a5bc468ee6707))
+
 ## [0.8.3](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.2...v0.8.3) (2026-05-17)
 
 ### 📚 Documentation
