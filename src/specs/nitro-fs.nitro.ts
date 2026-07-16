@@ -1,5 +1,5 @@
 
-import { type HybridObject } from 'react-native-nitro-modules'
+import type { HybridObject } from 'react-native-nitro-modules'
 import type { NitroFile, NitroFileEncoding, NitroFileStat, NitroUploadOptions } from '../type'
 
 export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
