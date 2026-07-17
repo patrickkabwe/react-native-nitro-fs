@@ -74,14 +74,15 @@ class NitroFSImpl(val context: ReactApplicationContext) {
 
                 file.writeBytes(decodedBytes)
             } else {
-                val dataSize = data.toByteArray(getFileEncoding(encoding)).size
+                val encodedBytes = data.toByteArray(getFileEncoding(encoding))
+                val dataSize = encodedBytes.size
                 val availableSpace = file.parentFile?.freeSpace ?: 0L
 
                 if (dataSize > availableSpace) {
                     throw RuntimeException("Insufficient disk space. Required: ${dataSize / (1024 * 1024)}MB, Available: ${availableSpace / (1024 * 1024)}MB")
                 }
 
-                file.writeText(data, charset = getFileEncoding(encoding))
+                file.writeBytes(encodedBytes)
             }
         } catch (_: SecurityException) {
             throw RuntimeException("Permission denied writing to: $path")
@@ -116,7 +117,7 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return try {
             if (encoding == NitroFileEncoding.BASE64) {
                 val bytes = file.readBytes()
-                Base64.encodeToString(bytes, Base64.DEFAULT)
+                Base64.encodeToString(bytes, Base64.NO_WRAP)
             } else if (fileSize < 1024 * 1024) {
                 file.readText(charset = getFileEncoding(encoding))
             } else {
@@ -130,10 +131,10 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     }
     
     private fun readFileChunked(file: File, charset: Charset): String {
-        val buffer = StringBuilder()
+        val buffer = StringBuilder(file.length().toInt())
         val chunkSize = 64 * 1024
         
-        file.inputStream().buffered().reader(charset).use { reader ->
+        file.reader(charset).use { reader ->
             val charBuffer = CharArray(chunkSize)
             var bytesRead: Int
             
