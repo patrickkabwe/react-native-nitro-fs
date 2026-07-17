@@ -20,18 +20,20 @@ final class NitroFSFileDownloader: NSObject {
     }
         
     func downloadFile(
-        _ serverUrl: String,
-        _ destinationPath: String,
-        onProgress: ((Double, Double) -> Void)? = nil
+        _ downloadOptions: NitroDownloadOptions,
+        onProgress: ((Double, Double) -> Void)?
     ) async throws -> NitroFile {
         guard fileManager != nil else {
             throw NitroFSError.unavailable(message: "FileManager is not available")
         }
         
         self.onProgress = onProgress
-        self.destinationPath = destinationPath
+        self.destinationPath = downloadOptions.destinationPath
         
-        let request = try makeRequest(serverUrl: serverUrl)
+        let request = try makeRequest(
+            url: downloadOptions.url,
+            headers: downloadOptions.headers
+        )
         
         let session: URLSession = {
             let config = URLSessionConfiguration.default
@@ -53,8 +55,11 @@ final class NitroFSFileDownloader: NSObject {
     
     // MARK: - Private Methods
     
-    private func makeRequest(serverUrl: String) throws -> URLRequest {
-        guard let encoded = serverUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+    private func makeRequest(
+        url: String,
+        headers: [String: String]?
+    ) throws -> URLRequest {
+        guard let encoded = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encoded) else {
             throw URLError(.badURL)
         }
@@ -62,6 +67,9 @@ final class NitroFSFileDownloader: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
+        headers?.forEach { field, value in
+            request.setValue(value, forHTTPHeaderField: field)
+        }
         return request
     }
     
@@ -153,4 +161,3 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         }
     }
 }
-

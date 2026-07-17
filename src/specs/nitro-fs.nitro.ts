@@ -1,6 +1,12 @@
 
 import { type HybridObject } from 'react-native-nitro-modules'
-import type { NitroFile, NitroFileEncoding, NitroFileStat, NitroUploadOptions } from '../type'
+import type {
+    NitroDownloadOptions,
+    NitroFile,
+    NitroFileEncoding,
+    NitroFileStat,
+    NitroUploadOptions,
+} from '../type'
 
 export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
     /**
@@ -108,12 +114,7 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      * Upload a file to the file system
      * ```typescript
      * const options: NitroUploadOptions = {
-     *  file: {
-     *      name: 'test.txt',
-     *      mimeType: 'text/plain',
-     *      path: 'test.txt',
-     *  },
-     * 
+     *  filePath: NitroFS.DOCUMENT_DIR + '/test.txt',
      *  url: 'https://example.com/upload',
      *  headers: {
      *      'X-Filename': 'test.txt',
@@ -124,7 +125,7 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      * })
      * ```
      */
-    uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<void>
+    uploadFile(uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<void>
     /**
      * Upload multiple files to the file system
      * ```typescript
@@ -140,13 +141,18 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
     /**
      * Download a file from the internet to the file system
      * ```typescript
-     * const serverUrl = 'https://example.com/download'
-     * const destinationPath = NitroFS.DOWNLOAD_DIR + '/file.txt'   
-     * const file = await NitroFS.downloadFile(serverUrl, destinationPath, (downloadedBytes, totalBytes) => {
+     * const options: NitroDownloadOptions = {
+     *  url: 'https://example.com/download',
+     *  destinationPath: NitroFS.DOWNLOAD_DIR + '/file.txt',
+     *  headers: {
+     *      'Authorization': 'Bearer token',
+     *  },
+     * }
+     * const file = await NitroFS.downloadFile(options, (downloadedBytes, totalBytes) => {
      *  console.log(`Downloading ${downloadedBytes / totalBytes * 100}%`)
      * })
      * console.log(file) // { name: 'file.txt', mimeType: 'text/plain', path: 'file.txt' }
      * ```
      */
-    downloadFile(serverUrl: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
+    downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
 }

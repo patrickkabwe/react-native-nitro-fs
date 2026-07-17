@@ -111,21 +111,21 @@ abstract class HybridNitroFSSpec: HybridObject() {
   @Keep
   abstract fun extname(path: String): String
   
-  abstract fun uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: ((uploadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<Unit>
+  abstract fun uploadFile(uploadOptions: NitroUploadOptions, onProgress: ((uploadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<Unit>
   
   @DoNotStrip
   @Keep
-  private fun uploadFile_cxx(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: Func_void_double_double?): Promise<Unit> {
-    val __result = uploadFile(file, uploadOptions, onProgress?.let { it })
+  private fun uploadFile_cxx(uploadOptions: NitroUploadOptions, onProgress: Func_void_double_double?): Promise<Unit> {
+    val __result = uploadFile(uploadOptions, onProgress?.let { it })
     return __result
   }
   
-  abstract fun downloadFile(serverUrl: String, destinationPath: String, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroFile>
+  abstract fun downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroFile>
   
   @DoNotStrip
   @Keep
-  private fun downloadFile_cxx(serverUrl: String, destinationPath: String, onProgress: Func_void_double_double?): Promise<NitroFile> {
-    val __result = downloadFile(serverUrl, destinationPath, onProgress?.let { it })
+  private fun downloadFile_cxx(downloadOptions: NitroDownloadOptions, onProgress: Func_void_double_double?): Promise<NitroFile> {
+    val __result = downloadFile(downloadOptions, onProgress?.let { it })
     return __result
   }
 

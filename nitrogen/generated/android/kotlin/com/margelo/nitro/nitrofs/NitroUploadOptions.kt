@@ -20,29 +20,39 @@ import java.util.Objects
 data class NitroUploadOptions(
   @DoNotStrip
   @Keep
+  val filePath: String,
+  @DoNotStrip
+  @Keep
   val url: String,
   @DoNotStrip
   @Keep
   val method: NitroUploadMethod?,
   @DoNotStrip
   @Keep
-  val field: String?
+  val field: String?,
+  @DoNotStrip
+  @Keep
+  val headers: Map<String, String>?
 ) {
   /* primary constructor */
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is NitroUploadOptions) return false
-    return Objects.deepEquals(this.url, other.url)
+    return Objects.deepEquals(this.filePath, other.filePath)
+      && Objects.deepEquals(this.url, other.url)
       && Objects.deepEquals(this.method, other.method)
       && Objects.deepEquals(this.field, other.field)
+      && Objects.deepEquals(this.headers, other.headers)
   }
 
   override fun hashCode(): Int {
     return arrayOf(
+      filePath,
       url,
       method,
-      field
+      field,
+      headers
     ).contentDeepHashCode()
   }
 
@@ -54,8 +64,8 @@ data class NitroUploadOptions(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(url: String, method: NitroUploadMethod?, field: String?): NitroUploadOptions {
-      return NitroUploadOptions(url, method, field)
+    private fun fromCpp(filePath: String, url: String, method: NitroUploadMethod?, field: String?, headers: Map<String, String>?): NitroUploadOptions {
+      return NitroUploadOptions(filePath, url, method, field, headers)
     }
   }
 }

@@ -34,6 +34,7 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include <string>
 #include "NitroUploadMethod.hpp"
 #include <optional>
+#include <unordered_map>
 
 namespace margelo::nitro::nitrofs {
 
@@ -42,13 +43,15 @@ namespace margelo::nitro::nitrofs {
    */
   struct NitroUploadOptions final {
   public:
+    std::string filePath     SWIFT_PRIVATE;
     std::string url     SWIFT_PRIVATE;
     std::optional<NitroUploadMethod> method     SWIFT_PRIVATE;
     std::optional<std::string> field     SWIFT_PRIVATE;
+    std::optional<std::unordered_map<std::string, std::string>> headers     SWIFT_PRIVATE;
 
   public:
     NitroUploadOptions() = default;
-    explicit NitroUploadOptions(std::string url, std::optional<NitroUploadMethod> method, std::optional<std::string> field): url(url), method(method), field(field) {}
+    explicit NitroUploadOptions(std::string filePath, std::string url, std::optional<NitroUploadMethod> method, std::optional<std::string> field, std::optional<std::unordered_map<std::string, std::string>> headers): filePath(filePath), url(url), method(method), field(field), headers(headers) {}
 
   public:
     friend bool operator==(const NitroUploadOptions& lhs, const NitroUploadOptions& rhs) = default;
@@ -64,16 +67,20 @@ namespace margelo::nitro {
     static inline margelo::nitro::nitrofs::NitroUploadOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::nitrofs::NitroUploadOptions(
+        JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "filePath"))),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url"))),
         JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "method"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "field")))
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "field"))),
+        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headers")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrofs::NitroUploadOptions& arg) {
       jsi::Object obj(runtime);
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "filePath"), JSIConverter<std::string>::toJSI(runtime, arg.filePath));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "url"), JSIConverter<std::string>::toJSI(runtime, arg.url));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "method"), JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::toJSI(runtime, arg.method));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "field"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.field));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "headers"), JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::toJSI(runtime, arg.headers));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -84,9 +91,11 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
+      if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "filePath")))) return false;
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url")))) return false;
       if (!JSIConverter<std::optional<margelo::nitro::nitrofs::NitroUploadMethod>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "method")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "field")))) return false;
+      if (!JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headers")))) return false;
       return true;
     }
   };

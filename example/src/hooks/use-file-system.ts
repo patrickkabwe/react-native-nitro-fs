@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 import NitroFS, { NitroUploadOptions } from 'react-native-nitro-fs';
 import { DirectoryType, FileItem } from '../types';
-import { getMimeTypeFromExtension } from '../utils/file-utils';
 import { NitroDocumentPicker } from 'react-native-nitro-document-picker';
 
 export const useFileSystem = () => {
@@ -179,19 +178,13 @@ export const useFileSystem = () => {
       setUploadProgress(0);
 
       const uploadOptions = {
+        filePath: selectedFile.path,
         url: 'https://httpbin.org/post',
         method: 'POST' as const,
         field: 'file',
       };
 
-      const file = {
-        name: selectedFile.name,
-        mimeType: getMimeTypeFromExtension(selectedFile.name),
-        path: selectedFile.path,
-      };
-
       await NitroFS.uploadFile(
-        file,
         uploadOptions,
         (uploadedBytes, totalBytes) => {
           const progress = (uploadedBytes / totalBytes) * 100;
@@ -214,12 +207,11 @@ export const useFileSystem = () => {
       setLoading(true);
       setDownloadProgress(0);
 
-      const serverUrl = 'https://httpbin.org/bytes/1024';
+      const url = 'https://httpbin.org/bytes/1024';
       const destinationPath = `${NitroFS.DOWNLOAD_DIR}/downloaded_file.txt`;
 
       const file = await NitroFS.downloadFile(
-        serverUrl,
-        destinationPath,
+        { url, destinationPath },
         (downloadedBytes, totalBytes) => {
           const progress = (downloadedBytes / totalBytes) * 100;
           setDownloadProgress(progress);
@@ -545,17 +537,13 @@ export const useFileSystem = () => {
       
       // upload the file to the server
       const uploadOptions: NitroUploadOptions = {
+        filePath: dest,
         url: 'https://httpbin.org/post',
         method: 'POST',
         field: 'file',
       };
 
-      const nitroFile = {
-        name: name,
-        mimeType: getMimeTypeFromExtension(extension),
-        path: dest,
-      }
-      await NitroFS.uploadFile(nitroFile, uploadOptions, (uploadedBytes, totalBytes) => {
+      await NitroFS.uploadFile(uploadOptions, (uploadedBytes, totalBytes) => {
         const progress = (uploadedBytes / totalBytes) * 100;
         setUploadProgress(progress);
       });

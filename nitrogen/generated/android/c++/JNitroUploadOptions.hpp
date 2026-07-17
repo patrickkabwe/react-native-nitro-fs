@@ -14,6 +14,7 @@
 #include "NitroUploadMethod.hpp"
 #include <optional>
 #include <string>
+#include <unordered_map>
 
 namespace margelo::nitro::nitrofs {
 
@@ -34,16 +35,29 @@ namespace margelo::nitro::nitrofs {
     [[nodiscard]]
     NitroUploadOptions toCpp() const {
       static const auto clazz = javaClassStatic();
+      static const auto fieldFilePath = clazz->getField<jni::JString>("filePath");
+      jni::local_ref<jni::JString> filePath = this->getFieldValue(fieldFilePath);
       static const auto fieldUrl = clazz->getField<jni::JString>("url");
       jni::local_ref<jni::JString> url = this->getFieldValue(fieldUrl);
       static const auto fieldMethod = clazz->getField<JNitroUploadMethod>("method");
       jni::local_ref<JNitroUploadMethod> method = this->getFieldValue(fieldMethod);
       static const auto fieldField = clazz->getField<jni::JString>("field");
       jni::local_ref<jni::JString> field = this->getFieldValue(fieldField);
+      static const auto fieldHeaders = clazz->getField<jni::JMap<jni::JString, jni::JString>>("headers");
+      jni::local_ref<jni::JMap<jni::JString, jni::JString>> headers = this->getFieldValue(fieldHeaders);
       return NitroUploadOptions(
+        filePath->toStdString(),
         url->toStdString(),
         method != nullptr ? std::make_optional(method->toCpp()) : std::nullopt,
-        field != nullptr ? std::make_optional(field->toStdString()) : std::nullopt
+        field != nullptr ? std::make_optional(field->toStdString()) : std::nullopt,
+        headers != nullptr ? std::make_optional([&]() {
+          std::unordered_map<std::string, std::string> __map;
+          __map.reserve(headers->size());
+          for (const auto& __entry : *headers) {
+            __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
+          }
+          return __map;
+        }()) : std::nullopt
       );
     }
 
@@ -53,14 +67,22 @@ namespace margelo::nitro::nitrofs {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroUploadOptions::javaobject> fromCpp(const NitroUploadOptions& value) {
-      using JSignature = JNitroUploadOptions(jni::alias_ref<jni::JString>, jni::alias_ref<JNitroUploadMethod>, jni::alias_ref<jni::JString>);
+      using JSignature = JNitroUploadOptions(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<JNitroUploadMethod>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JMap<jni::JString, jni::JString>>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
+        jni::make_jstring(value.filePath),
         jni::make_jstring(value.url),
         value.method.has_value() ? JNitroUploadMethod::fromCpp(value.method.value()) : nullptr,
-        value.field.has_value() ? jni::make_jstring(value.field.value()) : nullptr
+        value.field.has_value() ? jni::make_jstring(value.field.value()) : nullptr,
+        value.headers.has_value() ? [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
+          auto __map = jni::JHashMap<jni::JString, jni::JString>::create(value.headers.value().size());
+          for (const auto& __entry : value.headers.value()) {
+            __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));
+          }
+          return __map;
+        }() : nullptr
       );
     }
   };

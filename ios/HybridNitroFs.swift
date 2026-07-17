@@ -157,14 +157,12 @@ class HybridNitroFS: HybridNitroFSSpec {
     }
 
     func uploadFile(
-        file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
     ) throws -> Promise<Void>{
         return .async { [unowned self] in
             do {
                 try await self.nitroFSImpl.uploadFile(
-                    file: file,
                     uploadOptions: uploadOptions,
                     onProgress: onProgress
                 )
@@ -175,12 +173,11 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func downloadFile(serverUrl: String, destinationPath: String, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
+    func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
         return .async { [unowned self] in
             do {
                 return try await self.nitroFSImpl.downloadFile(
-                    serverUrl: serverUrl,
-                    destinationPath: destinationPath,
+                    downloadOptions: downloadOptions,
                     onProgress: onProgress
                 )
             } catch {
@@ -190,4 +187,3 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
 }
-

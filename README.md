@@ -59,8 +59,10 @@ await NitroFS.writeFile('/path/to/file', 'Hello, World!', 'utf8')
 
 // Download with progress
 const file = await NitroFS.downloadFile(
-  'https://example.com/file.txt',
-  NitroFS.DOWNLOAD_DIR + '/file.txt',
+  {
+    url: 'https://example.com/file.txt',
+    destinationPath: NitroFS.DOWNLOAD_DIR + '/file.txt',
+  },
   (downloadedBytes, totalBytes) => {
     console.log(`Downloading ${(downloadedBytes / totalBytes) * 100}%`)
   }
@@ -68,8 +70,12 @@ const file = await NitroFS.downloadFile(
 
 // Upload with progress
 await NitroFS.uploadFile(
-  { name: 'file.txt', mimeType: 'text/plain', path: '/path/to/file.txt' },
-  { url: 'https://example.com/upload', method: 'POST', field: 'file' },
+  {
+    filePath: '/path/to/file.txt',
+    url: 'https://example.com/upload',
+    method: 'POST',
+    field: 'file',
+  },
   (uploadedBytes, totalBytes) => {
     console.log(`Uploading ${(uploadedBytes / totalBytes) * 100}%`)
   }
@@ -269,18 +275,13 @@ const ext = NitroFS.extname('/path/to/file.txt')
 
 ### Network Operations
 
-#### `uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<void>`
+#### `uploadFile(uploadOptions: NitroUploadOptions, onProgress?: (uploadedBytes: number, totalBytes: number) => void): Promise<void>`
 
 Upload a file to a server with progress tracking and multipart support.
 
 ```typescript
-const file = {
-  name: 'document.pdf',
-  mimeType: 'application/pdf',
-  path: NitroFS.DOCUMENT_DIR + '/document.pdf',
-}
-
 const uploadOptions = {
+  filePath: NitroFS.DOCUMENT_DIR + '/document.pdf',
   url: 'https://api.example.com/upload',
   method: 'POST',
   field: 'file',
@@ -290,23 +291,27 @@ const uploadOptions = {
   },
 }
 
-await NitroFS.uploadFile(file, uploadOptions, (uploadedBytes, totalBytes) => {
+await NitroFS.uploadFile(uploadOptions, (uploadedBytes, totalBytes) => {
   const progress = (uploadedBytes / totalBytes) * 100
   console.log(`Upload progress: ${progress.toFixed(1)}%`)
 })
 ```
 
-#### `downloadFile(serverUrl: string, destinationPath: string, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>`
+#### `downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>`
 
 Download a file from a server with progress tracking.
 
 ```typescript
-const serverUrl = 'https://example.com/files/document.pdf'
-const destinationPath = NitroFS.DOWNLOAD_DIR + '/document.pdf'
+const downloadOptions = {
+  url: 'https://example.com/files/document.pdf',
+  destinationPath: NitroFS.DOWNLOAD_DIR + '/document.pdf',
+  headers: {
+    'Authorization': 'Bearer your-token',
+  },
+}
 
 const downloadedFile = await NitroFS.downloadFile(
-  serverUrl,
-  destinationPath,
+  downloadOptions,
   (downloadedBytes, totalBytes) => {
     const progress = (downloadedBytes / totalBytes) * 100
     console.log(`Download progress: ${progress.toFixed(1)}%`)
@@ -333,9 +338,20 @@ interface NitroFile {
 
 ```typescript
 interface NitroUploadOptions {
+  filePath: string // Path to the file to upload
   url: string // Upload endpoint URL
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' // HTTP method
-  field: string // Form field name
+  method?: 'POST' | 'PUT' | 'PATCH' // HTTP method
+  field?: string // Form field name
+  headers?: Record<string, string> // Custom headers
+}
+```
+
+### `NitroDownloadOptions`
+
+```typescript
+interface NitroDownloadOptions {
+  url: string // Download endpoint URL
+  destinationPath: string // Path where the downloaded file is saved
   headers?: Record<string, string> // Custom headers
 }
 ```
@@ -448,14 +464,13 @@ const backupFile = async (sourcePath: string) => {
 
 ```typescript
 const uploadWithTimeout = async (
-  file: NitroFile,
   options: NitroUploadOptions
 ) => {
   const timeoutPromise = new Promise((_, reject) => {
     setTimeout(() => reject(new Error('Upload timeout')), 30000)
   })
 
-  return Promise.race([NitroFS.uploadFile(file, options), timeoutPromise])
+  return Promise.race([NitroFS.uploadFile(options), timeoutPromise])
 }
 ```
 
