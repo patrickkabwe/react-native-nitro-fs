@@ -189,7 +189,6 @@ class NitroFSImpl {
     }
     
     func uploadFile(
-        file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?
     ) async throws {
@@ -198,15 +197,13 @@ class NitroFSImpl {
         }
         let fileUploader = NitroFSFileUploader(fileManager: fileManager)
         try await fileUploader.uploadFile(
-            file: file,
             uploadOptions: uploadOptions,
             onProgress: onProgress
         )
     }
     
     func downloadFile(
-        serverUrl: String,
-        destinationPath: String,
+        downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Void)?
     ) async throws -> NitroFile {
         guard let fileManager else {
@@ -214,8 +211,7 @@ class NitroFSImpl {
         }
         let fileDownloader = NitroFSFileDownloader(fileManager: fileManager)
         return try await fileDownloader.downloadFile(
-            serverUrl,
-            destinationPath,
+            downloadOptions,
             onProgress: onProgress
         )
     }

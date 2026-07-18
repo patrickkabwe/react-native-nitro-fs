@@ -17,6 +17,8 @@ namespace margelo::nitro::nitrofs { enum class NitroFileEncoding; }
 namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 // Forward declaration of `NitroUploadMethod` to properly resolve imports.
 namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
+// Forward declaration of `NitroDownloadOptions` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 
 #include <string>
 #include <NitroModules/Promise.hpp>
@@ -34,9 +36,12 @@ namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 #include "NitroUploadMethod.hpp"
 #include <optional>
 #include "JNitroUploadMethod.hpp"
+#include <unordered_map>
 #include <functional>
 #include "JFunc_void_double_double.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include "NitroDownloadOptions.hpp"
+#include "JNitroDownloadOptions.hpp"
 
 namespace margelo::nitro::nitrofs {
 
@@ -290,9 +295,9 @@ namespace margelo::nitro::nitrofs {
     auto __result = method(_javaPart, jni::make_jstring(path));
     return __result->toStdString();
   }
-  std::shared_ptr<Promise<void>> JHybridNitroFSSpec::uploadFile(const NitroFile& file, const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroFile> /* file */, jni::alias_ref<JNitroUploadOptions> /* uploadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("uploadFile_cxx");
-    auto __result = method(_javaPart, JNitroFile::fromCpp(file), JNitroUploadOptions::fromCpp(uploadOptions), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
+  std::shared_ptr<Promise<void>> JHybridNitroFSSpec::uploadFile(const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroUploadOptions> /* uploadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("uploadFile_cxx");
+    auto __result = method(_javaPart, JNitroUploadOptions::fromCpp(uploadOptions), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
@@ -305,9 +310,9 @@ namespace margelo::nitro::nitrofs {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const std::string& serverUrl, const std::string& destinationPath, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* serverUrl */, jni::alias_ref<jni::JString> /* destinationPath */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
-    auto __result = method(_javaPart, jni::make_jstring(serverUrl), jni::make_jstring(destinationPath), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
+  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroDownloadOptions> /* downloadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
+    auto __result = method(_javaPart, JNitroDownloadOptions::fromCpp(downloadOptions), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<NitroFile>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {

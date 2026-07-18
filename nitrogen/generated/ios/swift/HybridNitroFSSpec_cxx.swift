@@ -411,9 +411,9 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func uploadFile(file: NitroFile, uploadOptions: NitroUploadOptions, onProgress: bridge.std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func uploadFile(uploadOptions: NitroUploadOptions, onProgress: bridge.std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __result = try self.__implementation.uploadFile(file: file, uploadOptions: uploadOptions, onProgress: { () -> ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)? in
+      let __result = try self.__implementation.uploadFile(uploadOptions: uploadOptions, onProgress: { () -> ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______(onProgress) {
           let __unwrapped = bridge.get_std__optional_std__function_void_double____uploadedBytes_____double____totalBytes______(onProgress)
           return { () -> (Double, Double) -> Void in
@@ -442,9 +442,9 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func downloadFile(serverUrl: std.string, destinationPath: std.string, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
+  public final func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
     do {
-      let __result = try self.__implementation.downloadFile(serverUrl: String(serverUrl), destinationPath: String(destinationPath), onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
+      let __result = try self.__implementation.downloadFile(downloadOptions: downloadOptions, onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______(onProgress) {
           let __unwrapped = bridge.get_std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______(onProgress)
           return { () -> (Double, Double) -> Void in

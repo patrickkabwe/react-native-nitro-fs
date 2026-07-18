@@ -17,9 +17,8 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
     }
 
     func uploadFile(
-        file: NitroFile,
         uploadOptions: NitroUploadOptions,
-        onProgress: ((Double, Double) -> Void)? = nil
+        onProgress: ((Double, Double) -> Void)?
     ) async throws {
         self.onProgress = onProgress
         
@@ -29,7 +28,7 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
 
         let fieldName = uploadOptions.field ?? "file"
         let boundary = UUID().uuidString
-        let fileURL = URL(fileURLWithPath: file.path)
+        let fileURL = URL(fileURLWithPath: uploadOptions.filePath)
 
         // Create multipart file body on disk
         let multipartFile = try createMultipartBodyFile(
@@ -40,6 +39,9 @@ final class NitroFSFileUploader: NSObject, URLSessionDataDelegate {
 
         var request = URLRequest(url: uploadURL)
         request.httpMethod = "POST"
+        uploadOptions.headers?.forEach { field, value in
+            request.setValue(value, forHTTPHeaderField: field)
+        }
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         return try await withCheckedThrowingContinuation { [weak self] continuation in

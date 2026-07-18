@@ -4,6 +4,7 @@ import android.util.Log
 import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.nitrofs.HybridNitroFSSpec
+import com.margelo.nitro.nitrofs.NitroDownloadOptions
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -177,13 +178,12 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun uploadFile(
-        file: NitroFile,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<Unit> {
         return Promise.async(ioScope) {
             try {
-                nitroFsImpl.uploadFile(file, uploadOptions, onProgress)
+                nitroFsImpl.uploadFile(uploadOptions, onProgress)
             } catch (e: Exception) {
                 Log.e(TAG, "Error uploading file: ${e.message}")
                 throw Error(e)
@@ -192,13 +192,12 @@ class HybridNitroFS: HybridNitroFSSpec() {
     }
 
     override fun downloadFile(
-        serverUrl: String,
-        destinationPath: String,
+        downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ): Promise<NitroFile> {
         return Promise.async(ioScope) {
             try {
-                nitroFsImpl.downloadFile(serverUrl, destinationPath, onProgress)
+                nitroFsImpl.downloadFile(downloadOptions, onProgress)
             } catch (e: Exception) {
                 Log.e(TAG, "Error downloading file: ${e.message}")
                 throw Error(e)

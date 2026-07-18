@@ -10,6 +10,8 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridNitroFSSpec` to properly resolve imports.
 namespace margelo::nitro::nitrofs { class HybridNitroFSSpec; }
+// Forward declaration of `NitroDownloadOptions` to properly resolve imports.
+namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 // Forward declaration of `NitroFileEncoding` to properly resolve imports.
 namespace margelo::nitro::nitrofs { enum class NitroFileEncoding; }
 // Forward declaration of `NitroFileStat` to properly resolve imports.
@@ -23,6 +25,7 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 
 // Include C++ defined types
 #include "HybridNitroFSSpec.hpp"
+#include "NitroDownloadOptions.hpp"
 #include "NitroFile.hpp"
 #include "NitroFileEncoding.hpp"
 #include "NitroFileStat.hpp"
@@ -35,6 +38,7 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 #include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 // C++ helpers for Swift

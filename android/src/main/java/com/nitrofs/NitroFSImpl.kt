@@ -7,6 +7,7 @@ import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
 import com.facebook.react.bridge.ReactApplicationContext
+import com.margelo.nitro.nitrofs.NitroDownloadOptions
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -334,28 +335,25 @@ class NitroFSImpl(val context: ReactApplicationContext) {
         return context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath ?: ""
     }
 
-    suspend fun uploadFile(file: NitroFile,
-                   uploadOptions: NitroUploadOptions,
-                   onProgress: ((Double, Double) -> Unit)?
+    suspend fun uploadFile(
+        uploadOptions: NitroUploadOptions,
+        onProgress: ((Double, Double) -> Unit)?
     ) {
-        val nitroFile = File(file.path)
-        nitroFileUploader.handleUpload(nitroFile, uploadOptions, onProgress)
+        nitroFileUploader.handleUpload(uploadOptions, onProgress)
     }
 
     suspend fun downloadFile(
-        serverUrl: String,
-        destinationPath: String,
+        downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ): NitroFile {
         val file = fileDownloader.downloadFile(
-            serverUrl,
-            destinationPath,
+            downloadOptions,
             onProgress
         )
         if (file != null) {
             return file
         } else {
-            throw RuntimeException("Failed to download file from: $serverUrl")
+            throw RuntimeException("Failed to download file from: ${downloadOptions.url}")
         }
     }
 

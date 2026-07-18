@@ -5,6 +5,7 @@ import com.margelo.nitro.nitrofs.NitroUploadMethod
 import com.margelo.nitro.nitrofs.NitroUploadOptions
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.onUpload
+import io.ktor.client.request.header
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.http.ContentType
@@ -18,10 +19,10 @@ import java.io.File
 
 class NitroFileUploader {
     suspend fun handleUpload(
-        file: File,
         uploadOptions: NitroUploadOptions,
         onProgress: ((Double, Double) -> Unit)?
     ) {
+        val file = File(uploadOptions.filePath)
         val totalBytes = file.length()
         val client = HttpClient(OkHttp)
 
@@ -42,6 +43,9 @@ class NitroFileUploader {
                 }
             ){
                 method = getMethod(uploadOptions.method)
+                uploadOptions.headers?.forEach { (name, value) ->
+                    header(name, value)
+                }
                 onUpload { totalBytesSent, totalBytes ->
                     if (totalBytesSent > 0 && totalBytes != null) {
                         onProgress?.let {

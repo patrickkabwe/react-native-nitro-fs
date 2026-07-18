@@ -4,6 +4,7 @@
   "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
     "strict": true,
+    "types": ["jest"],
     "baseUrl": ".",
     "paths": {
       "react-native-nitro-fs": ["../src"]
