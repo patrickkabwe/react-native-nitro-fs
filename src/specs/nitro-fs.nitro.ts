@@ -1,5 +1,5 @@
 
-import { type HybridObject } from 'react-native-nitro-modules'
+import type { HybridObject } from 'react-native-nitro-modules'
 import type {
     NitroDownloadOptions,
     NitroFile,
