@@ -1,3 +1,35 @@
+## [1.0.0](https://github.com/[secure]/react-native-nitro-fs/compare/v0.9.0...v1.0.0) (2026-07-19)
+
+### ⚠ BREAKING CHANGES
+
+* unify file transfer request options
+
+### ✨ Features
+
+* unify file transfer request options ([00d92de](https://github.com/[secure]/react-native-nitro-fs/commit/00d92de0e3c1aa976c87f3167f74c74c0b37f836))
+
+### 💨 Performance Improvements
+
+* reduce allocations ([2300f57](https://github.com/[secure]/react-native-nitro-fs/commit/2300f57dd221e1167bb0ad092d63b00a36e83561))
+
+### 🛠️ Other changes
+
+* **deps:** bump actions/cache from 4 to 5 ([bed2456](https://github.com/[secure]/react-native-nitro-fs/commit/bed245609d3e29e155c30d7262fbb08b909206dc))
+* **deps:** bump actions/cache from 5 to 6 ([b76456f](https://github.com/[secure]/react-native-nitro-fs/commit/b76456f48fc14958315b6faf895542c79dcca505))
+* **deps:** bump actions/checkout from 5 to 7 ([54bfb49](https://github.com/[secure]/react-native-nitro-fs/commit/54bfb49448e8445721276f2d2aa8d98af9a22942))
+* **deps:** bump actions/setup-node from 6 to 7 ([113185e](https://github.com/[secure]/react-native-nitro-fs/commit/113185e3b56e4f5560fde6c122566dc1d7a85eb1))
+* **deps:** bump activesupport from 7.2.3 to 7.2.3.1 in /example ([d359243](https://github.com/[secure]/react-native-nitro-fs/commit/d359243c24e9bd84941894b688b34e9e79e69461))
+* **deps:** bump bigdecimal from 3.3.1 to 4.1.2 in /example ([3568be0](https://github.com/[secure]/react-native-nitro-fs/commit/3568be07eb64c8903f85d6b2621bdef30ebf2200))
+* **deps:** bump cocoapods from 1.16.2 to 1.17.0 in /example ([344c862](https://github.com/[secure]/react-native-nitro-fs/commit/344c86215c8bf5b7f1c6e1129929a73afd33380c))
+* **deps:** bump com.android.tools.build:gradle in /android ([22753d3](https://github.com/[secure]/react-native-nitro-fs/commit/22753d33a69632ebc37dcd1e8d38064c09645b70))
+* **deps:** bump com.android.tools.build:gradle in /android ([a4d46b9](https://github.com/[secure]/react-native-nitro-fs/commit/a4d46b9e06f8bd44476090b7e704fb0491b756e3))
+* **deps:** bump com.android.tools.build:gradle in /android ([3609eb6](https://github.com/[secure]/react-native-nitro-fs/commit/3609eb6fddd5564b5e3324a3efc347aa3a1c4943))
+* **deps:** bump gradle-wrapper in /example/android ([7e7a911](https://github.com/[secure]/react-native-nitro-fs/commit/7e7a911f12d28f25a4fed2ad67bc8d996ead7302))
+* **deps:** bump xcodeproj from 1.27.0 to 1.28.1 in /example ([c1ac562](https://github.com/[secure]/react-native-nitro-fs/commit/c1ac562fecdc063b50168ae3b96f4d6ebdb084f8))
+* **deps:** upgrade React Native to 0.86.0 ([149cbac](https://github.com/[secure]/react-native-nitro-fs/commit/149cbac5ea79bf468712db60d119507da6121c97))
+* generate `NitroDownloadOptions` bindings ([df64528](https://github.com/[secure]/react-native-nitro-fs/commit/df645286fb6687e96101f75b126a62d23d0bbc45))
+* update CocoaPods version ([6660564](https://github.com/[secure]/react-native-nitro-fs/commit/66605644c9e1e067f89185420310ae896e414fe6))
+
 ## [0.9.0](https://github.com/patrickkabwe/react-native-nitro-fs/compare/v0.8.5...v0.9.0) (2026-05-17)
 
 ### ✨ Features
