@@ -22,8 +22,12 @@ namespace margelo::nitro::nitrofs { struct NitroFile; }
 namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 // Forward declaration of `NitroUploadMethod` to properly resolve imports.
 namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `NitroDownloadOptions` to properly resolve imports.
 namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
+// Forward declaration of `NitroDownloadOutput` to properly resolve imports.
+namespace margelo::nitro::nitrofs { enum class NitroDownloadOutput; }
 
 #include <string>
 #include <NitroModules/Promise.hpp>
@@ -36,7 +40,11 @@ namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 #include <optional>
 #include <unordered_map>
 #include <functional>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <variant>
+#include <NitroModules/ArrayBufferHolder.hpp>
 #include "NitroDownloadOptions.hpp"
+#include "NitroDownloadOutput.hpp"
 
 #include "NitroFS-Swift-Cxx-Umbrella.hpp"
 
@@ -231,7 +239,7 @@ namespace margelo::nitro::nitrofs {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<NitroFile>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
+    inline std::shared_ptr<Promise<std::variant<std::shared_ptr<ArrayBuffer>, NitroFile>>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override {
       auto __result = _swiftPart.downloadFile(std::forward<decltype(downloadOptions)>(downloadOptions), onProgress);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

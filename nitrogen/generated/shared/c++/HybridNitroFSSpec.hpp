@@ -33,6 +33,8 @@ namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 #include "NitroUploadOptions.hpp"
 #include <functional>
 #include <optional>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <variant>
 #include "NitroDownloadOptions.hpp"
 
 namespace margelo::nitro::nitrofs {
@@ -87,7 +89,7 @@ namespace margelo::nitro::nitrofs {
       virtual std::string basename(const std::string& path) = 0;
       virtual std::string extname(const std::string& path) = 0;
       virtual std::shared_ptr<Promise<void>> uploadFile(const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
-      virtual std::shared_ptr<Promise<NitroFile>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
+      virtual std::shared_ptr<Promise<std::variant<std::shared_ptr<ArrayBuffer>, NitroFile>>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) = 0;
 
     protected:
       // Hybrid Setup

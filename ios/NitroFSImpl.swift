@@ -205,7 +205,7 @@ class NitroFSImpl {
     func downloadFile(
         downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Void)?
-    ) async throws -> NitroFile {
+    ) async throws -> NitroDownloadResult {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "Failed to download file. FileManager is unavailable")
         }

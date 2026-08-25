@@ -2,6 +2,7 @@
 import type { HybridObject } from 'react-native-nitro-modules'
 import type {
     NitroDownloadOptions,
+    NitroDownloadResult,
     NitroFile,
     NitroFileEncoding,
     NitroFileStat,
@@ -154,5 +155,5 @@ export interface NitroFS extends HybridObject<{ ios: 'swift', android: 'kotlin' 
      * console.log(file) // { name: 'file.txt', mimeType: 'text/plain', path: 'file.txt' }
      * ```
      */
-    downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>
+    downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroDownloadResult>
 }

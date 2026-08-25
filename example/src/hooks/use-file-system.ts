@@ -210,7 +210,7 @@ export const useFileSystem = () => {
       const url = 'https://httpbin.org/bytes/1024';
       const destinationPath = `${NitroFS.DOWNLOAD_DIR}/downloaded_file.txt`;
 
-      const file = await NitroFS.downloadFile(
+      const result = await NitroFS.downloadFile(
         { url, destinationPath },
         (downloadedBytes, totalBytes) => {
           const progress = (downloadedBytes / totalBytes) * 100;
@@ -218,6 +218,11 @@ export const useFileSystem = () => {
         },
       );
 
+      if (result instanceof ArrayBuffer) {
+        throw new Error('Expected NitroFile result for default download output');
+      }
+
+      const file = result;
       Alert.alert('Success', `File downloaded successfully: ${file.name}`);
       setDownloadProgress(0);
       await listFiles(currentPath);

@@ -10,6 +10,8 @@
 #include <fbjni/fbjni.h>
 #include "NitroDownloadOptions.hpp"
 
+#include "JNitroDownloadOutput.hpp"
+#include "NitroDownloadOutput.hpp"
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -39,6 +41,8 @@ namespace margelo::nitro::nitrofs {
       jni::local_ref<jni::JString> destinationPath = this->getFieldValue(fieldDestinationPath);
       static const auto fieldHeaders = clazz->getField<jni::JMap<jni::JString, jni::JString>>("headers");
       jni::local_ref<jni::JMap<jni::JString, jni::JString>> headers = this->getFieldValue(fieldHeaders);
+      static const auto fieldOutput = clazz->getField<JNitroDownloadOutput>("output");
+      jni::local_ref<JNitroDownloadOutput> output = this->getFieldValue(fieldOutput);
       return NitroDownloadOptions(
         url->toStdString(),
         destinationPath->toStdString(),
@@ -49,7 +53,8 @@ namespace margelo::nitro::nitrofs {
             __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
           }
           return __map;
-        }()) : std::nullopt
+        }()) : std::nullopt,
+        output != nullptr ? std::make_optional(output->toCpp()) : std::nullopt
       );
     }
 
@@ -59,7 +64,7 @@ namespace margelo::nitro::nitrofs {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroDownloadOptions::javaobject> fromCpp(const NitroDownloadOptions& value) {
-      using JSignature = JNitroDownloadOptions(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JMap<jni::JString, jni::JString>>);
+      using JSignature = JNitroDownloadOptions(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JMap<jni::JString, jni::JString>>, jni::alias_ref<JNitroDownloadOutput>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -72,7 +77,8 @@ namespace margelo::nitro::nitrofs {
             __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));
           }
           return __map;
-        }() : nullptr
+        }() : nullptr,
+        value.output.has_value() ? JNitroDownloadOutput::fromCpp(value.output.value()) : nullptr
       );
     }
   };

@@ -19,6 +19,8 @@ namespace margelo::nitro::nitrofs { struct NitroUploadOptions; }
 namespace margelo::nitro::nitrofs { enum class NitroUploadMethod; }
 // Forward declaration of `NitroDownloadOptions` to properly resolve imports.
 namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
+// Forward declaration of `NitroDownloadOutput` to properly resolve imports.
+namespace margelo::nitro::nitrofs { enum class NitroDownloadOutput; }
 
 #include <string>
 #include <NitroModules/Promise.hpp>
@@ -29,6 +31,10 @@ namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 #include "NitroFile.hpp"
 #include <vector>
 #include "JNitroFile.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <variant>
+#include "JNitroDownloadResult.hpp"
+#include <NitroModules/JArrayBuffer.hpp>
 #include "NitroFileEncoding.hpp"
 #include "JNitroFileEncoding.hpp"
 #include "NitroUploadOptions.hpp"
@@ -42,6 +48,8 @@ namespace margelo::nitro::nitrofs { struct NitroDownloadOptions; }
 #include <NitroModules/JNICallable.hpp>
 #include "NitroDownloadOptions.hpp"
 #include "JNitroDownloadOptions.hpp"
+#include "NitroDownloadOutput.hpp"
+#include "JNitroDownloadOutput.hpp"
 
 namespace margelo::nitro::nitrofs {
 
@@ -310,13 +318,13 @@ namespace margelo::nitro::nitrofs {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<NitroFile>> JHybridNitroFSSpec::downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
+  std::shared_ptr<Promise<std::variant<std::shared_ptr<ArrayBuffer>, NitroFile>>> JHybridNitroFSSpec::downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JNitroDownloadOptions> /* downloadOptions */, jni::alias_ref<JFunc_void_double_double::javaobject> /* onProgress */)>("downloadFile_cxx");
     auto __result = method(_javaPart, JNitroDownloadOptions::fromCpp(downloadOptions), onProgress.has_value() ? JFunc_void_double_double_cxx::fromCpp(onProgress.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<NitroFile>::create();
+      auto __promise = Promise<std::variant<std::shared_ptr<ArrayBuffer>, NitroFile>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JNitroFile>(__boxedResult);
+        auto __result = jni::static_ref_cast<JNitroDownloadResult>(__boxedResult);
         __promise->resolve(__result->toCpp());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {

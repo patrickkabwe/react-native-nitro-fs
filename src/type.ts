@@ -2,6 +2,8 @@ export type NitroFileEncoding = 'utf8' | 'ascii' | 'base64'
 
 export type NitroUploadMethod = 'POST' | 'PUT' | 'PATCH'
 
+export type NitroDownloadOutput = 'file' | 'arrayBuffer'
+
 export interface NitroUploadOptions {
     /**
      * The path to the file to upload
@@ -39,6 +41,12 @@ export interface NitroDownloadOptions {
      * The headers to send with the download request
      */
     headers?: Record<string, string>
+    /**
+     * The value returned after downloading the file.
+     *
+     * @default 'file'
+     */
+    output?: NitroDownloadOutput
 }
 
 export type NitroFile = {
@@ -46,6 +54,8 @@ export type NitroFile = {
     mimeType: string
     path: string
 }
+
+export type NitroDownloadResult = NitroFile | ArrayBuffer
 
 export type NitroFileStat = {
     size: number

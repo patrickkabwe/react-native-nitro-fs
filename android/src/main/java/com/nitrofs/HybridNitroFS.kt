@@ -5,6 +5,7 @@ import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.nitrofs.HybridNitroFSSpec
 import com.margelo.nitro.nitrofs.NitroDownloadOptions
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -194,7 +195,7 @@ class HybridNitroFS: HybridNitroFSSpec() {
     override fun downloadFile(
         downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Unit)?
-    ): Promise<NitroFile> {
+    ): Promise<NitroDownloadResult> {
         return Promise.async(ioScope) {
             try {
                 nitroFsImpl.downloadFile(downloadOptions, onProgress)

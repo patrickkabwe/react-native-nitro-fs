@@ -2,6 +2,8 @@ package com.nitrofs
 
 import android.util.Log
 import com.margelo.nitro.nitrofs.NitroDownloadOptions
+import com.margelo.nitro.nitrofs.NitroDownloadOutput
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -22,7 +24,7 @@ class FileDownloader {
     suspend fun downloadFile(
         downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Unit)?
-    ): NitroFile? {
+    ): NitroDownloadResult {
         var contentType = ""
         val outputFile = File(downloadOptions.destinationPath)
         outputFile.parentFile?.mkdirs()
@@ -30,18 +32,17 @@ class FileDownloader {
         val client = HttpClient(OkHttp)
         
 
-        client.use { it
-            it.prepareGet(downloadOptions.url) {
+        client.use { httpClient ->
+            httpClient.prepareGet(downloadOptions.url) {
                 method = HttpMethod.Get
                 downloadOptions.headers?.forEach { (name, value) ->
                     header(name, value)
                 }
                 onDownload { totalBytesSent, contentLength ->
-                    if (totalBytesSent > 0 && contentLength != null){
-                        onProgress?.let {
-                            withContext(Dispatchers.Main) {
-                                onProgress.invoke(totalBytesSent.toDouble(), contentLength.toDouble())
-                            }
+                    val progressCallback = onProgress
+                    if (totalBytesSent > 0 && contentLength != null && progressCallback != null) {
+                        withContext(Dispatchers.Main) {
+                            progressCallback.invoke(totalBytesSent.toDouble(), contentLength.toDouble())
                         }
                     }
                 }
@@ -56,10 +57,16 @@ class FileDownloader {
             }
         }
         
-        return NitroFile(
-            name = outputFile.name,
-            path = outputFile.absolutePath,
-            mimeType = contentType
-        )
+        return when (downloadOptions.output) {
+            NitroDownloadOutput.ARRAYBUFFER -> NitroDownloadResult.First(outputFile.toMappedArrayBuffer())
+            NitroDownloadOutput.FILE,
+            null -> NitroDownloadResult.Second(
+                NitroFile(
+                    name = outputFile.name,
+                    path = outputFile.absolutePath,
+                    mimeType = contentType
+                )
+            )
+        }
     }
 }

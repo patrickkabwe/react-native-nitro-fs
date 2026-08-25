@@ -6,55 +6,58 @@
 //
 
 import Foundation
+import NitroModules
 
 final class NitroFSFileDownloader: NSObject {
     private weak var fileManager: FileManager?
     private var downloadTask: URLSessionDownloadTask?
     private var onProgress: ((Double, Double) -> Void)?
-    private var continuation: CheckedContinuation<NitroFile, Error>?
+    private var continuation: CheckedContinuation<NitroDownloadResult, Error>?
     private var destinationPath: String?
-    
+    private var downloadOutput: NitroDownloadOutput?
+
     init(fileManager: FileManager) {
         self.fileManager = fileManager
         super.init()
     }
-        
+
     func downloadFile(
         _ downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Void)?
-    ) async throws -> NitroFile {
+    ) async throws -> NitroDownloadResult {
         guard fileManager != nil else {
             throw NitroFSError.unavailable(message: "FileManager is not available")
         }
-        
+
         self.onProgress = onProgress
         self.destinationPath = downloadOptions.destinationPath
-        
+        self.downloadOutput = downloadOptions.output
+
         let request = try makeRequest(
             url: downloadOptions.url,
             headers: downloadOptions.headers
         )
-        
+
         let session: URLSession = {
             let config = URLSessionConfiguration.default
             config.requestCachePolicy = .reloadIgnoringLocalCacheData
             return URLSession(configuration: config, delegate: self, delegateQueue: .main)
         }()
-            
-        
+
+
         return try await withCheckedThrowingContinuation { continuation in
             self.continuation = continuation
             downloadTask = session.downloadTask(with: request)
             downloadTask?.resume()
         }
     }
-    
+
     func cancelDownload() {
         downloadTask?.cancel()
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func makeRequest(
         url: String,
         headers: [String: String]?
@@ -63,7 +66,7 @@ final class NitroFSFileDownloader: NSObject {
               let url = URL(string: encoded) else {
             throw URLError(.badURL)
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
@@ -72,43 +75,49 @@ final class NitroFSFileDownloader: NSObject {
         }
         return request
     }
-    
+
     private func handleDownloadCompletion(
         location: URL,
         response: URLResponse,
         downloadTask: URLSessionDownloadTask
-    ) throws -> NitroFile {
+    ) throws -> NitroDownloadResult {
         guard let fileManager else {
             throw NitroFSError.unavailable(message: "FileManager is not available")
         }
-        
+
         guard let response = response as? HTTPURLResponse else {
             throw NitroFSError.networkError(message: "Invalid response type")
         }
-        
+
         guard (200...299).contains(response.statusCode) else {
             throw NitroFSError.networkError(message: "HTTP Error: \(response.statusCode)")
         }
-        
+
         guard let destinationPath = self.destinationPath else {
             throw NitroFSError.networkError(message: "Destination path not set")
         }
-        
+
         let destinationURL = URL(fileURLWithPath: destinationPath)
-        
+
         try fileManager.createDirectory(at: destinationURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        
+
         if fileManager.fileExists(atPath: destinationPath) {
             try fileManager.removeItem(at: destinationURL)
         }
-        
+
         try fileManager.moveItem(at: location, to: destinationURL)
-        
-        return NitroFile(
+
+        let file = NitroFile(
             name: destinationURL.lastPathComponent,
             mimeType: response.allHeaderFields["Content-Type"] as? String ?? "application/octet-stream",
             path: destinationPath
         )
+
+        if downloadOutput == .arraybuffer {
+            return .first(try ArrayBuffer.mapFile(atPath: destinationPath))
+        }
+
+        return .second(file)
     }
 }
 
@@ -121,7 +130,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         didFinishDownloadingTo location: URL
     ) {
         guard let continuation = self.continuation else { return }
-        
+
         do {
             let file = try handleDownloadCompletion(
                 location: location,
@@ -135,7 +144,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
         self.continuation = nil
         session.finishTasksAndInvalidate()
     }
-    
+
     func urlSession(
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
@@ -148,7 +157,7 @@ extension NitroFSFileDownloader: URLSessionDownloadDelegate {
             self?.onProgress?(Double(totalBytesWritten), Double(totalBytesExpectedToWrite))
         }
     }
-    
+
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
