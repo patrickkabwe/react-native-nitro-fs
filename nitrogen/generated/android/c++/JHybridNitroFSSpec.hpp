@@ -75,7 +75,7 @@ namespace margelo::nitro::nitrofs {
     std::string basename(const std::string& path) override;
     std::string extname(const std::string& path) override;
     std::shared_ptr<Promise<void>> uploadFile(const NitroUploadOptions& uploadOptions, const std::optional<std::function<void(double /* uploadedBytes */, double /* totalBytes */)>>& onProgress) override;
-    std::shared_ptr<Promise<NitroFile>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;
+    std::shared_ptr<Promise<std::variant<std::shared_ptr<ArrayBuffer>, NitroFile>>> downloadFile(const NitroDownloadOptions& downloadOptions, const std::optional<std::function<void(double /* downloadedBytes */, double /* totalBytes */)>>& onProgress) override;
 
   private:
     jni::global_ref<JHybridNitroFSSpec::JavaPart> _javaPart;

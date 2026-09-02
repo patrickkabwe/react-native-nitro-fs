@@ -297,7 +297,7 @@ await NitroFS.uploadFile(uploadOptions, (uploadedBytes, totalBytes) => {
 })
 ```
 
-#### `downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroFile>`
+#### `downloadFile(downloadOptions: NitroDownloadOptions, onProgress?: (downloadedBytes: number, totalBytes: number) => void): Promise<NitroDownloadResult>`
 
 Download a file from a server with progress tracking.
 
@@ -310,7 +310,7 @@ const downloadOptions = {
   },
 }
 
-const downloadedFile = await NitroFS.downloadFile(
+const downloadResult = await NitroFS.downloadFile(
   downloadOptions,
   (downloadedBytes, totalBytes) => {
     const progress = (downloadedBytes / totalBytes) * 100
@@ -318,8 +318,31 @@ const downloadedFile = await NitroFS.downloadFile(
   }
 )
 
+if (downloadResult instanceof ArrayBuffer) {
+  throw new Error('Expected file metadata')
+}
+
+const downloadedFile = downloadResult
 console.log('Downloaded file:', downloadedFile)
 // Returns: { name: 'document.pdf', mimeType: 'application/pdf', path: '/path/to/file' }
+```
+
+Return the downloaded bytes as a zero-copy `ArrayBuffer` by setting `output` to `'arrayBuffer'`.
+The file is still saved to `destinationPath`.
+
+```typescript
+const downloadedBytes = await NitroFS.downloadFile({
+  url: 'https://example.com/files/document.pdf',
+  destinationPath: NitroFS.DOWNLOAD_DIR + '/document.pdf',
+  output: 'arrayBuffer',
+})
+
+if (!(downloadedBytes instanceof ArrayBuffer)) {
+  throw new Error('Expected ArrayBuffer')
+}
+
+const view = new Uint8Array(downloadedBytes)
+console.log('Downloaded byte length:', view.byteLength)
 ```
 
 ## 📝 Type Definitions
@@ -353,7 +376,14 @@ interface NitroDownloadOptions {
   url: string // Download endpoint URL
   destinationPath: string // Path where the downloaded file is saved
   headers?: Record<string, string> // Custom headers
+  output?: 'file' | 'arrayBuffer' // Return file metadata or downloaded bytes
 }
+```
+
+### `NitroDownloadResult`
+
+```typescript
+type NitroDownloadResult = NitroFile | ArrayBuffer
 ```
 
 ### `NitroFileStat`

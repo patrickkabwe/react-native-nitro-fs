@@ -8,6 +8,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import com.facebook.react.bridge.ReactApplicationContext
 import com.margelo.nitro.nitrofs.NitroDownloadOptions
+import com.margelo.nitro.nitrofs.NitroDownloadResult
 import com.margelo.nitro.nitrofs.NitroFile
 import com.margelo.nitro.nitrofs.NitroFileEncoding
 import com.margelo.nitro.nitrofs.NitroFileStat
@@ -345,16 +346,11 @@ class NitroFSImpl(val context: ReactApplicationContext) {
     suspend fun downloadFile(
         downloadOptions: NitroDownloadOptions,
         onProgress: ((Double, Double) -> Unit)?
-    ): NitroFile {
-        val file = fileDownloader.downloadFile(
+    ): NitroDownloadResult {
+        return fileDownloader.downloadFile(
             downloadOptions,
             onProgress
         )
-        if (file != null) {
-            return file
-        } else {
-            throw RuntimeException("Failed to download file from: ${downloadOptions.url}")
-        }
     }
 
     fun getFileEncoding(encoding: NitroFileEncoding): Charset {

@@ -442,7 +442,7 @@ open class HybridNitroFSSpec_cxx {
   }
   
   @inline(__always)
-  public final func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_NitroFile___ {
+  public final func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: bridge.std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______) -> bridge.Result_std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile____ {
     do {
       let __result = try self.__implementation.downloadFile(downloadOptions: downloadOptions, onProgress: { () -> ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____downloadedBytes_____double____totalBytes______(onProgress) {
@@ -457,18 +457,25 @@ open class HybridNitroFSSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_NitroFile__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_NitroFile__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_NitroFile__(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile___(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve(__result) })
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_std__shared_ptr_ArrayBuffer___NitroFile_ in
+              switch __result {
+                case .first(let __value):
+                  return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___NitroFile_(__value.getArrayBuffer())
+                case .second(let __value):
+                  return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___NitroFile_(__value)
+              }
+            }().variant) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_NitroFile___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile____(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_NitroFile___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__variant_std__shared_ptr_ArrayBuffer___NitroFile____(__exceptionPtr)
     }
   }
 }

@@ -61,7 +61,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func copy(srcPath: String, destPath: String) throws -> NitroModules.Promise<Void> {
+    func copy(srcPath: String, destPath: String) throws -> Promise<Void> {
         return .async { [unowned self] in
             do {
                 try self.nitroFSImpl.copy(source: srcPath, destination: destPath)
@@ -72,7 +72,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func unlink(path: String) throws -> NitroModules.Promise<Bool> {
+    func unlink(path: String) throws -> Promise<Bool> {
         return .async { [unowned self] in
             do {
                 try self.nitroFSImpl.unlink(path: path)
@@ -84,7 +84,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func mkdir(path: String) throws -> NitroModules.Promise<Bool> {
+    func mkdir(path: String) throws -> Promise<Bool> {
         return .async { [unowned self] in
             do {
                 try self.nitroFSImpl.mkdir(path: path)
@@ -96,7 +96,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func stat(path: String) throws -> NitroModules.Promise<NitroFileStat> {
+    func stat(path: String) throws -> Promise<NitroFileStat> {
         return .async { [unowned self] in
             do {
                 return try self.nitroFSImpl.stat(path: path)
@@ -107,7 +107,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func readdir(path: String) throws -> NitroModules.Promise<[NitroFile]> {
+    func readdir(path: String) throws -> Promise<[NitroFile]> {
         return .async {
             do {
                 return try self.nitroFSImpl.readdir(atPath: path)
@@ -118,7 +118,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func rename(oldPath: String, newPath: String) throws -> NitroModules.Promise<Void> {
+    func rename(oldPath: String, newPath: String) throws -> Promise<Void> {
         return .async {
             do {
                 return try self.nitroFSImpl.rename(oldPath: oldPath, newPath: newPath)
@@ -173,7 +173,7 @@ class HybridNitroFS: HybridNitroFSSpec {
         }
     }
     
-    func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((Double, Double) -> Void)?) throws -> NitroModules.Promise<NitroFile> {
+    func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((Double, Double) -> Void)?) throws -> Promise<NitroDownloadResult> {
         return .async { [unowned self] in
             do {
                 return try await self.nitroFSImpl.downloadFile(

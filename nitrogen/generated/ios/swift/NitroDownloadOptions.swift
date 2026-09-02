@@ -18,7 +18,7 @@ public extension NitroDownloadOptions {
   /**
    * Create a new instance of `NitroDownloadOptions`.
    */
-  init(url: String, destinationPath: String, headers: Dictionary<String, String>?) {
+  init(url: String, destinationPath: String, headers: Dictionary<String, String>?, output: NitroDownloadOutput?) {
     self.init(std.string(url), std.string(destinationPath), { () -> bridge.std__optional_std__unordered_map_std__string__std__string__ in
       if let __unwrappedValue = headers {
         return bridge.create_std__optional_std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
@@ -31,6 +31,12 @@ public extension NitroDownloadOptions {
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__optional_NitroDownloadOutput_ in
+      if let __unwrappedValue = output {
+        return bridge.create_std__optional_NitroDownloadOutput_(__unwrappedValue)
+      } else {
+        return .init()
+      }
     }())
   }
 
@@ -38,12 +44,12 @@ public extension NitroDownloadOptions {
   var url: String {
     return String(self.__url)
   }
-  
+
   @inline(__always)
   var destinationPath: String {
     return String(self.__destinationPath)
   }
-  
+
   @inline(__always)
   var headers: Dictionary<String, String>? {
     return { () -> Dictionary<String, String>? in
@@ -62,5 +68,10 @@ public extension NitroDownloadOptions {
         return nil
       }
     }()
+  }
+
+  @inline(__always)
+  var output: NitroDownloadOutput? {
+    return self.__output.value
   }
 }

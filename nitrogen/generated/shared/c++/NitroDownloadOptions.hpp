@@ -28,11 +28,13 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `NitroDownloadOutput` to properly resolve imports.
+namespace margelo::nitro::nitrofs { enum class NitroDownloadOutput; }
 
 #include <string>
 #include <unordered_map>
 #include <optional>
+#include "NitroDownloadOutput.hpp"
 
 namespace margelo::nitro::nitrofs {
 
@@ -44,10 +46,11 @@ namespace margelo::nitro::nitrofs {
     std::string url     SWIFT_PRIVATE;
     std::string destinationPath     SWIFT_PRIVATE;
     std::optional<std::unordered_map<std::string, std::string>> headers     SWIFT_PRIVATE;
+    std::optional<NitroDownloadOutput> output     SWIFT_PRIVATE;
 
   public:
     NitroDownloadOptions() = default;
-    explicit NitroDownloadOptions(std::string url, std::string destinationPath, std::optional<std::unordered_map<std::string, std::string>> headers): url(url), destinationPath(destinationPath), headers(headers) {}
+    explicit NitroDownloadOptions(std::string url, std::string destinationPath, std::optional<std::unordered_map<std::string, std::string>> headers, std::optional<NitroDownloadOutput> output): url(url), destinationPath(destinationPath), headers(headers), output(output) {}
 
   public:
     friend bool operator==(const NitroDownloadOptions& lhs, const NitroDownloadOptions& rhs) = default;
@@ -65,7 +68,8 @@ namespace margelo::nitro {
       return margelo::nitro::nitrofs::NitroDownloadOptions(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url"))),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "destinationPath"))),
-        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headers")))
+        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headers"))),
+        JSIConverter<std::optional<margelo::nitro::nitrofs::NitroDownloadOutput>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "output")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrofs::NitroDownloadOptions& arg) {
@@ -73,6 +77,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "url"), JSIConverter<std::string>::toJSI(runtime, arg.url));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "destinationPath"), JSIConverter<std::string>::toJSI(runtime, arg.destinationPath));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "headers"), JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::toJSI(runtime, arg.headers));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "output"), JSIConverter<std::optional<margelo::nitro::nitrofs::NitroDownloadOutput>>::toJSI(runtime, arg.output));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -86,6 +91,7 @@ namespace margelo::nitro {
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url")))) return false;
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "destinationPath")))) return false;
       if (!JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headers")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::nitrofs::NitroDownloadOutput>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "output")))) return false;
       return true;
     }
   };

@@ -34,7 +34,7 @@ public protocol HybridNitroFSSpec_protocol: HybridObject {
   func basename(path: String) throws -> String
   func extname(path: String) throws -> String
   func uploadFile(uploadOptions: NitroUploadOptions, onProgress: ((_ uploadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<Void>
-  func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroFile>
+  func downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((_ downloadedBytes: Double, _ totalBytes: Double) -> Void)?) throws -> Promise<NitroDownloadResult>
 }
 
 public extension HybridNitroFSSpec_protocol {

@@ -26,7 +26,10 @@ data class NitroDownloadOptions(
   val destinationPath: String,
   @DoNotStrip
   @Keep
-  val headers: Map<String, String>?
+  val headers: Map<String, String>?,
+  @DoNotStrip
+  @Keep
+  val output: NitroDownloadOutput?
 ) {
   /* primary constructor */
 
@@ -36,13 +39,15 @@ data class NitroDownloadOptions(
     return Objects.deepEquals(this.url, other.url)
       && Objects.deepEquals(this.destinationPath, other.destinationPath)
       && Objects.deepEquals(this.headers, other.headers)
+      && Objects.deepEquals(this.output, other.output)
   }
 
   override fun hashCode(): Int {
     return arrayOf(
       url,
       destinationPath,
-      headers
+      headers,
+      output
     ).contentDeepHashCode()
   }
 
@@ -54,8 +59,8 @@ data class NitroDownloadOptions(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(url: String, destinationPath: String, headers: Map<String, String>?): NitroDownloadOptions {
-      return NitroDownloadOptions(url, destinationPath, headers)
+    private fun fromCpp(url: String, destinationPath: String, headers: Map<String, String>?, output: NitroDownloadOutput?): NitroDownloadOptions {
+      return NitroDownloadOptions(url, destinationPath, headers, output)
     }
   }
 }

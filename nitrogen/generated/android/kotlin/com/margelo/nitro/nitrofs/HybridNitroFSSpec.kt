@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.HybridObject
 
 /**
@@ -120,11 +121,11 @@ abstract class HybridNitroFSSpec: HybridObject() {
     return __result
   }
   
-  abstract fun downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroFile>
+  abstract fun downloadFile(downloadOptions: NitroDownloadOptions, onProgress: ((downloadedBytes: Double, totalBytes: Double) -> Unit)?): Promise<NitroDownloadResult>
   
   @DoNotStrip
   @Keep
-  private fun downloadFile_cxx(downloadOptions: NitroDownloadOptions, onProgress: Func_void_double_double?): Promise<NitroFile> {
+  private fun downloadFile_cxx(downloadOptions: NitroDownloadOptions, onProgress: Func_void_double_double?): Promise<NitroDownloadResult> {
     val __result = downloadFile(downloadOptions, onProgress?.let { it })
     return __result
   }
